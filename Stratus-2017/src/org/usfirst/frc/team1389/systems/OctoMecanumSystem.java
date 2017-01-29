@@ -15,14 +15,15 @@ import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.Subsystem;
-import com.team1389.system.drive.CurvatureDriveAlgorithm;
+import com.team1389.system.drive.CurvatureDriveSystem;
+import com.team1389.system.drive.MecanumDriveSystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
 public class OctoMecanumSystem extends Subsystem {
 	private DriveMode currentMode;
-	private CurvatureDriveAlgorithm tankCalc;
-	
+	private CurvatureDriveSystem tank;
+	private MecanumDriveSystem mecanum;
 	private DigitalOut switcherPistons;
 	private DigitalIn switcherSensors;
 	private FourDriveOut<Percent> voltageDrive;
@@ -68,7 +69,8 @@ public class OctoMecanumSystem extends Subsystem {
 			Runnable sendSwitchRequest = () -> switcherPistons.set(mode.solenoidVal);
 			Command waitForSwitch = CommandUtil.createCommand(isInDesiredMode(mode));
 			Runnable updateCurrentMode = () -> currentMode = mode;
-			CompletableFuture.runAsync(sendSwitchRequest).thenRun(() -> CommandUtil.executeCommand(waitForSwitch, 15))
+			CompletableFuture.runAsync(sendSwitchRequest)
+					.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, 15))
 					.thenRun(updateCurrentMode);
 		}
 	}
@@ -78,6 +80,17 @@ public class OctoMecanumSystem extends Subsystem {
 		if (switchTrigger.get()) {
 			DriveMode desired = currentMode == DriveMode.TANK ? DriveMode.MECANUM : DriveMode.TANK;
 			enterMode(desired);
+		}
+		switch (currentMode) {
+		case MECANUM:
+			mecanum.update();
+			break;
+		case TANK:
+			tank.update();
+			break;
+		default:
+			break;
+
 		}
 	}
 
