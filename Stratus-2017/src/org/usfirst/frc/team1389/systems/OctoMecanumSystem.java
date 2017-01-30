@@ -1,43 +1,66 @@
 package org.usfirst.frc.team1389.systems;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
+import java.util.Arrays;
 
-import org.usfirst.frc.team1389.util.FourDriveOut;
+import org.usfirst.frc.team1389.robot.controls.ControlMap;
+import org.usfirst.frc.team1389.util.VerifiedSwitcher;
 
-import com.team1389.command_framework.CommandUtil;
-import com.team1389.command_framework.command_base.Command;
+import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.outputs.software.DigitalOut;
-import com.team1389.hardware.outputs.software.RangeOut;
+import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.value_types.Percent;
+import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.Subsystem;
 import com.team1389.system.drive.CurvatureDriveSystem;
+import com.team1389.system.drive.DriveOut;
+import com.team1389.system.drive.FourDriveOut;
 import com.team1389.system.drive.MecanumDriveSystem;
+import com.team1389.util.bezier.BezierCurve;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.StringInfo;
 
 public class OctoMecanumSystem extends Subsystem {
 	private DriveMode currentMode;
 	private CurvatureDriveSystem tank;
 	private MecanumDriveSystem mecanum;
-	private DigitalOut switcherPistons;
-	private DigitalIn switcherSensors;
+	private VerifiedSwitcher octoShifter;
+	private DigitalIn switchModes;
 	private FourDriveOut<Percent> voltageDrive;
-	private FourDriveOut<Speed> speedDrive;
-	private RangeOut<Value> airPressure;
+	private RangeIn<Value> airPressure;
 
-	private DigitalIn switchTrigger;
-	private PercentIn xAxis;
-	private PercentIn yAxis;
-	private PercentIn twistAxis;
+	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, FourDriveOut<Speed> speedDrive,
+			VerifiedSwitcher octoShifter, RangeIn<Value> airPressure, AngleIn<Position> gyro, PercentIn xAxis,
+			PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes, DigitalIn trigger) {
+		this.airPressure = airPressure;
+		this.voltageDrive = voltageDrive;
+		setupTankDriveSystem(voltageDrive.getAsTank(), xAxis, yAxis, trim, trigger);
+		setupMecanumDriveSystem(voltageDrive, xAxis, yAxis, twist, trigger, gyro);
+	}
+
+	private void setupTankDriveSystem(DriveOut<Percent> drive, PercentIn xAxis, PercentIn yAxis, PercentIn trim,
+			DigitalIn quickTurn) {
+		BezierCurve xCurve = new BezierCurve(0, .5, .79, -0.06);
+		BezierCurve yCurve = new BezierCurve(.0, 0.54, 0.45, -0.07);
+		xAxis.map(d -> xCurve.getPoint(d).getY());
+		yAxis.map(d -> yCurve.getPoint(d).getY());
+		tank = new CurvatureDriveSystem(drive, yAxis, xAxis, quickTurn, ControlMap.turnSensitivity,
+				ControlMap.turnSensitivity);
+	}
+
+	private void setupMecanumDriveSystem(FourDriveOut<Percent> wheels, PercentIn xAxis, PercentIn yAxis,
+			PercentIn twistAxis, DigitalIn toggleFOD, AngleIn<Position> gyro) {
+		mecanum = new MecanumDriveSystem(xAxis, yAxis, twistAxis, wheels, gyro, toggleFOD);
+	}
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return null;
+		return stem.put(voltageDrive, airPressure.getWatchable("air pressure"),
+				octoShifter.getSwitcherInput().getWatchable("pistonState"),
+				new StringInfo("drive mode", currentMode::name));
 	}
 
 	public enum DriveMode {
@@ -46,6 +69,10 @@ public class OctoMecanumSystem extends Subsystem {
 
 		DriveMode(boolean solenoidVal) {
 			this.solenoidVal = solenoidVal;
+		}
+
+		public DriveMode getFromBoolean(boolean value) {
+			return Arrays.stream(DriveMode.values()).filter(m -> m.solenoidVal).findFirst().orElse(TANK);
 		}
 	}
 
@@ -56,30 +83,21 @@ public class OctoMecanumSystem extends Subsystem {
 
 	@Override
 	public void init() {
-
+		setMode(DriveMode.TANK);
 	}
 
-	private Supplier<Boolean> isInDesiredMode(DriveMode desiredMode) {
-		return () -> switcherSensors.get() == desiredMode.solenoidVal;
+	private void switchModes() {
+		octoShifter.set(!octoShifter.get());
 	}
 
-	private void enterMode(DriveMode mode) {
-		// TODO add air pressure tracking
-		if (currentMode != mode) {
-			Runnable sendSwitchRequest = () -> switcherPistons.set(mode.solenoidVal);
-			Command waitForSwitch = CommandUtil.createCommand(isInDesiredMode(mode));
-			Runnable updateCurrentMode = () -> currentMode = mode;
-			CompletableFuture.runAsync(sendSwitchRequest)
-					.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, 15))
-					.thenRun(updateCurrentMode);
-		}
+	private void setMode(DriveMode mode) {
+		octoShifter.set(mode.solenoidVal);
 	}
 
 	@Override
 	public void update() {
-		if (switchTrigger.get()) {
-			DriveMode desired = currentMode == DriveMode.TANK ? DriveMode.MECANUM : DriveMode.TANK;
-			enterMode(desired);
+		if (switchModes.get()) {
+			switchModes();
 		}
 		switch (currentMode) {
 		case MECANUM:

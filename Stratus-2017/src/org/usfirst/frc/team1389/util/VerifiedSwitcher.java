@@ -16,16 +16,13 @@ public class VerifiedSwitcher {
 	private DigitalOut switcher;
 	private ExecutorService service;
 	private Consumer<Boolean> onSwitch;
-	private boolean currentVal;
 
 	public VerifiedSwitcher(DigitalIn verifier, DigitalOut switcher, ExecutorService service,
 			Consumer<Boolean> onSwitch) {
 		this.verifier = verifier;
 		this.switcher = switcher;
 		this.service = service;
-		this.onSwitch = b -> currentVal = b;
-		addSwitchListener(onSwitch);
-		this.currentVal = verifier.get();
+		this.onSwitch = onSwitch;
 	}
 
 	public void addSwitchListener(Consumer<Boolean> onSwitch) {
@@ -36,19 +33,20 @@ public class VerifiedSwitcher {
 		};
 	}
 
-	public Supplier<Boolean> isInDesired(boolean val) {
-		return () -> val == verifier.get();
+	public Supplier<Boolean> isInDesired(boolean desired) {
+		return () -> get() == desired;
 	}
 
 	public void set(boolean val) {
-		if (currentVal != val) {
+		if (get() != val) {
 			Runnable sendSwitchRequest = () -> switcher.set(val);
 			Command waitForSwitch = CommandUtil.createCommand(isInDesired(val));
 			Runnable triggerListeners = () -> onSwitch.accept(val);
 
-			CompletableFuture.runAsync(sendSwitchRequest, service)
-					.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, POLL_PERIOD_MILLIS))
-					.thenRun(triggerListeners);
+			CompletableFuture
+					.runAsync(sendSwitchRequest, service)
+						.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, POLL_PERIOD_MILLIS))
+						.thenRun(triggerListeners);
 		}
 
 	}
@@ -58,10 +56,10 @@ public class VerifiedSwitcher {
 	}
 
 	public DigitalIn getSwitcherInput() {
-		return new DigitalIn(this::get);
+		return verifier;
 	}
 
 	public boolean get() {
-		return currentVal;
+		return verifier.get();
 	}
 }
