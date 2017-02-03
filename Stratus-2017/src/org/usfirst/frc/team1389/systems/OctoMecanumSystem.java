@@ -95,16 +95,16 @@ public class OctoMecanumSystem extends Subsystem {
 	}
 
 	@Override
-	public void update() {
+	public void updateTeleop() {
 		if (switchModes.get()) {
 			switchModes();
 		}
 		switch (currentMode) {
 		case MECANUM:
-			mecanum.update();
+			mecanum.updateTeleop();
 			break;
 		case TANK:
-			tank.update();
+			tank.updateTeleop();
 			break;
 		default:
 			break;

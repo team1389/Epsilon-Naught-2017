@@ -30,8 +30,8 @@ public class ControlBoard extends ControlMap {
 	private PercentIn yAxis = driveController.getAxis(ax_X_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_yAxis = yAxis::copy;
 
-	public PercentIn xAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.075);
-	public Supplier<PercentIn> i_xAxis = yAxis::copy;
+	private PercentIn xAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.075);
+	public Supplier<PercentIn> i_xAxis = xAxis::copy;
 
 	public PercentIn twistAxis = driveController.getAxis(ax_TWIST_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_twistAxis = twistAxis::copy;
