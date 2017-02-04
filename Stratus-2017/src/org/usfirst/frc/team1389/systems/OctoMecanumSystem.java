@@ -30,6 +30,7 @@ public class OctoMecanumSystem extends Subsystem {
 	private VerifiedSwitcher octoShifter;
 	private DigitalIn switchModes;
 	private FourDriveOut<Percent> voltageDrive;
+	private FourDriveOut<Speed> speedDrive;
 	private RangeIn<Value> airPressure;
 
 	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, FourDriveOut<Speed> speedDrive,
@@ -37,6 +38,9 @@ public class OctoMecanumSystem extends Subsystem {
 			PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes, DigitalIn trigger) {
 		this.airPressure = airPressure;
 		this.voltageDrive = voltageDrive;
+		this.speedDrive = speedDrive;
+		this.octoShifter = octoShifter;
+		this.switchModes = switchModes;
 		setupTankDriveSystem(voltageDrive.getAsTank(), xAxis, yAxis, trim, trigger);
 		setupMecanumDriveSystem(voltageDrive, xAxis, yAxis, twist, trigger, gyro);
 	}
