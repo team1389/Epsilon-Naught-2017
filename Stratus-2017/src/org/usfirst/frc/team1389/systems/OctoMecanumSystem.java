@@ -3,16 +3,13 @@ package org.usfirst.frc.team1389.systems;
 import java.util.Arrays;
 
 import org.usfirst.frc.team1389.robot.controls.ControlMap;
-import org.usfirst.frc.team1389.util.VerifiedSwitcher;
 
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
-import com.team1389.hardware.inputs.software.RangeIn;
+import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.hardware.value_types.Speed;
-import com.team1389.hardware.value_types.Value;
 import com.team1389.system.Subsystem;
 import com.team1389.system.drive.CurvatureDriveSystem;
 import com.team1389.system.drive.DriveOut;
@@ -27,18 +24,18 @@ public class OctoMecanumSystem extends Subsystem {
 	private DriveMode currentMode;
 	private CurvatureDriveSystem tank;
 	private MecanumDriveSystem mecanum;
-	private VerifiedSwitcher octoShifter;
+	private DigitalOut octoShifter;
 	private DigitalIn switchModes;
 	private FourDriveOut<Percent> voltageDrive;
-	private RangeIn<Value> airPressure;
 
-	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, FourDriveOut<Speed> speedDrive,
-			VerifiedSwitcher octoShifter, RangeIn<Value> airPressure, AngleIn<Position> gyro, PercentIn xAxis,
-			PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes, DigitalIn trigger) {
-		this.airPressure = airPressure;
+	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, DigitalOut octoShifter, AngleIn<Position> gyro,
+			PercentIn xAxis, PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes,
+			DigitalIn trigger) {
 		this.voltageDrive = voltageDrive;
+		this.octoShifter = octoShifter;
+		this.switchModes = switchModes;
 		setupTankDriveSystem(voltageDrive.getAsTank(), xAxis, yAxis, trim, trigger);
-		setupMecanumDriveSystem(voltageDrive, xAxis, yAxis, twist, trigger, gyro);
+		setupMecanumDriveSystem(voltageDrive, xAxis, yAxis.copy().invert(), twist, trigger, gyro);
 	}
 
 	private void setupTankDriveSystem(DriveOut<Percent> drive, PercentIn xAxis, PercentIn yAxis, PercentIn trim,
@@ -58,13 +55,11 @@ public class OctoMecanumSystem extends Subsystem {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(voltageDrive, airPressure.getWatchable("air pressure"),
-				octoShifter.getSwitcherInput().getWatchable("pistonState"),
-				new StringInfo("drive mode", currentMode::name));
+		return stem.put(voltageDrive, new StringInfo("drive mode", currentMode::name));
 	}
 
 	public enum DriveMode {
-		TANK(false), MECANUM(true);
+		TANK(true), MECANUM(false);
 		public final boolean solenoidVal;
 
 		DriveMode(boolean solenoidVal) {
@@ -87,11 +82,12 @@ public class OctoMecanumSystem extends Subsystem {
 	}
 
 	private void switchModes() {
-		octoShifter.set(!octoShifter.get());
+		setMode(currentMode == DriveMode.TANK ? DriveMode.MECANUM : DriveMode.TANK);
 	}
 
 	private void setMode(DriveMode mode) {
 		octoShifter.set(mode.solenoidVal);
+		currentMode = mode;
 	}
 
 	@Override

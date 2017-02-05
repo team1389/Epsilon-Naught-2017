@@ -27,18 +27,22 @@ public class ControlBoard extends ControlMap {
 	private final JoystickHardware driveController = new JoystickHardware(DRIVE_CONTROLLER);
 
 	// DRIVER CONTROLS
-	private PercentIn yAxis = driveController.getAxis(ax_X_AXIS).applyDeadband(.075);
+	private PercentIn yAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.075).invert();
 	public Supplier<PercentIn> i_yAxis = yAxis::copy;
 
-	private PercentIn xAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.075);
+	private PercentIn xAxis = driveController.getAxis(ax_X_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_xAxis = xAxis::copy;
 
 	public PercentIn twistAxis = driveController.getAxis(ax_TWIST_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_twistAxis = twistAxis::copy;
-	
+
 	public PercentIn trimAxis = driveController.getAxis(ax_TWIST_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_trimAxis = trimAxis::copy;
 
 	public DigitalIn trigger = driveController.getButton(btn_TRIGGER);
 	public Supplier<DigitalIn> i_trigger = trigger::copy;
+
+	public DigitalIn thumb = driveController.getButton(btn_THUMB).getLatched();
+	public Supplier<DigitalIn> i_thumb = thumb::copy;
+
 }

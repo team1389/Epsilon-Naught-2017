@@ -8,6 +8,7 @@ public class ControlMap {
 	protected static final int ax_TWIST_AXIS = 2;
 	protected static final int ax_TRIM_AXIS = 3;
 	protected static final int btn_TRIGGER = 1;
+	protected static final int btn_THUMB = 2;
 
 	public static final double turnSensitivity = 1.0;
 	public static final double spinSensitivity = 1.0;
