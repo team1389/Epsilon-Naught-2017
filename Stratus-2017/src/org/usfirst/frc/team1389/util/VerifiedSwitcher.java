@@ -42,10 +42,9 @@ public class VerifiedSwitcher {
 			Runnable sendSwitchRequest = () -> switcher.set(val);
 			Command waitForSwitch = CommandUtil.createCommand(isInDesired(val));
 			Runnable triggerListeners = () -> onSwitch.accept(val);
-
 			CompletableFuture
 					.runAsync(sendSwitchRequest, service)
-						.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, POLL_PERIOD_MILLIS))
+				//TODO		.thenRun(() -> CommandUtil.executeCommand(waitForSwitch, POLL_PERIOD_MILLIS))
 						.thenRun(triggerListeners);
 		}
 

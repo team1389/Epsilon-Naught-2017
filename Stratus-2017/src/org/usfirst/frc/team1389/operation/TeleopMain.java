@@ -2,6 +2,7 @@ package org.usfirst.frc.team1389.operation;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
+import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
@@ -21,19 +22,20 @@ public class TeleopMain {
 
 	public void init() {
 		controls = ControlBoard.getInstance();
-		// Subsystem drive = new CurvatureDriveSystem(robot.voltageDrive.getAsTank(),
-		// controls.i_yAxis.get(),
-		// controls.i_xAxis.get(), controls.i_trigger.get());
-	//	Subsystem drive = new MecanumDriveSystem(controls.i_xAxis.get(), controls.i_yAxis.get().invert(),
-	//			controls.i_twistAxis.get(), robot.voltageDrive, robot.gyroInput, controls.i_trigger.get());
-	//	thumb = controls.i_thumb.get();
-		Subsystem drive = new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.i_xAxis.get(), controls.i_yAxis.get(), controls.twistAxis, controls.trimAxis, controls.i_thumb.get(), controls.i_trigger.get());
-		manager = new SystemManager(drive);
+		Subsystem drive = new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput,
+				controls.i_xAxis.get(), controls.i_yAxis.get(), controls.twistAxis, controls.trimAxis,
+				controls.i_thumb.get(), controls.i_trigger.get());
+		Subsystem gearIntake = setupGearIntake();
+		manager = new SystemManager(gearIntake);
 		manager.init();
-		DebugDash.getInstance().watch(drive);
+		DebugDash.getInstance().watch(gearIntake,robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"));
 
 	}
 
+	private Subsystem setupGearIntake() {
+		return new GearIntakeSystem(robot.armAngle, robot.armElevator.getVoltageOutput(),
+				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent);
+	}
 
 	public void periodic() {
 		manager.update();

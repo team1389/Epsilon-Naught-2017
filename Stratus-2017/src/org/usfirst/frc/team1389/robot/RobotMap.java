@@ -2,6 +2,7 @@ package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.registry.port_types.CAN;
 import com.team1389.hardware.registry.port_types.PCM;
+import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.registry.port_types.SPIPort;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -34,7 +35,10 @@ public class RobotMap {
 	protected static final CAN can_RIGHT_FRONT_MOTOR = new CAN(4); protected static final boolean inv_RIGHT_FRONT_MOTOR = false;
 	protected static final CAN can_LEFT_REAR_MOTOR = new CAN(1); protected static final boolean inv_LEFT_REAR_MOTOR = true;
 	protected static final CAN can_RIGHT_REAR_MOTOR = new CAN(3); protected static final boolean inv_RIGHT_REAR_MOTOR = false;
+	protected static final CAN can_ARM_ELEVATOR_MOTOR = new CAN(5); protected static final boolean inv_ARM_ELEVATOR_MOTOR = false;
 	protected static final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
+	protected static final boolean sinv_ARM_ELEVATOR_MOTOR = false;
+	protected static final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected static final boolean inv_GEAR_INTAKE_MOTOR = true;
 	protected static final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
 	protected static final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
 	protected static final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
@@ -43,6 +47,7 @@ public class RobotMap {
 	protected static final PCM pcm_REAR_LEFT_PISTON_B = new PCM(1);
 	protected static final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
 	protected static final PCM pcm_REAR_RIGHT_PISTON_B = new PCM(2);
+	protected static final int pdp_GEAR_INTAKE_CURRENT = 4;
 
 }
 
