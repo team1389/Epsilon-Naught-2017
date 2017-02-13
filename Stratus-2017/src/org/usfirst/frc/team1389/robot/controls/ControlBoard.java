@@ -25,6 +25,7 @@ public class ControlBoard extends ControlMap {
 	}
 
 	private final JoystickHardware driveController = new JoystickHardware(DRIVE_CONTROLLER);
+	private final JoystickHardware manipController = new JoystickHardware(MANIP_CONTROLLER);
 
 	// DRIVER CONTROLS
 	private PercentIn yAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.075).invert();
@@ -36,7 +37,7 @@ public class ControlBoard extends ControlMap {
 	public PercentIn twistAxis = driveController.getAxis(ax_TWIST_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_twistAxis = twistAxis::copy;
 
-	public PercentIn trimAxis = driveController.getAxis(ax_TWIST_AXIS).applyDeadband(.075);
+	public PercentIn trimAxis = driveController.getAxis(ax_TRIM_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_trimAxis = trimAxis::copy;
 
 	public DigitalIn trigger = driveController.getButton(btn_TRIGGER);
@@ -44,5 +45,17 @@ public class ControlBoard extends ControlMap {
 
 	public DigitalIn thumb = driveController.getButton(btn_THUMB).getLatched();
 	public Supplier<DigitalIn> i_thumb = thumb::copy;
+	
+	public DigitalIn aButton = driveController.getButton(btn_A).getLatched();
+	public Supplier<DigitalIn> i_aButton = aButton::copy;
+	
+	public DigitalIn bButton = driveController.getButton(btn_B).getLatched();
+	public Supplier<DigitalIn> i_bButton = bButton::copy;
+	
+	public DigitalIn xButton = driveController.getButton(btn_X).getLatched();
+	public Supplier<DigitalIn> i_xButton = xButton::copy;
+	
+	
+
 
 }

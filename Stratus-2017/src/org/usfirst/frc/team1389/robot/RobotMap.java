@@ -33,7 +33,7 @@ public class RobotMap {
 	//Drivetrain
 	protected static final CAN can_LEFT_FRONT_MOTOR = new CAN(2); protected static final boolean inv_LEFT_FRONT_MOTOR = true;
 	protected static final CAN can_RIGHT_FRONT_MOTOR = new CAN(4); protected static final boolean inv_RIGHT_FRONT_MOTOR = false;
-	protected static final CAN can_LEFT_REAR_MOTOR = new CAN(1); protected static final boolean inv_LEFT_REAR_MOTOR = true;
+	protected static final CAN can_LEFT_REAR_MOTOR = new CAN(6); protected static final boolean inv_LEFT_REAR_MOTOR = true;
 	protected static final CAN can_RIGHT_REAR_MOTOR = new CAN(3); protected static final boolean inv_RIGHT_REAR_MOTOR = false;
 	protected static final CAN can_ARM_ELEVATOR_MOTOR = new CAN(5); protected static final boolean inv_ARM_ELEVATOR_MOTOR = false;
 	protected static final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);

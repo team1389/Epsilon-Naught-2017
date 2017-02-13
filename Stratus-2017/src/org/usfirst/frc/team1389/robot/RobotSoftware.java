@@ -6,6 +6,7 @@ import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
+import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.drive.FourDriveOut;
 
@@ -23,13 +24,15 @@ public class RobotSoftware extends RobotHardware {
 				.adjustRange(RobotConstants.armAbsoluteMin, RobotConstants.armAbsoluteMax, 0, 90)
 				.setRange(0, 360)
 				.mapToAngle(Position.class);
-	public RangeIn<Value> gearIntakeCurrent =  new RangeIn<Value>(Value.class,0,0);//pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
+	public AngleIn<Speed> armVel = armElevator.getSpeedInput().scale(28 / 12).mapToAngle(Speed.class);
+	public RangeIn<Value> gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
 	public OhmThreadService threadManager = new OhmThreadService(20);
 
 	public static RobotSoftware getInstance() {
 		return INSTANCE;
 	}
-	public  RobotSoftware(){
+
+	public RobotSoftware() {
 		new Compressor(0).setClosedLoopControl(false);
 	}
 

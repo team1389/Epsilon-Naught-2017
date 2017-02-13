@@ -1,11 +1,11 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.hardware.inputs.hardware.GyroHardware;
+import com.team1389.hardware.inputs.hardware.PDPHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
 import com.team1389.hardware.registry.Registry;
-import com.team1389.hardware.registry.port_types.SPIPort;
+import com.team1389.hardware.registry.port_types.CAN;
 
 /**
  * responsible for initializing and storing hardware objects defined in {@link RobotLayout}
@@ -24,6 +24,7 @@ public class RobotHardware extends RobotLayout {
 	protected RobotHardware() {
 		registry = new Registry();
 		//gyro = new GyroHardware<SPIPort>(GyroHardware.ADXRS_453, spi_GyroPort, registry);
+		pdp = new PDPHardware(new CAN(1),registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
 		initGearIntake();
