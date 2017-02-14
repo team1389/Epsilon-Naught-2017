@@ -82,8 +82,12 @@ public class GearIntakeSystem extends Subsystem {
 
 	public Command intakeGear() {
 		return CommandUtil.combineSequential(enablePID(true), new SetAngle(Angle.DOWN), setStateCommand(State.INTAKING),
-				new IntakeUntilGear(), setIntake(-.5), new SetAngle(Angle.CARRYING), setStateCommand(State.CARRYING),
-				setIntake(0));
+				new IntakeUntilGear(), carryGear());
+	}
+
+	public Command carryGear() {
+		return CommandUtil.combineSequential(enablePID(true), setIntake(-.5), new SetAngle(Angle.CARRYING),
+				setStateCommand(State.CARRYING), setIntake(0));
 	}
 
 	public Command stowArm() {
@@ -120,6 +124,10 @@ public class GearIntakeSystem extends Subsystem {
 			break;
 		case ALIGNING:
 			schedule(preparePlaceGear());
+			break;
+		case CARRYING:
+			schedule(carryGear());
+			break;
 		default:
 			break;
 		}

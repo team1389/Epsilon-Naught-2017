@@ -27,7 +27,7 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	@Override
 	public void update() {
 		if (intakeGearButton.get()) {
-			enterState(State.INTAKING);
+			enterState(state == State.INTAKING ? State.CARRYING : State.INTAKING);
 		}
 		if (prepareGearButton.get()) {
 			enterState(State.ALIGNING);
