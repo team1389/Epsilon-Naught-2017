@@ -39,6 +39,7 @@ public class RobotMap {
 	protected static final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
 	protected static final boolean sinv_ARM_ELEVATOR_MOTOR = false;
 	protected static final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected static final boolean inv_GEAR_INTAKE_MOTOR = true;
+	protected static final PWM pwm_BALL_INTAKE_MOTOR = new PWM(4); protected static final boolean inv_BALL_INTAKE_MOTOR = false;
 	protected static final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
 	protected static final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
 	protected static final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
