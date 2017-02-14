@@ -12,8 +12,9 @@ public class ControlMap {
 	
 	protected static final int MANIP_CONTROLLER = 1;
 	protected static final int btn_A = 1;
-	protected static final int btn_B = 4;
+	protected static final int btn_Y = 4;
 	protected static final int btn_X = 3;
+	protected static final int btn_B = 2;
 
 	public static final double turnSensitivity = 1.0;
 	public static final double spinSensitivity = 1.0;

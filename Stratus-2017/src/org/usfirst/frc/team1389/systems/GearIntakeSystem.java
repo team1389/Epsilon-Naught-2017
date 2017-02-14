@@ -5,7 +5,6 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SmoothSetController;
 import com.team1389.hardware.inputs.software.AngleIn;
-import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
@@ -14,6 +13,7 @@ import com.team1389.hardware.value_types.Value;
 import com.team1389.system.Subsystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.EnumInfo;
 
 public class GearIntakeSystem extends Subsystem {
 	private AngleIn<Position> armAngle;
@@ -21,28 +21,24 @@ public class GearIntakeSystem extends Subsystem {
 	private SmoothSetController armPositionPID;
 	private PercentOut intakeVoltageOut;
 	private RangeIn<Value> intakeCurrentDraw;
-	private DigitalIn intakeGearButton;
-	private DigitalIn prepareGearButton;
-	private DigitalIn placeGearButton;
+	protected State state;
 
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, RangeIn<Value> intakeCurrent, DigitalIn intakeGearButton,
-			DigitalIn prepareGearButton, DigitalIn placeGearButton) {
+			PercentOut intakeVoltage, RangeIn<Value> intakeCurrent) {
 		this.armAngle = armAngle;
 		this.armVel = armVel;
-		this.armPositionPID = new SmoothSetController(new PIDConstants(.06, 1E-6, 0), 400, 400, 70, armAngle, armVel,
+		this.armPositionPID = new SmoothSetController(new PIDConstants(.06, 1E-6, 0), 400, 400, 150, armAngle, armVel,
 				armVoltage);
-		this.intakeVoltageOut = intakeVoltage;
+		setState(State.STOWED);
 		this.intakeCurrentDraw = intakeCurrent;
-		this.intakeGearButton = intakeGearButton;
-		this.prepareGearButton = prepareGearButton;
-		this.placeGearButton = placeGearButton;
+		this.intakeVoltageOut = intakeVoltage;
 	}
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(armAngle.getWatchable("angle"), armVel.getWatchable("velocity"),
-				intakeVoltageOut.getWatchable("intake voltage"), intakeCurrentDraw.getWatchable("intake current"));
+				intakeVoltageOut.getWatchable("intake voltage"), intakeCurrentDraw.getWatchable("intake current"),
+				new EnumInfo("Name", () -> state));
 	}
 
 	@Override
@@ -52,49 +48,47 @@ public class GearIntakeSystem extends Subsystem {
 
 	@Override
 	public void init() {
-		schedule(stowArm());
+		enterState(State.STOWED);
 	}
 
 	@Override
 	public void update() {
-		if (intakeGearButton.get()) {
-			schedule(intakeGear());
-		}
-		if (prepareGearButton.get()) {
-			schedule(preparePlaceGear());
-		}
-		if (placeGearButton.get()) {
-			schedule(placeGear());
-		}
 		armPositionPID.update();
 	}
 
-	private enum IntakePosition {
-		DOWN(10), PLACING(90), CARRYING(110), STOWED(125), PLACED(10);
+	private enum Angle {
+		DOWN(10), PLACING(80), CARRYING(110), STOWED(125), PLACED(30);
 		public final double angle;
 
-		private IntakePosition(double angle) {
+		private Angle(double angle) {
 			this.angle = angle;
 		}
 	}
 
+	public enum State {
+		INTAKING, CARRYING, STOWED, PLACING, ALIGNING;
+	}
+
 	public Command preparePlaceGear() {
-		return new SetAngle(IntakePosition.PLACING.angle);
+		return CommandUtil.combineSequential(setIntake(0), new SetAngle(Angle.PLACING),
+				setStateCommand(State.ALIGNING));
 	}
 
 	public Command placeGear() {
-		return CommandUtil.combineSequential(enablePID(true), new SetAngleSlow(IntakePosition.PLACED.angle, false),
-				CommandUtil.createCommand(() -> isNear(70, 1)), setIntake(.25),
-				CommandUtil.createCommand(() -> isNear(IntakePosition.PLACED.angle, 10)), setIntake(0));
+		return CommandUtil.combineSequential(setStateCommand(State.PLACING), enablePID(true), setIntake(0),
+				new SetAngleSlow(Angle.PLACED.angle, false), CommandUtil.createCommand(() -> isNear(70, 1)),
+				setIntake(.25), CommandUtil.createCommand(() -> isNear(Angle.PLACED.angle, 10)), setIntake(0));
 	}
 
 	public Command intakeGear() {
-		return CommandUtil.combineSequential(enablePID(true), new SetAngle(IntakePosition.DOWN), new IntakeUntilGear(),
-				setIntake(-.5), new SetAngle(IntakePosition.CARRYING), setIntake(0));
+		return CommandUtil.combineSequential(enablePID(true), new SetAngle(Angle.DOWN), setStateCommand(State.INTAKING),
+				new IntakeUntilGear(), setIntake(-.5), new SetAngle(Angle.CARRYING), setStateCommand(State.CARRYING),
+				setIntake(0));
 	}
 
 	public Command stowArm() {
-		return CommandUtil.combineSequential(enablePID(true), new SetAngle(IntakePosition.STOWED));
+		return CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED),
+				setStateCommand(State.STOWED));
 	}
 
 	public Command enablePID(boolean val) {
@@ -103,6 +97,33 @@ public class GearIntakeSystem extends Subsystem {
 
 	public Command setIntake(double voltage) {
 		return CommandUtil.createCommand(() -> intakeVoltageOut.set(voltage));
+	}
+
+	public Command setStateCommand(State s) {
+		return CommandUtil.createCommand(() -> setState(s));
+	}
+
+	public void setState(State s) {
+		state = s;
+	}
+
+	public void enterState(State desired) {
+		switch (desired) {
+		case STOWED:
+			schedule(stowArm());
+			break;
+		case INTAKING:
+			schedule(intakeGear());
+			break;
+		case PLACING:
+			schedule(placeGear());
+			break;
+		case ALIGNING:
+			schedule(preparePlaceGear());
+		default:
+			break;
+		}
+
 	}
 
 	public class IntakeUntilGear extends Command {
@@ -133,7 +154,7 @@ public class GearIntakeSystem extends Subsystem {
 			this.waitForFinish = waitForFinish;
 		}
 
-		public SetAngle(IntakePosition pos, boolean waitForFinish) {
+		public SetAngle(Angle pos, boolean waitForFinish) {
 			this(pos.angle, waitForFinish);
 		}
 
@@ -141,7 +162,7 @@ public class GearIntakeSystem extends Subsystem {
 			this(position, true);
 		}
 
-		public SetAngle(IntakePosition pos) {
+		public SetAngle(Angle pos) {
 			this(pos, true);
 		}
 

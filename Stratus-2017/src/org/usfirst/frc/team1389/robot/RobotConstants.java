@@ -5,8 +5,8 @@ public class RobotConstants {
 
 	public static final double WheelDiameter = 8; // in
 	
-	public static final int armAbsoluteMin = -1000;
-	public static final int armAbsoluteMax = 992;
+	public static final int armAbsoluteMin = 1716;
+	public static final int armAbsoluteMax = 3736;
 
 	/**
 	 * constants for odometry calculations

@@ -2,7 +2,7 @@ package org.usfirst.frc.team1389.operation;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
-import org.usfirst.frc.team1389.systems.GearIntakeSystem;
+import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
@@ -29,13 +29,13 @@ public class TeleopMain {
 		manager = new SystemManager(drive, gearIntake);
 		manager.init();
 		DebugDash.getInstance().watch(gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
-				robot.pdp.getCurrentIn().getWatchable("total"));
+				robot.pdp.getCurrentIn().getWatchable("total"),controls.aButton.getWatchable("button"));
 
 	}
 
 	private Subsystem setupGearIntake() {
-		return new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
-				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),controls.i_bButton.get(), controls.i_xButton.get());
+		return new TeleopGearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
+				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get());
 	}
 
 	public void periodic() {
