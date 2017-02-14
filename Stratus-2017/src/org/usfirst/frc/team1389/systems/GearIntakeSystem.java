@@ -38,12 +38,12 @@ public class GearIntakeSystem extends Subsystem {
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(armAngle.getWatchable("angle"), armVel.getWatchable("velocity"),
 				intakeVoltageOut.getWatchable("intake voltage"), intakeCurrentDraw.getWatchable("intake current"),
-				new EnumInfo("Name", () -> state));
+				new EnumInfo("Name", () -> state), scheduler);
 	}
 
 	@Override
 	public String getName() {
-		return "GearSystem";
+		return "GearIntake";
 	}
 
 	@Override
@@ -70,29 +70,34 @@ public class GearIntakeSystem extends Subsystem {
 	}
 
 	public Command preparePlaceGear() {
-		return CommandUtil.combineSequential(setIntake(0), new SetAngle(Angle.PLACING),
-				setStateCommand(State.ALIGNING));
+		return CommandUtil
+				.combineSequential(setIntake(0), new SetAngle(Angle.PLACING), setStateCommand(State.ALIGNING))
+					.setName("prepare-pos");
 	}
 
 	public Command placeGear() {
-		return CommandUtil.combineSequential(setStateCommand(State.PLACING), enablePID(true), setIntake(0),
-				new SetAngleSlow(Angle.PLACED.angle, false), CommandUtil.createCommand(() -> isNear(70, 1)),
-				setIntake(.25), CommandUtil.createCommand(() -> isNear(Angle.PLACED.angle, 10)), setIntake(0));
+		return CommandUtil
+				.combineSequential(setStateCommand(State.PLACING), enablePID(true), setIntake(0),
+						new SetAngleSlow(Angle.PLACED.angle, false), CommandUtil.createCommand(() -> isNear(70, 1)),
+						setIntake(.25), CommandUtil.createCommand(() -> isNear(Angle.PLACED.angle, 10)), setIntake(0))
+					.setName("placing");
 	}
 
 	public Command intakeGear() {
-		return CommandUtil.combineSequential(enablePID(true), new SetAngle(Angle.DOWN), setStateCommand(State.INTAKING),
+		return CommandUtil.combineSequential(CommandUtil
+				.combineSequential(enablePID(true), new SetAngle(Angle.DOWN), setStateCommand(State.INTAKING))
+					.setName("lowering"),
 				new IntakeUntilGear(), carryGear());
 	}
 
 	public Command carryGear() {
 		return CommandUtil.combineSequential(enablePID(true), setIntake(-.5), new SetAngle(Angle.CARRYING),
-				setStateCommand(State.CARRYING), setIntake(0));
+				setStateCommand(State.CARRYING), setIntake(0).setName("raising-to-carry"));
 	}
 
 	public Command stowArm() {
 		return CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED),
-				setStateCommand(State.STOWED));
+				setStateCommand(State.STOWED),enablePID(false)).setName("stowing");
 	}
 
 	public Command enablePID(boolean val) {
@@ -149,6 +154,10 @@ public class GearIntakeSystem extends Subsystem {
 		@Override
 		protected void done() {
 			intakeVoltageOut.set(0);
+		}
+
+		public String getName() {
+			return "awaiting-gear";
 		}
 
 	}
