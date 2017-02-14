@@ -6,6 +6,7 @@ import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
+import com.ctre.CANTalon.FeedbackDevice;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
@@ -37,7 +38,8 @@ public class TeleopMain {
 		return new TeleopGearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
 				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
 				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
-				controls.i_leftVertAxis.get());
+				controls.i_leftVertAxis.get(),
+				robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute));
 	}
 
 	public void periodic() {
