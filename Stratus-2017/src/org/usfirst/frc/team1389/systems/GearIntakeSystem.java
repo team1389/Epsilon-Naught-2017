@@ -19,7 +19,7 @@ public class GearIntakeSystem extends Subsystem {
 	private AngleIn<Position> armAngle;
 	private AngleIn<Speed> armVel;
 	private SmoothSetController armPositionPID;
-	private PercentOut intakeVoltageOut;
+	protected PercentOut intakeVoltageOut;
 	private RangeIn<Value> intakeCurrentDraw;
 	protected State state;
 

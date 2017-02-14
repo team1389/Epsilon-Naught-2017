@@ -45,20 +45,20 @@ public class ControlBoard extends ControlMap {
 
 	public DigitalIn thumb = driveController.getButton(btn_THUMB).getLatched();
 	public Supplier<DigitalIn> i_thumb = thumb::copy;
-	
+
 	public DigitalIn aButton = manipController.getButton(btn_A).getLatched();
 	public Supplier<DigitalIn> i_aButton = aButton::copy;
-	
+
 	public DigitalIn yButton = manipController.getButton(btn_Y).getLatched();
 	public Supplier<DigitalIn> i_yButton = yButton::copy;
-	
+
 	public DigitalIn xButton = manipController.getButton(btn_X).getLatched();
 	public Supplier<DigitalIn> i_xButton = xButton::copy;
-	
+
 	public DigitalIn bButton = manipController.getButton(btn_B).getLatched();
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
-	
-	
 
+	public PercentIn leftVertAxis = manipController.getAxis(ax_LEFT_VERT_AXIS).applyDeadband(.075);
+	public Supplier<PercentIn> i_leftVertAxis = leftVertAxis::copy;
 
 }
