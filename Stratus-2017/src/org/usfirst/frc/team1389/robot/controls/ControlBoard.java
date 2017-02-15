@@ -43,20 +43,23 @@ public class ControlBoard extends ControlMap {
 	public DigitalIn trigger = driveController.getButton(btn_TRIGGER);
 	public Supplier<DigitalIn> i_trigger = trigger::copy;
 
-	public DigitalIn thumb = driveController.getButton(btn_THUMB).getLatched();
+	public DigitalIn thumb = driveController.getButton(btn_THUMB).latched();
 	public Supplier<DigitalIn> i_thumb = thumb::copy;
 
-	public DigitalIn aButton = manipController.getButton(btn_A).getLatched();
+	public DigitalIn aButton = manipController.getButton(btn_A).latched();
 	public Supplier<DigitalIn> i_aButton = aButton::copy;
 
-	public DigitalIn yButton = manipController.getButton(btn_Y).getLatched();
+	public DigitalIn yButton = manipController.getButton(btn_Y).latched();
 	public Supplier<DigitalIn> i_yButton = yButton::copy;
 
-	public DigitalIn xButton = manipController.getButton(btn_X).getLatched();
+	public DigitalIn xButton = manipController.getButton(btn_X).latched();
 	public Supplier<DigitalIn> i_xButton = xButton::copy;
 
-	public DigitalIn bButton = manipController.getButton(btn_B).getLatched();
+	public DigitalIn bButton = manipController.getButton(btn_B).latched();
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
+
+	public DigitalIn leftBumper = manipController.getButton(btn_LEFT_BUMPER);
+	// TODO
 
 	public PercentIn leftVertAxis = manipController.getAxis(ax_LEFT_VERT_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_leftVertAxis = leftVertAxis::copy;

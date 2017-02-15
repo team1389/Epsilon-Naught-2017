@@ -30,7 +30,8 @@ public class TeleopMain {
 		manager = new SystemManager(drive, gearIntake);
 		manager.init();
 		DebugDash.getInstance().watch(gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
-				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"));
+				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"),
+				robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute).getWatchable("is sensor"));
 
 	}
 
@@ -38,8 +39,7 @@ public class TeleopMain {
 		return new TeleopGearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
 				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
 				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
-				controls.i_leftVertAxis.get(),
-				robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute));
+				controls.i_leftVertAxis.get(), robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute).invert());
 	}
 
 	public void periodic() {

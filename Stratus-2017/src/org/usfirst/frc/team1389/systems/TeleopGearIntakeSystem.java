@@ -8,6 +8,9 @@ import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
+import com.team1389.util.list.AddList;
+import com.team1389.watch.Watchable;
+import com.team1389.watch.info.EnumInfo;
 
 public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	private DigitalIn intakeGearButton;
@@ -17,6 +20,7 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	private PercentOut armVoltage;
 	private PercentIn armManualAxis;
 	private DigitalIn sensorFailure;
+	private boolean intakeRunning;
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, RangeIn<Value> intakeCurrent, DigitalIn intakeGearButton,
@@ -44,7 +48,8 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	public void update() {
 		if (sensorFailure.get()) {
 			armVoltage.set(armManualAxis.get());
-			intakeVoltageOut.set(intakeGearButton.get() ? -1 : 0.0);
+			intakeRunning = intakeGearButton.get() ^ intakeRunning;
+			intakeVoltageOut.set(intakeRunning ? -1 : 0.0);
 		} else {
 			if (intakeGearButton.get()) {
 				enterState(state == State.INTAKING ? State.CARRYING : State.INTAKING);
@@ -64,5 +69,10 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 
 	public void addSensorFailurePoint(DigitalIn... sensorFailFlags) {
 		sensorFailure = sensorFailure.combineOR(sensorFailFlags);
+	}
+	
+	@Override
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+		return stem.put(intakeGearButton.toggled().getWatchable("intake gear button"));
 	}
 }
