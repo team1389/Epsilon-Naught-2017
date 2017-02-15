@@ -15,7 +15,7 @@ public class BallIntakeSystem extends Subsystem{
 	DigitalIn intakeButton;
 	RangeOut<Percent> intakeVoltage;
 	GearIntakeSystem.State state;
-	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state, RangeOut<Percent> intakeVoltage ){
+	public BallIntakeSystem(DigitalIn intakeButton,Supplier <GearIntakeSystem.State> state,RangeOut<Percent> intakeVoltage ){
 		this.intakeButton = intakeButton.getLatched();
 		this.intakeVoltage = intakeVoltage;
 		this.state = state.get();
@@ -46,5 +46,11 @@ public class BallIntakeSystem extends Subsystem{
 		else{
 			intakeVoltage.set(1);
 		}
+
 	}
-}
+
+		
+		
+		
+	}
+
