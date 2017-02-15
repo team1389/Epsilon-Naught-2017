@@ -10,7 +10,6 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
-import com.team1389.watch.info.EnumInfo;
 
 public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	private DigitalIn intakeGearButton;

@@ -55,6 +55,9 @@ public class GearIntakeSystem extends Subsystem {
 	public void update() {
 		armPositionPID.update();
 	}
+	public State getState(){
+		return this.state;
+	}
 
 	private enum Angle {
 		DOWN(10), PLACING(80), CARRYING(110), STOWED(125), PLACED(30);

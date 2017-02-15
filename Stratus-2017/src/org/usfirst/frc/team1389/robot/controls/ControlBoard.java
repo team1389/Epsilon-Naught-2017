@@ -54,6 +54,8 @@ public class ControlBoard extends ControlMap {
 
 	public DigitalIn xButton = manipController.getButton(btn_X).latched();
 	public Supplier<DigitalIn> i_xButton = xButton::copy;
+	
+	
 
 	public DigitalIn bButton = manipController.getButton(btn_B).latched();
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
