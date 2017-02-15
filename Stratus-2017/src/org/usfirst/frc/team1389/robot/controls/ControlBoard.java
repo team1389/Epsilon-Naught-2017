@@ -7,9 +7,9 @@ import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 
 /**
- * A basic framework for the robot controls. Like the RobotHardware, one instance of the
- * ControlBoard object is created upon startup, then other methods request the singleton
- * ControlBoard instance.
+ * A basic framework for the robot controls. Like the RobotHardware, one
+ * instance of the ControlBoard object is created upon startup, then other
+ * methods request the singleton ControlBoard instance.
  * 
  * @author amind
  * @see ControlMap
@@ -54,8 +54,6 @@ public class ControlBoard extends ControlMap {
 
 	public DigitalIn xButton = manipController.getButton(btn_X).latched();
 	public Supplier<DigitalIn> i_xButton = xButton::copy;
-	
-	
 
 	public DigitalIn bButton = manipController.getButton(btn_B).latched();
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
