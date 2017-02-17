@@ -17,7 +17,7 @@ public class ControlMap {
 	protected static final int btn_B = 2;
 	protected static final int ax_LEFT_VERT_AXIS = 1;
 	protected static final int btn_LEFT_BUMPER = 5;
-	protected static final int ax_LEFT_TRIGGER = 6;
+	protected static final int ax_LEFT_TRIGGER = 2;
 
 	public static final double turnSensitivity = 1.0;
 	public static final double spinSensitivity = 1.0;

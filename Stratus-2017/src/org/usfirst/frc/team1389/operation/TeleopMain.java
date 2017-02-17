@@ -20,7 +20,7 @@ public class TeleopMain {
 	ControlBoard controls;
 	RobotSoftware robot;
 	DigitalIn thumb;
-	Supplier<GearIntakeSystem.State> state;
+	Supplier<GearIntakeSystem.State> gearIntakeState;
 
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -48,17 +48,16 @@ public class TeleopMain {
 
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
 				robot.armElevator.getVoltageOutput(),
-
 				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
 				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
 				controls.i_leftVertAxis.get());
-		state = () -> Supplier.getState();
+		gearIntakeState = () -> Supplier.getState();
 		// robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute));
 		return Supplier;
 	}
 
 	private Subsystem setUpBallIntake() {
-		return new BallIntakeSystem(controls.trigger, state, robot.ballVoltageOut);
+		return new BallIntakeSystem(controls.trigger, gearIntakeState, robot.ballVoltageOut);
 
 	}
 	
