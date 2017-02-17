@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.BallIntakeSystem;
+import org.usfirst.frc.team1389.systems.ClimberSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
@@ -33,13 +34,15 @@ public class TeleopMain {
 				controls.i_thumb.get(), controls.i_trigger.get());
 		Subsystem gearIntake = setupGearIntake();
 		Subsystem ballIntake = setUpBallIntake();
-
-		manager = new SystemManager(drive, gearIntake, ballIntake);
+		Subsystem climbing = setUpClimbing();
+		
+		manager = new SystemManager(drive, gearIntake, ballIntake, climbing);
 		manager.init();
 		DebugDash.getInstance().watch(gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
 				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"));
 
 	}
+
 
 	private Subsystem setupGearIntake() {
 
@@ -57,6 +60,10 @@ public class TeleopMain {
 	private Subsystem setUpBallIntake() {
 		return new BallIntakeSystem(controls.trigger, state, robot.ballVoltageOut);
 
+	}
+	
+	private ClimberSystem setUpClimbing() {
+		return new ClimberSystem(controls.leftTriggerAxis, robot.climberCurrent, robot.climberVoltageOut);
 	}
 
 	public void periodic() {

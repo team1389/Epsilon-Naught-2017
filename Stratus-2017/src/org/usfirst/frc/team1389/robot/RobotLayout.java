@@ -21,7 +21,7 @@ public class RobotLayout extends RobotMap {
 	public CANTalonHardware rearLeft;
 	public CANTalonHardware rearRight;
 	public CANTalonHardware armElevator;
-	public VictorHardware gearIntake, ballIntake;
+	public VictorHardware gearIntake, ballIntake, climber;
 	public PDPHardware pdp;
 	public DoubleSolenoidHardware flPiston, frPiston, rlPiston, rrPiston;
 	public GyroHardware<?> gyro;

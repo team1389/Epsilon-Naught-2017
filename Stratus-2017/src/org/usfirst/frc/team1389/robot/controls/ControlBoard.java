@@ -46,6 +46,8 @@ public class ControlBoard extends ControlMap {
 	public DigitalIn thumb = driveController.getButton(btn_THUMB).latched();
 	public Supplier<DigitalIn> i_thumb = thumb::copy;
 
+	
+	
 	public DigitalIn aButton = manipController.getButton(btn_A).latched();
 	public Supplier<DigitalIn> i_aButton = aButton::copy;
 
@@ -59,8 +61,12 @@ public class ControlBoard extends ControlMap {
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
 
 	public DigitalIn leftBumper = manipController.getButton(btn_LEFT_BUMPER);
-	// TODO
 
+	
+	public PercentIn leftTriggerAxis = manipController.getAxis(ax_LEFT_TRIGGER).applyDeadband(.075);
+	public Supplier<PercentIn> i_leftTriggerAxis = leftTriggerAxis::copy;
+
+	
 	public PercentIn leftVertAxis = manipController.getAxis(ax_LEFT_VERT_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_leftVertAxis = leftVertAxis::copy;
 
