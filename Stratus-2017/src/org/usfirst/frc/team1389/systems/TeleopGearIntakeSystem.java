@@ -48,6 +48,12 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 		if (sensorFailure.get()) {
 			armVoltage.set(armManualAxis.get());
 			intakeRunning = intakeGearButton.get() ^ intakeRunning;
+			if(intakeRunning){
+				setState(State.INTAKING);
+			}
+			else{
+				setState(State.CARRYING);
+			}
 			intakeVoltageOut.set(intakeRunning ? -1 : 0.0);
 		} else {
 			if (intakeGearButton.get()) {
