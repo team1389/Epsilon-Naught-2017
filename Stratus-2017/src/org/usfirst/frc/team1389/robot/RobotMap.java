@@ -49,6 +49,8 @@ public class RobotMap {
 	protected static final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
 	protected static final PCM pcm_REAR_RIGHT_PISTON_B = new PCM(2);
 	protected static final int pdp_GEAR_INTAKE_CURRENT = 4;
+	protected static final int pdp_Climber_Val = 2;
+	protected static final PWM pwm_CLIMBER_MOTOR = new PWM(2); 
 
 }
 

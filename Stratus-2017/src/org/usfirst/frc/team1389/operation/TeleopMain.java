@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.BallIntakeSystem;
+import org.usfirst.frc.team1389.systems.ClimberSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
@@ -20,7 +21,7 @@ public class TeleopMain {
 	ControlBoard controls;
 	RobotSoftware robot;
 	DigitalIn thumb;
-	Supplier<GearIntakeSystem.State> state;
+	Supplier<GearIntakeSystem.State> gearIntakeState;
 
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -34,6 +35,9 @@ public class TeleopMain {
 		GearIntakeSystem gearIntake = setupGearIntake();
 		Subsystem ballIntake = setUpBallIntake(() -> gearIntake.getState());
 		manager = new SystemManager(drive, gearIntake);
+		Subsystem climbing = setUpClimbing();
+		
+		manager = new SystemManager(drive, gearIntake, ballIntake, climbing);
 		manager.init();
 		DebugDash.getInstance().watch(drive, gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
 				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"));
@@ -41,9 +45,9 @@ public class TeleopMain {
 	}
 
 	private GearIntakeSystem setupGearIntake() {
+
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
 				robot.armElevator.getVoltageOutput(),
-
 				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
 				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
 				controls.i_leftVertAxis.get(),
@@ -53,6 +57,10 @@ public class TeleopMain {
 
 	private Subsystem setUpBallIntake(Supplier<GearIntakeSystem.State> state) {
 		return new BallIntakeSystem(controls.trigger, state, robot.ballVoltageOut);
+	}
+	
+	private ClimberSystem setUpClimbing() {
+		return new ClimberSystem(controls.leftTriggerAxis, robot.climberCurrent, robot.climberVoltageOut);
 	}
 
 	public void periodic() {

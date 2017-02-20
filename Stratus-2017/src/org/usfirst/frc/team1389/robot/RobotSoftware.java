@@ -4,6 +4,7 @@ import com.team1389.concurrent.OhmThreadService;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
+import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.outputs.software.RangeOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
@@ -28,6 +29,8 @@ public class RobotSoftware extends RobotHardware {
 				.mapToAngle(Position.class);
 	public AngleIn<Speed> armVel = armElevator.getSpeedInput().scale(28 / 12).mapToAngle(Speed.class);
 	public RangeIn<Value> gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
+	public PercentOut climberVoltageOut = climber.getVoltageOutput();
+	public RangeIn<Value> climberCurrent = pdp.getCurrentIn(pdp_Climber_Val);
 	public OhmThreadService threadManager = new OhmThreadService(20);
 
 	public static RobotSoftware getInstance() {

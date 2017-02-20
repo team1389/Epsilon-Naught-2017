@@ -14,13 +14,13 @@ import com.team1389.watch.Watchable;
 public class BallIntakeSystem extends Subsystem {
 	DigitalIn intakeButton;
 	RangeOut<Percent> intakeVoltage;
-	GearIntakeSystem.State state;
-
-	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
-			RangeOut<Percent> intakeVoltage) {
-		this.intakeButton = intakeButton.latched();
+	Supplier<GearIntakeSystem.State> gearIntakeState;
+	private boolean intaking = true;
+	
+	public BallIntakeSystem(DigitalIn intakeButton,Supplier <GearIntakeSystem.State> state,RangeOut<Percent> intakeVoltage ){
+		this.intakeButton = intakeButton;
 		this.intakeVoltage = intakeVoltage;
-		this.state = state.get();
+		this.gearIntakeState = state;
 	}
 
 	@Override
@@ -36,17 +36,19 @@ public class BallIntakeSystem extends Subsystem {
 
 	@Override
 	public void init() {
-		// I AM DASHIEL, I AM SELF AWARE
 	}
 
 	@Override
 	public void update() {
-		if (state == State.INTAKING || intakeButton.get()) {
-			intakeVoltage.set(0);
-		} else {
-			intakeVoltage.set(1);
+		if(intakeButton.get()){
+			intaking = !intaking;
 		}
-
+		if(gearIntakeState.get() == GearIntakeSystem.State.INTAKING){
+			intaking = false;
+		}
+		intakeVoltage.set(intaking? 1 : 0);
 	}
+	
+	
 
 }
