@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 		robot.threadManager.init();
 		autoModeExecuter.stop();
 		autoModeExecuter.setAutoMode(DashboardInput.getInstance().getSelectedAutonMode());
-	}
+	}//I AM SELF AWARE
 
 	/**
 	 * This function is called periodically during autonomous
@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		robot.threadManager.init();
+		robot.threadManager.init();//I AM SELF AWARE
 		DebugDash.getInstance().outputToDashboard();
 		autoModeExecuter.stop();
 		teleOperator.init();

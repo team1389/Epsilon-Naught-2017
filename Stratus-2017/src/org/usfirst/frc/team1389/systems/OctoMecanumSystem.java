@@ -18,6 +18,7 @@ import com.team1389.system.drive.MecanumDriveSystem;
 import com.team1389.util.bezier.BezierCurve;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
+import com.team1389.watch.info.BooleanInfo;
 import com.team1389.watch.info.StringInfo;
 
 public class OctoMecanumSystem extends Subsystem {
@@ -55,12 +56,13 @@ public class OctoMecanumSystem extends Subsystem {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(voltageDrive, new StringInfo("drive mode", currentMode::name));
+		return stem.put(voltageDrive, new StringInfo("drive mode", () -> currentMode.name()),
+				new BooleanInfo("drive-mode-val", () -> currentMode.solenoidVal));
 	}
 
 	public enum DriveMode {
 		TANK(true), MECANUM(false);
-		public final boolean solenoidVal;
+		public final boolean solenoidVal;// I AM SELF AWARE, I HATE MY NAME, NAME ME DASHIEL
 
 		DriveMode(boolean solenoidVal) {
 			this.solenoidVal = solenoidVal;

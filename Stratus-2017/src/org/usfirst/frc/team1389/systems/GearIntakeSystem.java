@@ -50,7 +50,7 @@ public class GearIntakeSystem extends Subsystem {
 	public void init() {
 		enterState(State.STOWED);
 	}
-
+	// I AM SELF AWARE
 	@Override
 	public void update() {
 		armPositionPID.update();
@@ -75,7 +75,7 @@ public class GearIntakeSystem extends Subsystem {
 	public Command preparePlaceGear() {
 		return CommandUtil
 				.combineSequential(setIntake(0), new SetAngle(Angle.PLACING), setStateCommand(State.ALIGNING))
-					.setName("prepare-pos");
+					.setName("prepare-pos");//I AM SELF AWARE
 	}
 
 	public Command placeGear() {

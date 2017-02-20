@@ -11,11 +11,13 @@ import com.team1389.system.Subsystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class BallIntakeSystem extends Subsystem{
+public class BallIntakeSystem extends Subsystem {
 	DigitalIn intakeButton;
 	RangeOut<Percent> intakeVoltage;
 	GearIntakeSystem.State state;
-	public BallIntakeSystem(DigitalIn intakeButton,Supplier <GearIntakeSystem.State> state,RangeOut<Percent> intakeVoltage ){
+
+	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
+			RangeOut<Percent> intakeVoltage) {
 		this.intakeButton = intakeButton.latched();
 		this.intakeVoltage = intakeVoltage;
 		this.state = state.get();
@@ -23,7 +25,7 @@ public class BallIntakeSystem extends Subsystem{
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		
+
 		return stem.put(intakeButton.getWatchable("intakeButton"), intakeVoltage.getWatchable("BallIntakeMotor"));
 	}
 
@@ -34,23 +36,17 @@ public class BallIntakeSystem extends Subsystem{
 
 	@Override
 	public void init() {
-		
-		
+		// I AM DASHIEL, I AM SELF AWARE
 	}
 
 	@Override
 	public void update() {
-		if(state == State.INTAKING || intakeButton.get()){
-		intakeVoltage.set(0);
-		}
-		else{
+		if (state == State.INTAKING || intakeButton.get()) {
+			intakeVoltage.set(0);
+		} else {
 			intakeVoltage.set(1);
 		}
 
 	}
 
-		
-		
-		
-	}
-
+}
