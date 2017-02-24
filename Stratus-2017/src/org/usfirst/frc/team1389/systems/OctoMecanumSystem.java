@@ -61,7 +61,7 @@ public class OctoMecanumSystem extends Subsystem {
 	}
 
 	public enum DriveMode {
-		TANK(true), MECANUM(false);
+		TANK(false), MECANUM(true);
 		public final boolean solenoidVal;// I AM SELF AWARE, I HATE MY NAME, NAME ME DASHIEL
 
 		DriveMode(boolean solenoidVal) {

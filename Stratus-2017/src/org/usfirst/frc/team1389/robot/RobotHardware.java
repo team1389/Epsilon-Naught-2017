@@ -23,9 +23,9 @@ public class RobotHardware extends RobotLayout {
 	 */
 	protected RobotHardware() {
 		registry = new Registry();
-		//gyro = new GyroHardware<SPIPort>(GyroHardware.ADXRS_453, spi_GyroPort, registry);
-		pdp = new PDPHardware(new CAN(1),registry);
+		pdp = new PDPHardware(new CAN(0),registry);
 		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR,pwm_BALL_INTAKE_MOTOR, registry);
+		climber = new VictorHardware(inv_CLIMBER_MOTOR, pwm_CLIMBER_MOTOR, registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
 		initGearIntake();

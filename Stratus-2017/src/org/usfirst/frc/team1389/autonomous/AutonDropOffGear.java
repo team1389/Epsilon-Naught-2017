@@ -6,24 +6,10 @@ import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeEndedException;
 import com.team1389.command_framework.CommandScheduler;
 import com.team1389.command_framework.CommandUtil;
-import com.team1389.trajectory.PathFollowingSystem.PathFollowCommand;
-import com.team1389.trajectory.PathFollowingSystem;
-import com.team1389.trajectory.Translation2d;
-import com.team1389.util.list.AddList;
-import com.team1389.watch.Watchable;
-import org.usfirst.frc.team1389.robot.RobotSoftware;
-
-import com.team1389.auto.AutoModeBase;
-import com.team1389.auto.AutoModeEndedException;
-import com.team1389.command_framework.CommandScheduler;
-import com.team1389.command_framework.CommandUtil;
-import com.team1389.hardware.inputs.software.PositionEncoderIn;
 import com.team1389.trajectory.PathFollowingSystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 
 public class AutonDropOffGear extends AutoModeBase {

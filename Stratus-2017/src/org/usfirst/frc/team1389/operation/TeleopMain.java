@@ -34,33 +34,31 @@ public class TeleopMain {
 				controls.i_thumb.get(), controls.i_trigger.get());
 		GearIntakeSystem gearIntake = setupGearIntake();
 		Subsystem ballIntake = setUpBallIntake(() -> gearIntake.getState());
-		manager = new SystemManager(drive, gearIntake);
 		Subsystem climbing = setUpClimbing();
-		
+
 		manager = new SystemManager(drive, gearIntake, ballIntake, climbing);
 		manager.init();
 		DebugDash.getInstance().watch(drive, gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
-				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"));
-
+				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"),
+				robot.flPiston);
 	}
 
 	private GearIntakeSystem setupGearIntake() {
 
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
-				robot.armElevator.getVoltageOutput(),
-				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
-				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
+				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent,
+				controls.i_aButton.get(), controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
 				controls.i_leftVertAxis.get(),
-				robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute));
+				robot.armElevator.getSensorTracker(FeedbackDevice.CtreMagEncoder_Absolute).invert());
 		return Supplier;
 	}
 
 	private Subsystem setUpBallIntake(Supplier<GearIntakeSystem.State> state) {
-		return new BallIntakeSystem(controls.trigger, state, robot.ballVoltageOut);
+		return new BallIntakeSystem(controls.rightBumper, state, robot.ballIntake.getVoltageOutput());
 	}
-	
+
 	private ClimberSystem setUpClimbing() {
-		return new ClimberSystem(controls.leftTriggerAxis, robot.climberCurrent, robot.climberVoltageOut);
+		return new ClimberSystem(controls.i_leftTriggerAxis.get(), robot.climberCurrent, robot.climber.getVoltageOutput());
 	}
 
 	public void periodic() {

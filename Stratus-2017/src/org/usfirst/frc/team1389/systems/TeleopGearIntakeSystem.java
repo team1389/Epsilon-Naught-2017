@@ -54,10 +54,11 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 			else{
 				setState(State.CARRYING);
 			}
-			intakeVoltageOut.set(intakeRunning ? -1 : 0.0);
+			intakeVoltageOut.set(intakeRunning ? 1 : 0.0);
 		} else {
 			if (intakeGearButton.get()) {
-				enterState(state == State.INTAKING ? State.CARRYING : State.INTAKING);
+				System.out.println("enter intake mode");
+				enterState(State.INTAKING);
 			}
 			if (prepareGearButton.get()) {
 				enterState(State.ALIGNING);
@@ -78,6 +79,6 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(intakeGearButton.toggled().getWatchable("intake gear button"));
+		return super.getSubWatchables(stem).put(intakeGearButton.getWatchable("intake gear button"),sensorFailure.getWatchable("sensor state"));
 	}
 }
