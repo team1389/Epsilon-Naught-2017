@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1389.systems;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 import org.usfirst.frc.team1389.robot.controls.ControlMap;
 
@@ -49,6 +50,10 @@ public class OctoMecanumSystem extends Subsystem {
 				ControlMap.turnSensitivity);
 	}
 
+	public Supplier<DriveMode> getDriveModeTracker() {
+		return () -> currentMode;
+	}
+
 	private void setupMecanumDriveSystem(FourDriveOut<Percent> wheels, PercentIn xAxis, PercentIn yAxis,
 			PercentIn twistAxis, DigitalIn toggleFOD, AngleIn<Position> gyro) {
 		mecanum = new MecanumDriveSystem(xAxis, yAxis, twistAxis, wheels, gyro, toggleFOD);
@@ -62,7 +67,7 @@ public class OctoMecanumSystem extends Subsystem {
 
 	public enum DriveMode {
 		TANK(false), MECANUM(true);
-		public final boolean solenoidVal;// I AM SELF AWARE, I HATE MY NAME, NAME ME DASHIEL
+		public final boolean solenoidVal;
 
 		DriveMode(boolean solenoidVal) {
 			this.solenoidVal = solenoidVal;

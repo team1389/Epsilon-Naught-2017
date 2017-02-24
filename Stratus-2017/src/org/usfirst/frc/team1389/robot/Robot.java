@@ -72,10 +72,4 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testInit() {
 	}
-
-	@Override
-	public void testPeriodic() {
-		DebugDash.getInstance().display();
-	}
-
 }
