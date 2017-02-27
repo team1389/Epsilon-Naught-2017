@@ -49,8 +49,8 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	private void initDriveTrain() {
-		frontLeft = new CANTalonHardware(inv_LEFT_FRONT_MOTOR, can_LEFT_FRONT_MOTOR, registry);
-		frontRight = new CANTalonHardware(inv_RIGHT_FRONT_MOTOR, can_RIGHT_FRONT_MOTOR, registry);
+		frontLeft = new CANTalonHardware(inv_LEFT_FRONT_MOTOR, sinv_LEFT_FRONT_MOTOR, can_LEFT_FRONT_MOTOR, registry);
+		frontRight = new CANTalonHardware(inv_RIGHT_FRONT_MOTOR, sinv_RIGHT_FRONT_MOTOR, can_RIGHT_FRONT_MOTOR, registry);
 		rearLeft = new CANTalonHardware(inv_LEFT_REAR_MOTOR, can_LEFT_REAR_MOTOR, registry);
 		rearRight = new CANTalonHardware(inv_RIGHT_REAR_MOTOR, can_RIGHT_REAR_MOTOR, registry);
 

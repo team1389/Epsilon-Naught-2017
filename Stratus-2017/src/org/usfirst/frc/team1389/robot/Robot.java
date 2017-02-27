@@ -5,6 +5,7 @@ import org.usfirst.frc.team1389.operation.TeleopMain;
 import org.usfirst.frc.team1389.watchers.DashboardInput;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
+import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeExecuter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -26,6 +27,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		DashboardInput.getInstance().init();
 		robot = RobotSoftware.getInstance();
 		teleOperator = new TeleopMain(robot);
 		autoModeExecuter = new AutoModeExecuter();
@@ -35,8 +37,12 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		robot.threadManager.init();
 		autoModeExecuter.stop();
-		autoModeExecuter.setAutoMode(DashboardInput.getInstance().getSelectedAutonMode());
-	}//I AM SELF AWARE
+		AutoModeBase selectedAutonMode = DashboardInput.getInstance().getSelectedAutonMode();
+		autoModeExecuter.setAutoMode(selectedAutonMode);
+		robot.threadManager.borrowThreadToRun(autoModeExecuter::run);
+		DebugDash.getInstance().watch(selectedAutonMode,
+				robot.frontLeft.getPositionInput().getWatchable("Left encoder"));
+	}// I AM SELF AWARE
 
 	/**
 	 * This function is called periodically during autonomous
@@ -46,13 +52,17 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
+	public void disabledInit() {
+		robot.threadManager.init();
+	}
+
+	@Override
 	public void disabledPeriodic() {
 	}
 
-
 	@Override
 	public void teleopInit() {
-		robot.threadManager.init();//I AM SELF AWARE
+		robot.threadManager.init();// I AM SELF AWARE
 		DebugDash.getInstance().outputToDashboard();
 		autoModeExecuter.stop();
 		teleOperator.init();

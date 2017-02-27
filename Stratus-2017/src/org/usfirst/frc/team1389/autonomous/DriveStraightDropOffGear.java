@@ -8,10 +8,12 @@ import org.usfirst.frc.team1389.systems.GearIntakeSystem.State;
 
 import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeEndedException;
+import com.team1389.auto.command.DriveStraightCommand;
 import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.control.SynchronousPIDController;
+import com.team1389.hardware.inputs.software.PositionEncoderIn;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.system.SystemManager;
@@ -27,12 +29,22 @@ public class DriveStraightDropOffGear extends AutoModeBase {
 	SystemManager manager;
 
 	DriveStraightDropOffGear(RobotSoftware robot) {
+		PositionEncoderIn.setGlobalWheelDiameter(4);
 		this.robot = robot;
 		DriveOut<Percent> tankDrive = robot.voltageDrive.getAsTank();
-		leftPID = new SynchronousPIDController<Percent, Position>(0.25, 0.25, 0.25, 0.25,
-				robot.frontLeft.getPositionInput(), tankDrive.left());
-		rightPID = new SynchronousPIDController<Percent, Position>(0.25, 0.25, 0.25, 0.25,
-				robot.frontRight.getPositionInput(), tankDrive.right());
+		leftPID = new SynchronousPIDController<Percent, Position>(0.25, 0, 0,
+				0, robot.frontLeft
+						.getPositionInput()
+							.<PositionEncoderIn>setTicksPerRotation(256)
+							.mapToRange(0, 1)
+							.scale(18 / 16),
+				tankDrive.left());
+		rightPID = new SynchronousPIDController<Percent, Position>(0.25, 0, 0, 0, robot.frontRight
+				.getPositionInput()
+					.<PositionEncoderIn>setTicksPerRotation(1024)
+					.mapToRange(0, 1)
+					.scale(18 / 16),
+				tankDrive.right());
 		gearSystem = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
 				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent);
 		manager = new SystemManager(gearSystem);
@@ -40,7 +52,7 @@ public class DriveStraightDropOffGear extends AutoModeBase {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return null;
+		return stem.put(leftPID.getOutput().getWatchable("PID Controller"));
 	}
 
 	@Override
@@ -50,14 +62,15 @@ public class DriveStraightDropOffGear extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-	//	Command driving = new DriveStraightCommand(leftPID, rightPID, 10, 10, 10, 10);
+		Command driving = new DriveStraightCommand(leftPID, rightPID, robot.gyroInput, 1, 1, 1, .2);
 		Function<State, Command> gearState = s -> gearSystem
 				.pairWithBackgroundCommand(gearSystem.getEnterStateCommand(s));
-	//	Function<Double, Command> distanceChecker = d -> new WaitForBooleanCommand(() -> (robot.frontLeft.getPositionInput().get() > d));
+		// Function<Double, Command> distanceChecker = d -> new WaitForBooleanCommand(() ->
+		// (robot.frontLeft.getPositionInput().get() > d));
 		Function<Double, Command> distanceChecker = WaitTimeCommand::new;
 		Command gearPlacing = CommandUtil.combineSequential(gearState.apply(State.CARRYING), distanceChecker.apply(5.0),
 				gearState.apply(State.ALIGNING), distanceChecker.apply(2.0), gearState.apply(State.PLACING));
-		runCommand(CommandUtil.combineSimultaneous(gearPlacing));
+		runCommand(CommandUtil.combineSimultaneous(driving));
 	}
 
 }
