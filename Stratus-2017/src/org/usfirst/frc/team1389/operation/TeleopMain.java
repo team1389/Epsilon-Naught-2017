@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.BallIntakeSystem;
+import org.usfirst.frc.team1389.systems.CameraSystem;
 import org.usfirst.frc.team1389.systems.ClimberSystem;
 import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
@@ -32,8 +33,8 @@ public class TeleopMain {
 		Subsystem ballIntake = setUpBallIntake(() -> gearIntake.getState());
 		Subsystem climbing = setUpClimbing();
 		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> gearIntake.getState());
-
-		manager = new SystemManager(drive, gearIntake, ballIntake, climbing, lights);
+		Subsystem cameraSystem = new CameraSystem(controls.i_right_trigger.get());
+		manager = new SystemManager(drive, gearIntake, ballIntake, climbing, lights, cameraSystem);
 		manager.init();
 		DebugDash.getInstance().watch(
 				manager.getSystemWatchables().put(robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
@@ -69,4 +70,5 @@ public class TeleopMain {
 		manager.update();
 
 	}
+	
 }
