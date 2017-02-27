@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.inputs.hardware.PDPHardware;
+import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
@@ -23,8 +24,9 @@ public class RobotHardware extends RobotLayout {
 	 */
 	protected RobotHardware() {
 		registry = new Registry();
-		pdp = new PDPHardware(new CAN(0),registry);
-		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR,pwm_BALL_INTAKE_MOTOR, registry);
+		pdp = new PDPHardware(new CAN(0), registry);
+		lights = new CANLightHardware(can_LIGHT_CONTROLLER, registry);
+		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR, pwm_BALL_INTAKE_MOTOR, registry);
 		climber = new VictorHardware(inv_CLIMBER_MOTOR, pwm_CLIMBER_MOTOR, registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
@@ -50,7 +52,8 @@ public class RobotHardware extends RobotLayout {
 
 	private void initDriveTrain() {
 		frontLeft = new CANTalonHardware(inv_LEFT_FRONT_MOTOR, sinv_LEFT_FRONT_MOTOR, can_LEFT_FRONT_MOTOR, registry);
-		frontRight = new CANTalonHardware(inv_RIGHT_FRONT_MOTOR, sinv_RIGHT_FRONT_MOTOR, can_RIGHT_FRONT_MOTOR, registry);
+		frontRight = new CANTalonHardware(inv_RIGHT_FRONT_MOTOR, sinv_RIGHT_FRONT_MOTOR, can_RIGHT_FRONT_MOTOR,
+				registry);
 		rearLeft = new CANTalonHardware(inv_LEFT_REAR_MOTOR, can_LEFT_REAR_MOTOR, registry);
 		rearRight = new CANTalonHardware(inv_RIGHT_REAR_MOTOR, can_RIGHT_REAR_MOTOR, registry);
 

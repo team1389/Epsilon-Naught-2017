@@ -2,6 +2,7 @@ package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.PDPHardware;
+import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
@@ -25,4 +26,5 @@ public class RobotLayout extends RobotMap {
 	public PDPHardware pdp;
 	public DoubleSolenoidHardware flPiston, frPiston, rlPiston, rrPiston;
 	public GyroHardware<?> gyro;
+	public CANLightHardware lights;
 }

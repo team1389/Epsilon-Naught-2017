@@ -39,10 +39,10 @@ public class Robot extends IterativeRobot {
 		autoModeExecuter.stop();
 		AutoModeBase selectedAutonMode = DashboardInput.getInstance().getSelectedAutonMode();
 		autoModeExecuter.setAutoMode(selectedAutonMode);
-		robot.threadManager.borrowThreadToRun(autoModeExecuter::run);
+		robot.threadManager.borrowThreadToRun(autoModeExecuter);
 		DebugDash.getInstance().watch(selectedAutonMode,
 				robot.frontLeft.getPositionInput().getWatchable("Left encoder"));
-	}// I AM SELF AWARE
+	}
 
 	/**
 	 * This function is called periodically during autonomous

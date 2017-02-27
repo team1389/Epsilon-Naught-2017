@@ -6,13 +6,13 @@ import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.BallIntakeSystem;
 import org.usfirst.frc.team1389.systems.ClimberSystem;
+import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
 import com.ctre.CANTalon.FeedbackDevice;
-import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
 
@@ -20,8 +20,6 @@ public class TeleopMain {
 	SystemManager manager;
 	ControlBoard controls;
 	RobotSoftware robot;
-	DigitalIn thumb;
-	Supplier<GearIntakeSystem.State> gearIntakeState;
 
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -29,18 +27,23 @@ public class TeleopMain {
 
 	public void init() {
 		controls = ControlBoard.getInstance();
-		Subsystem drive = new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput,
-				controls.i_xAxis.get(), controls.i_yAxis.get(), controls.twistAxis, controls.trimAxis,
-				controls.i_thumb.get(), controls.i_trigger.get());
 		GearIntakeSystem gearIntake = setupGearIntake();
+		Subsystem drive = setupDrive();
 		Subsystem ballIntake = setUpBallIntake(() -> gearIntake.getState());
 		Subsystem climbing = setUpClimbing();
+		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> gearIntake.getState());
 
-		manager = new SystemManager(drive, gearIntake, ballIntake, climbing);
+		manager = new SystemManager(drive, gearIntake, ballIntake, climbing, lights);
 		manager.init();
-		DebugDash.getInstance().watch(drive, gearIntake, robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
-				robot.pdp.getCurrentIn().getWatchable("total"), controls.aButton.getWatchable("button"),
-				robot.flPiston);
+		DebugDash.getInstance().watch(
+				manager.getSystemWatchables().put(robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
+						robot.pdp.getCurrentIn().getWatchable("total")));
+	}
+
+	private Subsystem setupDrive() {
+		return new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.i_xAxis.get(),
+				controls.i_yAxis.get(), controls.twistAxis, controls.trimAxis, controls.i_thumb.get(),
+				controls.i_trigger.get());
 	}
 
 	private GearIntakeSystem setupGearIntake() {
@@ -58,7 +61,8 @@ public class TeleopMain {
 	}
 
 	private ClimberSystem setUpClimbing() {
-		return new ClimberSystem(controls.i_leftTriggerAxis.get(), robot.climberCurrent, robot.climber.getVoltageOutput());
+		return new ClimberSystem(controls.i_leftTriggerAxis.get(), robot.climberCurrent,
+				robot.climber.getVoltageOutput());
 	}
 
 	public void periodic() {

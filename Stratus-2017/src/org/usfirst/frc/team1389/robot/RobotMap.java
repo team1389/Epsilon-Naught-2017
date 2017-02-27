@@ -31,31 +31,28 @@ public class RobotMap {
 	//Outputs
 	
 	//Drivetrain
-	protected static final CAN can_LEFT_FRONT_MOTOR = new CAN(3); protected static final boolean inv_LEFT_FRONT_MOTOR = true;
-	protected static final boolean sinv_LEFT_FRONT_MOTOR = false;
-	protected static final CAN can_RIGHT_FRONT_MOTOR = new CAN(6); protected static final boolean inv_RIGHT_FRONT_MOTOR = false;
-	protected static final boolean sinv_RIGHT_FRONT_MOTOR = true;
-	protected static final CAN can_LEFT_REAR_MOTOR = new CAN(5); protected static final boolean inv_LEFT_REAR_MOTOR = true;
-	protected static final CAN can_RIGHT_REAR_MOTOR = new CAN(4); protected static final boolean inv_RIGHT_REAR_MOTOR = false;
-	protected static final CAN can_ARM_ELEVATOR_MOTOR = new CAN(7); protected static final boolean inv_ARM_ELEVATOR_MOTOR = false;
-	protected static final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
-	protected static final boolean sinv_ARM_ELEVATOR_MOTOR = false;
-	protected static final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected static final boolean inv_GEAR_INTAKE_MOTOR = true;
-	protected static final PWM pwm_BALL_INTAKE_MOTOR = new PWM(5); protected static final boolean inv_BALL_INTAKE_MOTOR = false;
-	protected static final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
-	protected static final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
-	protected static final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
-	protected static final PCM pcm_FRONT_RIGHT_PISTON_B = new PCM(3);
-	protected static final PCM pcm_REAR_LEFT_PISTON_A = new PCM(6);
-	protected static final PCM pcm_REAR_LEFT_PISTON_B = new PCM(1);
-	protected static final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
-	protected static final PCM pcm_REAR_RIGHT_PISTON_B = new PCM(2);
-	protected static final int mod_DRIVE_TRAIN_PCM = 1;
-	protected static final int mod_HOPPER_PCM = 2;
-	protected static final int pdp_GEAR_INTAKE_CURRENT = 4;
-	protected static final int pdp_Climber_Val = 0;
-	protected static final PWM pwm_CLIMBER_MOTOR = new PWM(2); protected static final boolean inv_CLIMBER_MOTOR = false;
-	
-
-}
-
+	protected final CAN can_LEFT_FRONT_MOTOR = new CAN(3); protected final boolean inv_LEFT_FRONT_MOTOR = true;
+	protected final boolean sinv_LEFT_FRONT_MOTOR = false;
+	protected final CAN can_RIGHT_FRONT_MOTOR = new CAN(6); protected final boolean inv_RIGHT_FRONT_MOTOR = false;
+	protected final boolean sinv_RIGHT_FRONT_MOTOR = true;
+	protected final CAN can_LEFT_REAR_MOTOR = new CAN(5); protected final boolean inv_LEFT_REAR_MOTOR = true;
+	protected final CAN can_RIGHT_REAR_MOTOR = new CAN(4); protected final boolean inv_RIGHT_REAR_MOTOR = false;
+	protected final CAN can_ARM_ELEVATOR_MOTOR = new CAN(7); protected final boolean inv_ARM_ELEVATOR_MOTOR = false;
+	protected final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
+	protected final boolean sinv_ARM_ELEVATOR_MOTOR = false;
+	protected final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected final boolean inv_GEAR_INTAKE_MOTOR = true;
+	protected final PWM pwm_BALL_INTAKE_MOTOR = new PWM(5); protected final boolean inv_BALL_INTAKE_MOTOR = false;
+	protected final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
+	protected final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
+	protected final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
+	protected final PCM pcm_FRONT_RIGHT_PISTON_B = new PCM(3);
+	protected final PCM pcm_REAR_LEFT_PISTON_A = new PCM(6);
+	protected final PCM pcm_REAR_LEFT_PISTON_B = new PCM(1);
+	protected final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
+	protected final PCM pcm_REAR_RIGHT_PISTON_B = new PCM(2);
+	protected final int mod_DRIVE_TRAIN_PCM = 1;
+	protected final int mod_HOPPER_PCM = 2;
+	protected final int pdp_GEAR_INTAKE_CURRENT = 4;
+	protected final int pdp_Climber_Val = 0;
+	protected final PWM pwm_CLIMBER_MOTOR = new PWM(2); protected final boolean inv_CLIMBER_MOTOR = false;
+	protected final CAN can_LIGHT_CONTROLLER = new CAN(8);}
