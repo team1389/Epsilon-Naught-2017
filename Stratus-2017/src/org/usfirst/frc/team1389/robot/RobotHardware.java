@@ -58,4 +58,5 @@ public class RobotHardware extends RobotLayout {
 		rearRight = new CANTalonHardware(inv_RIGHT_REAR_MOTOR, can_RIGHT_REAR_MOTOR, registry);
 
 	}
+	
 }

@@ -20,6 +20,8 @@ public class Robot extends IterativeRobot {
 	RobotSoftware robot;
 	TeleopMain teleOperator;
 	AutoModeExecuter autoModeExecuter;
+	
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be used for any
