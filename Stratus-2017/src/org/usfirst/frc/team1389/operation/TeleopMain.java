@@ -7,7 +7,6 @@ import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.BallIntakeSystem;
 import org.usfirst.frc.team1389.systems.CameraSystem;
 import org.usfirst.frc.team1389.systems.ClimberSystem;
-import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
@@ -32,13 +31,12 @@ public class TeleopMain {
 		Subsystem drive = setupDrive();
 		Subsystem ballIntake = setUpBallIntake(() -> gearIntake.getState());
 		Subsystem climbing = setUpClimbing();
-		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> gearIntake.getState());
+		//Subsystem lights = new FancyLightSystem(robot.lights.getBlinkableColorOutput(), () -> gearIntake.getState());
 		Subsystem cameraSystem = new CameraSystem(controls.i_right_trigger.get());
-		manager = new SystemManager(drive, gearIntake, ballIntake, climbing, lights, cameraSystem);
+		manager = new SystemManager(drive, gearIntake, ballIntake, climbing,cameraSystem);
 		manager.init();
-		DebugDash.getInstance().watch(
-				manager.getSystemWatchables().put(robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"),
-						robot.pdp.getCurrentIn().getWatchable("total")));
+		DebugDash.getInstance().watch(manager.getSystemWatchables().put(robot.armElevator.getAbsoluteIn().getWatchable("absolute pos"), robot.pdp.getCurrentIn(4).getWatchable("current in")
+					/*	,robot.pdp.getCurrentIn().getWatchable("total")*/));
 	}
 
 	private Subsystem setupDrive() {
@@ -70,5 +68,5 @@ public class TeleopMain {
 		manager.update();
 
 	}
-	
+
 }

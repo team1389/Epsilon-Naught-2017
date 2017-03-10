@@ -24,8 +24,7 @@ public class ClimberSystem extends Subsystem {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(rightTrigger.getWatchable("climberButton"), climberCurrent.getWatchable("climberCurrent"),
-				climberVoltageOut.getWatchable("climberVoltage"));
+		return stem;
 	}
 
 	@Override

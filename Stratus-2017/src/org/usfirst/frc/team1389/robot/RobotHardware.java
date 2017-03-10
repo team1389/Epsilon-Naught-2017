@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1389.robot;
 
+import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.PDPHardware;
 import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
@@ -25,9 +26,10 @@ public class RobotHardware extends RobotLayout {
 	protected RobotHardware() {
 		registry = new Registry();
 		pdp = new PDPHardware(new CAN(0), registry);
-		lights = new CANLightHardware(can_LIGHT_CONTROLLER, registry);
+	//	lights = new CANLightHardware(can_LIGHT_CONTROLLER, registry);
 		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR, pwm_BALL_INTAKE_MOTOR, registry);
 		climber = new VictorHardware(inv_CLIMBER_MOTOR, pwm_CLIMBER_MOTOR, registry);
+		gyro = new GyroHardware<>(GyroHardware.ADXRS_453, spi_GyroPort, registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
 		initGearIntake();

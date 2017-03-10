@@ -1,12 +1,12 @@
-package org.usfirst.frc.team1389.systems;
+package org.usfirst.frc.team1389.vision;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem.State;
-import org.usfirst.frc.team1389.vision.PiVisionManager;
-import org.usfirst.frc.team1389.vision.VisionAnalyst;
 
+import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.value_types.Position;
@@ -20,13 +20,15 @@ public class VisionSystem extends Subsystem {
 	private PiVisionManager pi;
 	private Supplier<GearIntakeSystem.State> intakeState;
 	private RangeIn<Position> distanceSensor;
+	private DigitalIn visionEnableButton;
 
 	public VisionSystem(DigitalOut visionLight, PiVisionManager pi, Supplier<GearIntakeSystem.State> intakeState,
-			RangeIn<Position> distanceSensor) {
+			RangeIn<Position> distanceSensor, DigitalIn visionEnable) {
 		this.visionLight = visionLight;
 		this.pi = pi;
 		this.distanceSensor = distanceSensor;
 		this.intakeState = intakeState;
+		this.visionEnableButton = visionEnable;
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class VisionSystem extends Subsystem {
 
 	@Override
 	public String getName() {
-		return "vision";
+		return "Vision";
 	}
 
 	@Override
@@ -46,9 +48,16 @@ public class VisionSystem extends Subsystem {
 
 	@Override
 	public void update() {
-		if (intakeState.get() == State.CARRYING) {
-			enableVisionTracking();
+		State state = intakeState.get();
+		boolean visEnabled = true;
+		if (visionEnableButton.get()) {
+			visEnabled = true;
+		} else if (state == State.CARRYING) {
+			visEnabled = true;
+		} else if (state == State.STOWED || state == State.INTAKING) {
+			visEnabled = false;
 		}
+		setVisionTracking(visEnabled);
 	}
 
 	public Translation2d getTargetPose() {
@@ -61,14 +70,17 @@ public class VisionSystem extends Subsystem {
 		}
 	}
 
+	public void setVisionTracking(boolean val) {
+		pi.setProcessing(val);
+		visionLight.set(val);
+	}
+
 	public void enableVisionTracking() {
-		pi.setProcessing(true);
-		visionLight.set(true);
+		setVisionTracking(true);
 	}
 
 	public void disableVisionTracking() {
-		pi.setProcessing(false);
-		visionLight.set(false);
+		setVisionTracking(false);
 	}
 
 }

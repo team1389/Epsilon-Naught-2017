@@ -1,7 +1,9 @@
 package org.usfirst.frc.team1389.systems;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+
+import org.usfirst.frc.team1389.vision.VisionDriveSystem;
 
 import com.team1389.system.Subsystem;
 import com.team1389.util.Color;
@@ -13,12 +15,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class FancyLightSystem extends Subsystem {
-	private Consumer<Color> lightController;
+	private BiConsumer<Color, Boolean> lightController;
 	private Supplier<GearIntakeSystem.State> intakeState;
 	private Alliance alliance;
 	private Color lastSetColor;
 
-	public FancyLightSystem(Consumer<Color> lightController, Supplier<GearIntakeSystem.State> intakeState) {
+	public FancyLightSystem(BiConsumer<Color, Boolean> lightController, Supplier<GearIntakeSystem.State> intakeState,
+			Supplier<VisionDriveSystem.State> driveState) {
 		this.lightController = lightController;
 		this.intakeState = intakeState;
 	}
@@ -37,7 +40,7 @@ public class FancyLightSystem extends Subsystem {
 	public void init() {
 		alliance = DriverStation.getInstance().getAlliance();
 		lastSetColor = getAllianceColor(alliance);
-		lightController.accept(lastSetColor);
+		lightController.accept(lastSetColor, false);
 	}
 
 	@Override
@@ -53,7 +56,7 @@ public class FancyLightSystem extends Subsystem {
 		default:
 			break;
 		}
-		lightController.accept(lastSetColor);
+		lightController.accept(lastSetColor, false);
 	}
 
 	public static Color getAllianceColor(Alliance alliance) {

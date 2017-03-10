@@ -30,8 +30,8 @@ public class DashboardInput {
 		SmartDashboard.putData(SELECTED_AUTO_MODE, autonSelector);
 	}
 
-	private static final String SELECTED_AUTO_MODE = "selected_auto_mode";
-	private static final AutonOption DEFAULT_MODE = AutonOption.DRIVE_STRAIGHT;
+	private static final String SELECTED_AUTO_MODE = "auto";
+	private static final AutonOption DEFAULT_MODE = AutonOption.CROSS_BASELINE;
 
 	public AutoModeBase getSelectedAutonMode() {
 		String autoModeString = SmartDashboard.getString(SELECTED_AUTO_MODE, DEFAULT_MODE.name);

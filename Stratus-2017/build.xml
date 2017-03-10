@@ -101,6 +101,7 @@
 		<echo>[athena-deploy] Copying code over.</echo>
 		<!-- Team 1389 -->
 		<scp file="${teambase}/lib/native/libTalonSRXLib.so" todir="${adminUsername}@${target}:${libDeploy.dir}" password="${password}" trust="true"/>
+		<scp file="${teambase}/lib/native/libmindsensorsDriver.so" todir="${adminUsername}@${target}:${libDeploy.dir}" password="${password}" trust="true"/>
 		<scp file="${dist.jar}" todir="${username}@${target}:${deploy.dir}" password="${password}" trust="true"/>
 
 		<sshexec host="${target}"

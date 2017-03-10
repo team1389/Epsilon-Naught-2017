@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
 		robot = RobotSoftware.getInstance();
 		teleOperator = new TeleopMain(robot);
 		autoModeExecuter = new AutoModeExecuter();
+		DebugDash.getInstance().watch(robot.flPos.getWatchable("Left encoder"));
+
 	}
 
 	@Override
@@ -42,8 +44,6 @@ public class Robot extends IterativeRobot {
 		AutoModeBase selectedAutonMode = DashboardInput.getInstance().getSelectedAutonMode();
 		autoModeExecuter.setAutoMode(selectedAutonMode);
 		robot.threadManager.borrowThreadToRun(autoModeExecuter);
-		DebugDash.getInstance().watch(selectedAutonMode,
-				robot.frontLeft.getPositionInput().getWatchable("Left encoder"));
 	}
 
 	/**

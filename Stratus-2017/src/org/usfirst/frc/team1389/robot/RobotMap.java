@@ -40,7 +40,7 @@ public class RobotMap {
 	protected final CAN can_ARM_ELEVATOR_MOTOR = new CAN(7); protected final boolean inv_ARM_ELEVATOR_MOTOR = false;
 	protected final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
 	protected final boolean sinv_ARM_ELEVATOR_MOTOR = false;
-	protected final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected final boolean inv_GEAR_INTAKE_MOTOR = true;
+	protected final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1); protected final boolean inv_GEAR_INTAKE_MOTOR = false;
 	protected final PWM pwm_BALL_INTAKE_MOTOR = new PWM(5); protected final boolean inv_BALL_INTAKE_MOTOR = false;
 	protected final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
 	protected final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);

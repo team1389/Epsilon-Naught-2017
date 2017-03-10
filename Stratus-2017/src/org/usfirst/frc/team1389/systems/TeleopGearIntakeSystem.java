@@ -54,7 +54,7 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 			else{
 				setState(State.CARRYING);
 			}
-			intakeVoltageOut.set(intakeRunning ? 1 : 0.0);
+			intakeVoltageOut.set(intakeRunning ? -1 : 0.0);
 		} else {
 			if (intakeGearButton.get()) {
 				System.out.println("enter intake mode");

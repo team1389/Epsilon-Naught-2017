@@ -5,15 +5,17 @@ import java.util.function.Supplier;
 
 import org.usfirst.frc.team1389.robot.controls.ControlMap;
 
+import com.team1389.command_framework.CommandUtil;
+import com.team1389.command_framework.command_base.Command;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
-import com.team1389.system.Subsystem;
 import com.team1389.system.drive.CurvatureDriveSystem;
 import com.team1389.system.drive.DriveOut;
+import com.team1389.system.drive.DriveSystem;
 import com.team1389.system.drive.FourDriveOut;
 import com.team1389.system.drive.MecanumDriveSystem;
 import com.team1389.util.bezier.BezierCurve;
@@ -22,13 +24,13 @@ import com.team1389.watch.Watchable;
 import com.team1389.watch.info.BooleanInfo;
 import com.team1389.watch.info.StringInfo;
 
-public class OctoMecanumSystem extends Subsystem {
-	private DriveMode currentMode;
-	private CurvatureDriveSystem tank;
-	private MecanumDriveSystem mecanum;
-	private DigitalOut octoShifter;
-	private DigitalIn switchModes;
-	private FourDriveOut<Percent> voltageDrive;
+public class OctoMecanumSystem extends DriveSystem {
+	protected DriveMode currentMode;
+	protected CurvatureDriveSystem tank;
+	protected MecanumDriveSystem mecanum;
+	protected DigitalOut octoShifter;
+	protected DigitalIn switchModes;
+	protected FourDriveOut<Percent> voltageDrive;
 
 	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, DigitalOut octoShifter, AngleIn<Position> gyro,
 			PercentIn xAxis, PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes,
@@ -92,9 +94,13 @@ public class OctoMecanumSystem extends Subsystem {
 		setMode(currentMode == DriveMode.TANK ? DriveMode.MECANUM : DriveMode.TANK);
 	}
 
-	private void setMode(DriveMode mode) {
+	protected void setMode(DriveMode mode) {
 		octoShifter.set(mode.solenoidVal);
 		currentMode = mode;
+	}
+
+	protected Command setModeCommand(DriveMode mode) {
+		return CommandUtil.createCommand(() -> setMode(mode));
 	}
 
 	@Override
