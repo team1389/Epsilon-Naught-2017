@@ -10,12 +10,27 @@ import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.BooleanInfo;
 
+/**
+ * system responsible for ball intake
+ * 
+ * @author Quunii
+ *
+ */
 public class BallIntakeSystem extends Subsystem {
 	DigitalIn intakeButton;
 	RangeOut<Percent> intakeVoltage;
 	Supplier<GearIntakeSystem.State> gearIntakeState;
 	private boolean intaking = false;
 
+	/**
+	 * 
+	 * @param intakeButton
+	 *            controls when ball intake is running
+	 * @param state
+	 *            Supplier of GearIntakeSystem state
+	 * @param intakeVoltage
+	 *            voltage setter for ball intake motors
+	 */
 	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
 			RangeOut<Percent> intakeVoltage) {
 		this.intakeButton = intakeButton;
@@ -37,6 +52,10 @@ public class BallIntakeSystem extends Subsystem {
 	public void init() {
 	}
 
+	/**
+	 * toggles ball intake motors on and off based on button, disables it when
+	 * GearIntake is in State Intake
+	 */
 	@Override
 	public void update() {
 		if (intakeButton.get()) {

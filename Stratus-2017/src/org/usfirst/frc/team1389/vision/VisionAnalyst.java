@@ -4,6 +4,6 @@ import com.team1389.trajectory.Translation2d;
 
 public class VisionAnalyst {
 	public static Translation2d getDesiredMotion(double angleToTarget, double distanceToTarget) {
-		return new Translation2d(); //TODO calculation
+		return new Translation2d(distanceToTarget, distanceToTarget * Math.tan(angleToTarget));
 	}
 }

@@ -1,5 +1,9 @@
 package org.usfirst.frc.team1389.robot.controls;
-
+/**
+ * ports for controllers and everything on them
+ * @author Quunii
+ *
+ */
 public class ControlMap {
 	// Driver Controls
 	protected static final int DRIVE_CONTROLLER = 0;
@@ -9,7 +13,8 @@ public class ControlMap {
 	protected static final int ax_TRIM_AXIS = 5;
 	protected static final int btn_TRIGGER = 1;
 	protected static final int btn_THUMB = 2;
-
+	
+	//Manip Controls
 	protected static final int MANIP_CONTROLLER = 1;
 	protected static final int btn_A = 1;
 	protected static final int btn_Y = 4;

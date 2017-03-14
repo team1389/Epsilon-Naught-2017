@@ -24,7 +24,7 @@ public class DashboardInput {
 	public void init() {
 		autonSelector = new SendableChooser<AutonOption>();
 		for (AutonOption autonOption : AutonOption.values()) {
-			autonSelector.addObject(autonOption.name, autonOption);
+			autonSelector.addObject(autonOption.name(), autonOption);
 		}
 
 		SmartDashboard.putData(SELECTED_AUTO_MODE, autonSelector);
@@ -34,10 +34,10 @@ public class DashboardInput {
 	private static final AutonOption DEFAULT_MODE = AutonOption.CROSS_BASELINE;
 
 	public AutoModeBase getSelectedAutonMode() {
-		String autoModeString = SmartDashboard.getString(SELECTED_AUTO_MODE, DEFAULT_MODE.name);
+		String autoModeString = SmartDashboard.getString(SELECTED_AUTO_MODE, DEFAULT_MODE.name());
 		AutonOption selectedOption = DEFAULT_MODE;
 		for (AutonOption autonOption : AutonOption.values()) {
-			if (autonOption.name.equals(autoModeString)) {
+			if (autonOption.name().equals(autoModeString)) {
 				selectedOption = autonOption;
 				break;
 			}

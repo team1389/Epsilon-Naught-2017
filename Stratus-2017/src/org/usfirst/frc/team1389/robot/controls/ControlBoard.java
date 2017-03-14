@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1389.robot.controls;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.team1389.hardware.inputs.hardware.JoystickHardware;
@@ -27,10 +28,16 @@ public class ControlBoard extends ControlMap {
 	private final JoystickHardware driveController = new JoystickHardware(DRIVE_CONTROLLER);
 	private final JoystickHardware manipController = new JoystickHardware(MANIP_CONTROLLER);
 
+	public Consumer<Double> rumbleLeft = (d) -> driveController.setLeftRumble(d);
+	public Consumer<Double> rumbleRight = (d) -> driveController.setRightRumble(d);
+	public Consumer<Double> rumble = (d) -> driveController.setRumble(d, d);
+
+	
 	// DRIVER CONTROLS
 	private PercentIn yAxis = driveController.getAxis(ax_Y_AXIS).applyDeadband(.15).invert();
 	public Supplier<PercentIn> i_yAxis = yAxis::copy;
-
+	
+	
 	private PercentIn xAxis = driveController.getAxis(ax_X_AXIS).applyDeadband(.15);
 	public Supplier<PercentIn> i_xAxis = xAxis::copy;
 
@@ -62,8 +69,9 @@ public class ControlBoard extends ControlMap {
 	public Supplier<DigitalIn> i_bButton = bButton::copy;
 
 	public DigitalIn leftBumper = manipController.getButton(btn_LEFT_BUMPER);
-
+	public Supplier<DigitalIn> i_leftBumper = leftBumper::copy;
 	public DigitalIn rightBumper = manipController.getButton(btn_RIGHT_BUMPER).latched();
+	public Supplier<DigitalIn> i_rightBumper = rightBumper::copy;
 	
 
 	public PercentIn leftTriggerAxis = manipController.getAxis(ax_LEFT_TRIGGER).applyDeadband(.075);
@@ -71,5 +79,6 @@ public class ControlBoard extends ControlMap {
 
 	public PercentIn leftVertAxis = manipController.getAxis(ax_LEFT_VERT_AXIS).applyDeadband(.075);
 	public Supplier<PercentIn> i_leftVertAxis = leftVertAxis::copy;
+	
 
 }
