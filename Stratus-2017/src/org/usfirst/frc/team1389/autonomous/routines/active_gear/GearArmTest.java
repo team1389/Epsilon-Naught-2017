@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.autonomous.active_gear;
+package org.usfirst.frc.team1389.autonomous.routines.active_gear;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
@@ -23,7 +23,7 @@ public class GearArmTest extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		runCommand(gearArm.pairWithBackgroundCommand(gearArm.intakeGear()));
+		runCommand(gearArm.pairWithBackgroundCommand(gearArm.placeGear()));
 	}
 
 	@Override

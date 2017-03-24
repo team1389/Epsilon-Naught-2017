@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.autonomous.active_gear;
+package org.usfirst.frc.team1389.autonomous.routines.active_gear;
 
 import org.usfirst.frc.team1389.autonomous.AutoConstants;
 import org.usfirst.frc.team1389.autonomous.command.RobotCommands;
@@ -28,12 +28,12 @@ public class ActivePlaceGearRight extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		runCommand(CommandUtil.combineSequential(commands.new DriveStraight(AutoConstants.SIDE_GEAR_STRAIGHT),
-				commands.new TurnAngle(AutoConstants.SIDE_GEAR_TURN, true),
-				commands.new DriveStraight(AutoConstants.SIDE_GEAR_APPROACH-0.5), gearIn.placeGear()));
-
+		runCommand(CommandUtil.combineSequential(
+				commands.new DriveStraight(AutoConstants.getRotations(AutoConstants.SIDE_GEAR_STRAIGHT)),
+				commands.new TurnAngle(-AutoConstants.SIDE_GEAR_TURN, true),
+				commands.new DriveStraight(AutoConstants.getRotations(AutoConstants.SIDE_GEAR_APPROACH - AutoConstants.ACTIVE_STOP_SHORT)),
+				gearIn.placeGear()));
 	}
-
 	@Override
 	public String getIdentifier() {
 	return "Active Place Gear Right";

@@ -24,12 +24,9 @@ public class BallIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param intakeButton
-	 *            controls when ball intake is running
-	 * @param state
-	 *            Supplier of GearIntakeSystem state
-	 * @param intakeVoltage
-	 *            voltage setter for ball intake motors
+	 * @param intakeButton controls when ball intake is running
+	 * @param state Supplier of GearIntakeSystem state
+	 * @param intakeVoltage voltage setter for ball intake motors
 	 */
 	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
 			RangeOut<Percent> intakeVoltage) {
@@ -53,8 +50,8 @@ public class BallIntakeSystem extends Subsystem {
 	}
 
 	/**
-	 * toggles ball intake motors on and off based on button, disables it when
-	 * GearIntake is in State Intake
+	 * toggles ball intake motors on and off based on button, disables it when GearIntake is in
+	 * State Intake
 	 */
 	@Override
 	public void update() {

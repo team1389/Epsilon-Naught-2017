@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1389.autonomous.active_gear;
+package org.usfirst.frc.team1389.autonomous.routines.active_gear;
 
 import org.usfirst.frc.team1389.autonomous.AutoConstants;
 import org.usfirst.frc.team1389.autonomous.command.RobotCommands;
@@ -15,7 +15,7 @@ public class ActivePlaceGearLeft extends AutoModeBase {
 	RobotSoftware robot;
 	RobotCommands commands;
 	GearIntakeSystem gearIn;
-	
+
 	public ActivePlaceGearLeft(RobotSoftware robot) {
 		this.robot = robot;
 		this.gearIn = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
@@ -24,21 +24,22 @@ public class ActivePlaceGearLeft extends AutoModeBase {
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		// TODO Auto-generated method stub
-		return stem.put(robot.voltageDrive);
+		return stem.put(robot.flPos.getWatchable("left enc"), robot.frPos.getWatchable("right enc"));
 	}
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		// TODO Auto-generated method stub
-		runCommand(CommandUtil.combineSequential(commands.new DriveStraight(AutoConstants.SIDE_GEAR_STRAIGHT),
+		System.out.println("running left gear auto");
+		runCommand(CommandUtil.combineSequential(
+				commands.new DriveStraight(AutoConstants.getRotations(AutoConstants.SIDE_GEAR_STRAIGHT)),
 				commands.new TurnAngle(AutoConstants.SIDE_GEAR_TURN, true),
-				commands.new DriveStraight(AutoConstants.SIDE_GEAR_APPROACH - 0.5), gearIn.placeGear()));
+				commands.new DriveStraight(
+						AutoConstants.getRotations(AutoConstants.SIDE_GEAR_APPROACH - AutoConstants.ACTIVE_STOP_SHORT)),
+				gearIn.placeGear()));
 	}
 
 	@Override
 	public String getIdentifier() {
-		// TODO Auto-generated method stub
 		return "Active Place Gear Left";
 	}
 

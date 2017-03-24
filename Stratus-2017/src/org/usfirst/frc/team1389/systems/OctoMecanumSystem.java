@@ -3,7 +3,7 @@ package org.usfirst.frc.team1389.systems;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import org.usfirst.frc.team1389.robot.controls.ControlMap;
+import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
@@ -48,8 +48,8 @@ public class OctoMecanumSystem extends DriveSystem {
 		BezierCurve yCurve = new BezierCurve(.0, 0.54, 0.45, -0.07);
 		xAxis.map(d -> xCurve.getPoint(d).getY());
 		yAxis.map(d -> yCurve.getPoint(d).getY());
-		tank = new CurvatureDriveSystem(drive, yAxis, xAxis, quickTurn, ControlMap.turnSensitivity,
-				ControlMap.turnSensitivity);
+		tank = new CurvatureDriveSystem(drive, yAxis, xAxis, quickTurn, ControlBoard.turnSensitivity,
+				ControlBoard.spinSensitivity);
 	}
 
 	public Supplier<DriveMode> getDriveModeTracker() {

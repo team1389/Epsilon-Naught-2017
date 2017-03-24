@@ -2,8 +2,6 @@ package org.usfirst.frc.team1389.robot;
 
 import java.util.function.Function;
 
-import org.usfirst.frc.team1389.robot.controls.ControlBoard;
-
 import com.team1389.concurrent.OhmThreadService;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
@@ -30,7 +28,6 @@ public class RobotSoftware extends RobotHardware {
 	public DigitalIn timeRunning;
 	public RangeIn<Value> flCurrent, frCurrent, blCurrent, brCurrent;
 	public RangeIn<Value> armCurrent;
-	public DigitalOut rumble;
 
 	public static RobotSoftware getInstance() {
 		return INSTANCE;
@@ -53,14 +50,13 @@ public class RobotSoftware extends RobotHardware {
 		zeroArmAngle();
 
 		gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
-		
+
 		flCurrent = frontLeft.getCurrentIn();
 		frCurrent = frontRight.getCurrentIn();
 		blCurrent = rearLeft.getCurrentIn();
 		brCurrent = rearRight.getCurrentIn();
 		armCurrent = armElevator.getCurrentIn();
-		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.<PositionEncoderIn>setTicksPerRotation(1024)
-				.mapToRange(0, 1).scale(18 / 16);
+		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.adjustRange(0, 1024, 0, 1).scale(18.0 / 16.0);
 
 		flPos = posFunc.apply(frontLeft.getPositionInput());
 		frPos = posFunc.apply(frontRight.getPositionInput());
@@ -71,14 +67,11 @@ public class RobotSoftware extends RobotHardware {
 		 * pdp.getCurrentIn(pdp_REAR_RIGHT_CURRENT);
 		 */
 
-		ControlBoard board = ControlBoard.getInstance();
-		rumble = new DigitalOut((b) -> board.rumble.accept(b? 1.0 : 0.0));
 		threadManager = new OhmThreadService(20);
 	}
 
 	public void zeroArmAngle() {
 		double val = armAngleAbsolute.get() * 360 - armAngle.get();
-		System.out.println(val);
 		armAngle.offset(val);
 	}
 

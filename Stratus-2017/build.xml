@@ -77,14 +77,14 @@
 		<deploy-libs libs.name="WPI_Native_Libraries" libs.basedir="${wpilib.native.lib}" libs.deployDir="${libDeploy.dir}">
 			<libs.local>
 				<fileset id="wpiNativeLibs.local" dir="${wpilib.native.lib}">
-					<include name="libHALAthena.so"/>
-					<include name="libntcore.so"/>
-					<include name="libwpiutil.so"/>
-					<include name="libopencv*.so.3.1"/>
-					<include name="libcscore.so"/>
-					<include name="libopencv_java310.so"/>
-					<include name="libwpilibJavaJNI.so"/>
-					
+					<include name="libHALAthena.so" />
+					<include name="libntcore.so" />
+					<include name="libwpiutil.so" />
+					<include name="libopencv*.so.3.1" />
+					<include name="libcscore.so" />
+					<include name="libopencv_java310.so" />
+					<include name="libwpilibJavaJNI.so" />
+
 				</fileset>
 			</libs.local>
 		</deploy-libs>
@@ -92,7 +92,7 @@
 		<deploy-libs libs.name="User_Libraries" libs.basedir="${userLibs.dir}" libs.deployDir="${libDeploy.dir}">
 			<libs.local>
 				<fileset dir="${userLibs.dir}">
-					<include name="**/*.so"/>
+					<include name="**/*.so" />
 				</fileset>
 			</libs.local>
 		</deploy-libs>
@@ -100,47 +100,39 @@
 		<echo>[athena-deploy] ${username}@${target}:${deploy.dir}.</echo>
 		<echo>[athena-deploy] Copying code over.</echo>
 		<!-- Team 1389 -->
-		<scp file="${teambase}/lib/native/libTalonSRXLib.so" todir="${adminUsername}@${target}:${libDeploy.dir}" password="${password}" trust="true"/>
-		<scp file="${teambase}/lib/native/libmindsensorsDriver.so" todir="${adminUsername}@${target}:${libDeploy.dir}" password="${password}" trust="true"/>
-		<scp file="${dist.jar}" todir="${username}@${target}:${deploy.dir}" password="${password}" trust="true"/>
+		<scp todir="${adminUsername}@${target}:${libDeploy.dir}" password="${password}" trust="true" >
+			<fileset dir="${teambase}/lib/native">
+				<include name="**/*.so" />
+			</fileset>
+		</scp>
+		<scp file="${dist.jar}" todir="${username}@${target}:${deploy.dir}" password="${password}" trust="true" />
+		<sshexec host="${target}" username="${adminUsername}" password="${password}" trust="true" command="mkdir -p ../../paths" />
+		<scp todir="${adminUsername}@${target}:/paths" password="${password}" trust="true">
+			<fileset dir="paths">
+				<include name="**/*.csv" />
+			</fileset>
+		</scp>
 
-		<sshexec host="${target}"
-	         username="${adminUsername}"
-	         password="${password}"
-	         trust="true"
-	         command="ldconfig" />
+
+		<sshexec host="${target}" username="${adminUsername}" password="${password}" trust="true" command="ldconfig" />
 
 		<!-- Suppress the exit status so that if no netconsole was running then
 	          it doesn't show up red on the output. -->
-		<sshexec host="${target}"
-	               username="admin"
-	               password="${password}"
-	               trust="true"
-	               failonerror="false"
-	               command="killall -q netconsole-host || :"/>
+		<sshexec host="${target}" username="admin" password="${password}" trust="true" failonerror="false" command="killall -q netconsole-host || :" />
 
 		<deploy-libs libs.name="netconsole-host" libs.basedir="${wpilib.ant.dir}" libs.deployDir="/usr/local/frc/bin">
 			<libs.local>
 				<fileset id="netconsole.local" dir="${wpilib.ant.dir}">
-					<include name="netconsole-host"/>
+					<include name="netconsole-host" />
 				</fileset>
 			</libs.local>
 		</deploy-libs>
 
-		<scp file="${wpilib.ant.dir}/robotCommand" todir="${username}@${target}:${command.dir}" password="${password}" trust="true"/>
+		<scp file="${wpilib.ant.dir}/robotCommand" todir="${username}@${target}:${command.dir}" password="${password}" trust="true" />
 
 		<echo>[athena-deploy] Starting program.</echo>
-		<sshexec host="${target}"
-	       username="${username}"
-	       password="${password}"
-	       trust="true"
-		   failonerror="false"
-	       command="${deploy.kill.command};"/>
+		<sshexec host="${target}" username="${username}" password="${password}" trust="true" failonerror="false" command="${deploy.kill.command};" />
 
-		<sshexec host="${target}"
-	         username="${username}"
-	         password="${password}"
-	         trust="true"
-	         command="sync" />
+		<sshexec host="${target}" username="${username}" password="${password}" trust="true" command="sync" />
 	</target>
 </project>

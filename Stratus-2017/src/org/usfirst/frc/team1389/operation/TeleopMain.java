@@ -10,6 +10,7 @@ import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
+import org.usfirst.frc.team1389.systems.TeleopHopperSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
 import com.team1389.hardware.inputs.software.DigitalIn;
@@ -30,8 +31,7 @@ public class TeleopMain {
 
 	/**
 	 * 
-	 * @param robot
-	 *            container of all ohm streams
+	 * @param robot container of all ohm streams
 	 */
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -47,7 +47,7 @@ public class TeleopMain {
 		Subsystem ballIntake = setUpBallIntake(() -> GearIntakeSystem.State.STOWED);
 		Subsystem climbing = setUpClimbing();
 		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> GearIntakeSystem.State.STOWED);
-		manager = new SystemManager(drive, ballIntake, climbing, lights, gearIntake);
+		manager = new SystemManager(drive, ballIntake, climbing, lights, gearIntake, setupHopper());
 		manager.init();
 		DebugDash.getInstance().watch(robot.armAngleAbsolute.getWatchable("absolute pos"));
 	}
@@ -57,9 +57,9 @@ public class TeleopMain {
 	 * @return a new OctoMecanumSystem
 	 */
 	private Subsystem setupDrive() {
-		return new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.i_xAxis.get(),
-				controls.i_yAxis.get(), controls.twistAxis, controls.trimAxis, controls.i_thumb.get(),
-				controls.i_trigger.get());
+		return new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.driveXAxis(),
+				controls.driveYAxis(), controls.driveYaw(), controls.driveTrim(), controls.driveModeBtn(),
+				controls.driveModifierBtn());
 	}
 
 	/**
@@ -67,22 +67,20 @@ public class TeleopMain {
 	 * @return a new GearIntakeSystem
 	 */
 	private GearIntakeSystem setupGearIntake() {
-		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngleAbsolute,
-				robot.armVel /* could be a problem here */, robot.armElevator.getVoltageOutput(),
-				robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent, controls.i_aButton.get(),
-				controls.i_yButton.get(), controls.i_xButton.get(), controls.i_bButton.get(),
-				controls.i_leftVertAxis.get(), robot.rumble);
+		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngleAbsolute, robot.armVel,
+				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent,
+				controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(), controls.stowArmBtn(),
+				controls.armAngleAxis(), controls.gearRumble());
 		return Supplier;
 	}
 
 	/**
 	 * 
-	 * @param state
-	 *            supplier of state of GearIntake
+	 * @param state supplier of state of GearIntake
 	 * @return a new BallIntakeSystem
 	 */
 	private Subsystem setUpBallIntake(Supplier<GearIntakeSystem.State> state) {
-		return new BallIntakeSystem(controls.rightBumper, state, robot.ballIntake.getVoltageOutput());
+		return new BallIntakeSystem(controls.ballIntakeBtn(), state, robot.ballIntake.getVoltageOutput());
 	}
 
 	/**
@@ -90,7 +88,12 @@ public class TeleopMain {
 	 * @return a new ClimberSystem
 	 */
 	private ClimberSystem setUpClimbing() {
-		return new ClimberSystem(controls.i_leftTriggerAxis.get(), robot.climber.getVoltageOutput());
+		return new ClimberSystem(controls.climberThrottle(), robot.climber.getVoltageOutput());
+	}
+
+	private TeleopHopperSystem setupHopper() {
+		return new TeleopHopperSystem(robot.dumperPiston.getDigitalOut(), robot.dumperPiston.getDigitalOut(),
+				new DigitalIn(() -> true), controls.dumpHopperBtn(), controls.resetHopperBtn());
 	}
 
 	/**

@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.hardware.inputs.hardware.GyroHardware;
 import com.team1389.hardware.inputs.hardware.PDPHardware;
 import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
+import com.team1389.hardware.inputs.hardware.SpartanGyro;
 import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
@@ -11,8 +11,7 @@ import com.team1389.hardware.registry.Registry;
 import com.team1389.hardware.registry.port_types.CAN;
 
 /**
- * responsible for initializing and storing hardware objects defined in
- * {@link RobotLayout}
+ * responsible for initializing and storing hardware objects defined in {@link RobotLayout}
  * 
  * @author amind
  * @see RobotLayout
@@ -22,8 +21,8 @@ public class RobotHardware extends RobotLayout {
 
 	/**
 	 * Initializes robot hardware by subsystem. <br>
-	 * note: use this method as an index to show hardware initializations that
-	 * occur, and to find the init code for a particular system's hardware
+	 * note: use this method as an index to show hardware initializations that occur, and to find
+	 * the init code for a particular system's hardware
 	 */
 	protected RobotHardware() {
 		registry = new Registry();
@@ -31,10 +30,16 @@ public class RobotHardware extends RobotLayout {
 		lights = new CANLightHardware(can_LIGHT_CONTROLLER, registry);
 		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR, pwm_BALL_INTAKE_MOTOR, registry);
 		climber = new VictorHardware(inv_CLIMBER_MOTOR, pwm_CLIMBER_MOTOR, registry);
-		gyro = new GyroHardware<>(GyroHardware.ADXRS_453, spi_GyroPort, registry);
+		gyro = new SpartanGyro(spi_GyroPort, registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
 		initGearIntake();
+		initHopper();
+	}
+
+	private void initHopper() {
+		gatePiston = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_GATE_PISTON_A, pcm_GATE_PISTON_B, registry);
+		dumperPiston = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_DUMPER_PISTON_A, pcm_DUMPER_PISTON_B, registry);
 	}
 
 	private void initGearIntake() {

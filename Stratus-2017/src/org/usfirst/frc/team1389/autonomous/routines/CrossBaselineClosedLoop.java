@@ -1,11 +1,11 @@
-package org.usfirst.frc.team1389.autonomous;
+package org.usfirst.frc.team1389.autonomous.routines;
 
+import org.usfirst.frc.team1389.autonomous.AutoConstants;
 import org.usfirst.frc.team1389.autonomous.command.RobotCommands;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 
 import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeEndedException;
-import com.team1389.system.drive.FourWheelSignal;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
@@ -15,16 +15,15 @@ import com.team1389.watch.Watchable;
  * @author Quunii
  *
  */
-public class CrossBaseline extends AutoModeBase {
+public class CrossBaselineClosedLoop extends AutoModeBase {
 	RobotSoftware robot;
 	RobotCommands commands;
 
 	/**
 	 * 
-	 * @param robot
-	 *            container of all ohm streams
+	 * @param robot container of all ohm streams
 	 */
-	public CrossBaseline(RobotSoftware robot) {
+	public CrossBaselineClosedLoop(RobotSoftware robot) {
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 	}
@@ -34,7 +33,7 @@ public class CrossBaseline extends AutoModeBase {
 	 */
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(robot.voltageDrive);
+		return stem.put(robot.voltageDrive, robot.flPos.getWatchable("left encoder"), robot.frPos.getWatchable("right encoder"));
 	}
 
 	/**
@@ -42,13 +41,7 @@ public class CrossBaseline extends AutoModeBase {
 	 */
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		robot.voltageDrive.set(new FourWheelSignal(0.5,0.5,0.5,0.5));
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		robot.voltageDrive.set(new FourWheelSignal(0,0,0,0));
+		runCommand(commands.new DriveStraight(AutoConstants.getRotations(AutoConstants.BASELINE_DIST)));
 	}
 
 	/**
