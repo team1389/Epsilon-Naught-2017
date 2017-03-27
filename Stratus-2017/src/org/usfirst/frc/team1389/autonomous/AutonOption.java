@@ -3,11 +3,12 @@ package org.usfirst.frc.team1389.autonomous;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.usfirst.frc.team1389.autonomous.routines.CrossBaselineClosedLoop;
+import org.usfirst.frc.team1389.autonomous.routines.CrossBaselineOpenLoop;
 import org.usfirst.frc.team1389.autonomous.routines.active_gear.ActivePlaceGearCenter;
 import org.usfirst.frc.team1389.autonomous.routines.active_gear.ActivePlaceGearLeft;
 import org.usfirst.frc.team1389.autonomous.routines.active_gear.ActivePlaceGearRight;
 import org.usfirst.frc.team1389.autonomous.routines.active_gear.GearArmTest;
+import org.usfirst.frc.team1389.autonomous.routines.open_loop_gear.OpenLoopPlaceGear;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 
 import com.team1389.auto.AutoModeBase;
@@ -19,9 +20,10 @@ import com.team1389.auto.AutoModeBase;
  *
  */
 public enum AutonOption {
-	CROSS_BASELINE(CrossBaselineClosedLoop::new), TEST_GEAR_ARM(GearArmTest::new), ACTIVE_GEAR_LEFT(
+	CROSS_BASELINE(CrossBaselineOpenLoop::new), TEST_GEAR_ARM(GearArmTest::new), ACTIVE_GEAR_LEFT(
 			ActivePlaceGearLeft::new), ACTIVE_GEAR_CENTER(
-					ActivePlaceGearCenter::new), ACTIVE_GEAR_RIGHT(ActivePlaceGearRight::new);
+					ActivePlaceGearCenter::new), ACTIVE_GEAR_RIGHT(ActivePlaceGearRight::new),
+	PLACE_GEAR_OPEN_LOOP(OpenLoopPlaceGear::new);
 
 	public final Optional<Function<RobotSoftware, AutoModeBase>> autoConstructor;
 

@@ -44,8 +44,8 @@ public class RobotSoftware extends RobotHardware {
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageOutput(), frontRight.getVoltageOutput(),
 				rearLeft.getVoltageOutput(), rearRight.getVoltageOutput());
 
-		armAngleAbsolute = armPot.getAnalogInput().map(d -> 10 - d).mapToAngle(Position.class);
-		armAngle = armElevator.getPositionInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Position.class);
+		armAngleAbsolute = armElevator.getAbsoluteIn().invert().map(d -> (d * 12 / 22)).mapToAngle(Position.class);
+		armAngle = armElevator.getPositionInput().map(d -> (d * 12 / 22)).mapToAngle(Position.class).invert();
 		armVel = armElevator.getSpeedInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Speed.class);
 		zeroArmAngle();
 
@@ -71,7 +71,7 @@ public class RobotSoftware extends RobotHardware {
 	}
 
 	public void zeroArmAngle() {
-		double val = armAngleAbsolute.get() * 360 - armAngle.get();
+		double val = armAngleAbsolute.get() + armAngle.get();
 		armAngle.offset(val);
 	}
 

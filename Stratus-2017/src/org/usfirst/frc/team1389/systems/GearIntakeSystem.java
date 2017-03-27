@@ -232,7 +232,7 @@ public class GearIntakeSystem extends Subsystem {
 		 */
 		@Override
 		protected boolean execute() {
-			return intakeCurrentDraw.get() > 55;
+			return intakeCurrentDraw.get() > 25;
 		}
 		/**
 		 * sets voltage to 0 when done

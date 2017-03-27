@@ -49,7 +49,7 @@ public class RobotMap {
 	protected final PWM pwm_BALL_INTAKE_MOTOR = new PWM(5);
 	protected final boolean inv_BALL_INTAKE_MOTOR = false;
 	protected final PWM pwm_CLIMBER_MOTOR = new PWM(2);
-	protected final boolean inv_CLIMBER_MOTOR = false;
+	protected final boolean inv_CLIMBER_MOTOR = true;
 
 	protected final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
 	protected final Analog anlg_ARM_POTENTIOMETER = new Analog(0);

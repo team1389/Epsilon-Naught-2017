@@ -11,8 +11,8 @@ public class RobotConstants {
 
 	public static final int armAbsoluteMin = 1950;
 	public static final int armAbsoluteMax = 4390;
-	public static final double armPotSoftStop = .39;
-	public static final double armPotTurns = 10;
+	public static final double armPotSoftStop = 2.16;
+	public static final double armPotTurns = 1;
 	public static final double armSprocketRatio = 28 / 12;
 
 	/**

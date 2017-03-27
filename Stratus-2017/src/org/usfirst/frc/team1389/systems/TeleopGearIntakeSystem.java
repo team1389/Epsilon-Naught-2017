@@ -29,13 +29,14 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	private PercentIn armManualAxis;
 	private DigitalIn sensorFailure;
 	private DigitalOut rumble;
+	private PercentIn outtakeManualAxis;
 
 	private boolean intakeRunning, failure;
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, RangeIn<Value> intakeCurrent, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			DigitalIn sensorFailure, DigitalOut rumble) {
+			DigitalIn sensorFailure, DigitalOut rumble, PercentIn outtakeManualAxis) {
 		super(armAngle, armVel, armVoltage, intakeVoltage, intakeCurrent);
 		this.intakeGearButton = intakeGearButton;
 		this.prepareGearButton = prepareGearButton;
@@ -46,14 +47,15 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 		this.sensorFailure = sensorFailure;
 		failure = false;
 		this.rumble = rumble;
+		this.outtakeManualAxis = outtakeManualAxis;
 	}
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, RangeIn<Value> intakeCurrent, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			DigitalOut rumble) {
+			DigitalOut rumble, PercentIn outtakeManualAxis) {
 		this(armAngle, armVel, armVoltage, intakeVoltage, intakeCurrent, intakeGearButton, prepareGearButton,
-				placeGearButton, stowGearButton, armManualAxis, new DigitalIn(() -> false), rumble);
+				placeGearButton, stowGearButton, armManualAxis, new DigitalIn(() -> false), rumble, outtakeManualAxis);
 
 	}
 
@@ -75,18 +77,18 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	private void updateManualMode() {
 		armVoltage.set(armManualAxis.get());
 		intakeRunning = intakeGearButton.get() ^ intakeRunning;
-		if (intakeRunning) {
+
+		boolean gearIn = intakeCurrentDraw.get() > 20;
+		rumble.set(gearIn);
+		if (gearIn) {
+			setState(State.CARRYING);
+		} else if (intakeRunning) {
 			setState(State.INTAKING);
 		} else {
-			setState(State.CARRYING);
+			setState(State.STOWED);
 		}
 
-		boolean gearIn = intakeCurrentDraw.get() > 55;
-		if (gearIn) {
-			rumble.set(true);
-		}
-
-		intakeVoltageOut.set(intakeRunning ? -1 : 0.0);
+		intakeVoltageOut.set(intakeRunning ? -1 : outtakeManualAxis.get()/2);
 
 	}
 

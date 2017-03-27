@@ -31,7 +31,8 @@ public class TeleopMain {
 
 	/**
 	 * 
-	 * @param robot container of all ohm streams
+	 * @param robot
+	 *            container of all ohm streams
 	 */
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -49,7 +50,8 @@ public class TeleopMain {
 		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> GearIntakeSystem.State.STOWED);
 		manager = new SystemManager(drive, ballIntake, climbing, lights, gearIntake, setupHopper());
 		manager.init();
-		DebugDash.getInstance().watch(robot.armAngleAbsolute.getWatchable("absolute pos"));
+		DebugDash.getInstance().watch(robot.armAngleAbsolute.getWatchable("absolute pos"),
+				robot.gearIntakeCurrent.getWatchable("intake current"));
 	}
 
 	/**
@@ -70,13 +72,14 @@ public class TeleopMain {
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngleAbsolute, robot.armVel,
 				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent,
 				controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(), controls.stowArmBtn(),
-				controls.armAngleAxis(), controls.gearRumble());
+				controls.armAngleAxis(), controls.gearRumble(), controls.outtakeAxis());
 		return Supplier;
 	}
 
 	/**
 	 * 
-	 * @param state supplier of state of GearIntake
+	 * @param state
+	 *            supplier of state of GearIntake
 	 * @return a new BallIntakeSystem
 	 */
 	private Subsystem setUpBallIntake(Supplier<GearIntakeSystem.State> state) {

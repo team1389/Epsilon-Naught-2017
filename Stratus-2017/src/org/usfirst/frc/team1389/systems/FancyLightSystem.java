@@ -72,7 +72,7 @@ public class FancyLightSystem extends Subsystem {
 			lastSetColor = Color.green;
 			break;
 		case INTAKING:
-			lastSetColor = Color.orange;
+			lastSetColor = Color.magenta;
 			break;
 		default:
 			break;
