@@ -38,14 +38,15 @@ public class RobotCommands {
 		public DriveStraightOpenLoop(double time, double voltage) {
 			this.time = time;
 			timer = new Timer();
-			tankDrive = robot.voltageDrive.getAsTank();
-			
-/*			  tankDrive = new
-			  FourDriveOut<>(robot.frontLeft.getCompensatedVoltageOut(),
-			  robot.frontRight.getCompensatedVoltageOut(),
-			  robot.rearLeft.getCompensatedVoltageOut(),
-			  robot.rearRight.getCompensatedVoltageOut()).getAsTank();
-*/			 
+			tankDrive = robot.compensatedDrive.getAsTank();
+
+			/*
+			 * tankDrive = new
+			 * FourDriveOut<>(robot.frontLeft.getCompensatedVoltageOut(),
+			 * robot.frontRight.getCompensatedVoltageOut(),
+			 * robot.rearLeft.getCompensatedVoltageOut(),
+			 * robot.rearRight.getCompensatedVoltageOut()).getAsTank();
+			 */
 			this.voltage = voltage;
 		}
 

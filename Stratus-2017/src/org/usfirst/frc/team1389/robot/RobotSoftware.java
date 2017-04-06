@@ -22,6 +22,7 @@ public class RobotSoftware extends RobotHardware {
 	public AngleIn<Position> gyroInput;
 	public DigitalOut pistons;
 	public FourDriveOut<Percent> voltageDrive;
+	public FourDriveOut<Percent> compensatedDrive;
 	public AngleIn<Position> armAngle;
 	public AngleIn<Position> armAngleNoOffset;
 	public AngleIn<Speed> armVel;
@@ -39,7 +40,8 @@ public class RobotSoftware extends RobotHardware {
 	}
 
 	public RobotSoftware() {
-
+		voltageDrive = new FourDriveOut<>(frontLeft.getCompensatedVoltageOut(), frontRight.getCompensatedVoltageOut(),
+				rearLeft.getCompensatedVoltageOut(), rearRight.getCompensatedVoltageOut());
 		// gyroInput = new AngleIn<>(Position.class, () -> 0.0);
 		gyroInput = gyro.getAngleInput();
 
@@ -48,11 +50,8 @@ public class RobotSoftware extends RobotHardware {
 
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageOutput(), frontRight.getVoltageOutput(),
 				rearLeft.getVoltageOutput(), rearRight.getVoltageOutput());
-		armAngleNoOffset = armElevator
-				.getAbsoluteIn()
-					.mapToAngle(Position.class)
-					.invert()
-					.scale(RobotConstants.armSprocketRatio);
+		armAngleNoOffset = armElevator.getAbsoluteIn().mapToAngle(Position.class).invert()
+				.scale(RobotConstants.armSprocketRatio);
 		armAngle = armAngleNoOffset.copy().offset(-RobotConstants.armOffset);
 		armVel = armElevator.getSpeedInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Speed.class);
 

@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.usfirst.frc.team1389.autonomous.routines.CrossBaselineOpenLoop;
 import org.usfirst.frc.team1389.autonomous.routines.open_loop_gear.VoltCenterGear;
+import org.usfirst.frc.team1389.autonomous.routines.open_loop_gear.VoltSideGear;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 
 import com.team1389.auto.AutoModeBase;
@@ -16,7 +17,7 @@ import com.team1389.auto.AutoModeBase;
  *
  */
 public enum AutonOption {
-	CROSS_BASELINE(CrossBaselineOpenLoop::new), CENTER_GEAR(VoltCenterGear::new);
+	CROSS_BASELINE(CrossBaselineOpenLoop::new), CENTER_GEAR(VoltCenterGear::new), SIDE_GEAR(VoltSideGear::new);
 	public final Optional<Function<RobotSoftware, AutoModeBase>> autoConstructor;
 
 	AutonOption(Function<RobotSoftware, AutoModeBase> autoConstructor) {
