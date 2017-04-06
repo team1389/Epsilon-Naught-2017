@@ -66,7 +66,7 @@ public class HopperSystem extends Subsystem {
 		}
 	}
 
-	private enum DumperPosition {
+	public enum DumperPosition {
 		DUMP(true), STORE(false);
 		public final boolean pos;
 

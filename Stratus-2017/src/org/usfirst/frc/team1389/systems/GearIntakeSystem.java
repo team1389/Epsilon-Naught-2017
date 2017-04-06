@@ -21,6 +21,7 @@ import com.team1389.watch.info.EnumInfo;
 
 /**
  * The System responsible for controlling the gear intake
+ * 
  * @author Quunii
  *
  */
@@ -34,11 +35,17 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * defaults to Stowed State
-	 * @param armAngle encoder value of angle of arm
-	 * @param armVel speed of arm
-	 * @param armVoltage applies voltage to arm motors
-	 * @param intakeVoltage applies voltage to intake motors
-	 * @param intakeCurrent curret draw on intake
+	 * 
+	 * @param armAngle
+	 *            encoder value of angle of arm
+	 * @param armVel
+	 *            speed of arm
+	 * @param armVoltage
+	 *            applies voltage to arm motors
+	 * @param intakeVoltage
+	 *            applies voltage to intake motors
+	 * @param intakeCurrent
+	 *            curret draw on intake
 	 */
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> currentDriveMode) {
@@ -99,8 +106,8 @@ public class GearIntakeSystem extends Subsystem {
 	}
 
 	private enum Angle {
-		DOWN(-25), PLACING(48), CARRYING(70), STOWED(100), PLACED(30), OUTTAKE(42), PLACING_MECANUM(38), DOWN_MECANUM(
-				-40);
+		DOWN(-40), PLACING(40), CARRYING(70), STOWED(100), PLACED(17), OUTTAKE(35), PLACING_MECANUM(33), DOWN_MECANUM(
+				-45);
 		public final double angle;
 
 		private Angle(double angle) {
@@ -117,11 +124,9 @@ public class GearIntakeSystem extends Subsystem {
 	 * @return command that aligns gear with peg
 	 */
 	public Command preparePlaceGear() {
-		return CommandUtil
-				.combineSequential(enablePID(true), setIntake(0),
-						new SetAngle(driveMode.get() == DriveMode.TANK ? Angle.PLACING : Angle.PLACING_MECANUM),
-						setStateCommand(State.ALIGNING))
-					.setName("prepare-pos");
+		return CommandUtil.combineSequential(enablePID(true), setIntake(0),
+				new SetAngle(driveMode.get() == DriveMode.TANK ? Angle.PLACING : Angle.PLACING_MECANUM),
+				setStateCommand(State.ALIGNING)).setName("prepare-pos");
 	}
 
 	/**
@@ -129,12 +134,10 @@ public class GearIntakeSystem extends Subsystem {
 	 * @return command that places gear on peg
 	 */
 	public Command placeGear() {
-		return CommandUtil
-				.combineSequential(enablePID(true), setIntake(0), new SetAngleSlow(Angle.PLACED.angle, false),
-						CommandUtil.createCommand(() -> isNear(Angle.OUTTAKE.angle, 1)), setIntake(.4),
-						CommandUtil.createCommand(() -> isNear(Angle.PLACED.angle, 1)), setIntake(0),
-						setStateCommand(State.PLACING))
-					.setName("placing");
+		return CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.PLACED.angle, false),
+				CommandUtil.createCommand(() -> isNear(Angle.OUTTAKE.angle, 5)), setIntake(.4),
+				CommandUtil.createCommand(() -> isNear(Angle.PLACED.angle, 5)), setIntake(0),
+				setStateCommand(State.PLACING)).setName("placing");
 	}
 
 	/**
@@ -144,12 +147,13 @@ public class GearIntakeSystem extends Subsystem {
 	public Command intakeGear() {
 		return CommandUtil
 				.combineSequential(
-						CommandUtil
-								.combineSequential(enablePID(true),
-										new SetAngle(
-												driveMode.get() == DriveMode.TANK ? Angle.DOWN : Angle.DOWN_MECANUM),
-										setStateCommand(State.INTAKING))
-									.setName("lowering"),
+						CommandUtil.combineSequential(enablePID(true),
+								new SetAngle(driveMode.get() == DriveMode.TANK ? Angle.DOWN : Angle.DOWN_MECANUM,
+										false),
+								CommandUtil.createCommand(() -> isNear(
+										(driveMode.get() == DriveMode.TANK ? Angle.DOWN : Angle.DOWN_MECANUM).angle,
+										10)),
+								setStateCommand(State.INTAKING)).setName("lowering"),
 						new IntakeUntilGear().setName("awaiting"), carryGear());
 	}
 
@@ -158,10 +162,8 @@ public class GearIntakeSystem extends Subsystem {
 	 * @return command that carries a gear
 	 */
 	public Command carryGear() {
-		return CommandUtil
-				.combineSequential(enablePID(true), setStateCommand(State.CARRYING), setIntake(-.5),
-						new SetAngle(Angle.CARRYING), setIntake(0))
-					.setName("raising-to-carry");
+		return CommandUtil.combineSequential(enablePID(true), setStateCommand(State.CARRYING), setIntake(-.5),
+				new SetAngle(Angle.CARRYING), setIntake(0)).setName("raising-to-carry");
 	}
 
 	/**
@@ -169,15 +171,14 @@ public class GearIntakeSystem extends Subsystem {
 	 * @return a command that stows the arm
 	 */
 	public Command stowArm() {
-		return CommandUtil
-				.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED),
-						setStateCommand(State.STOWED), enablePID(false))
-					.setName("stowing");
+		return CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED),
+				setStateCommand(State.STOWED), enablePID(false)).setName("stowing");
 	}
 
 	/**
 	 * 
-	 * @param val whether to enable the Smooth Set controller
+	 * @param val
+	 *            whether to enable the Smooth Set controller
 	 * @return Command to enable or disable Smooth Set Controller
 	 */
 	public Command enablePID(boolean val) {
@@ -186,7 +187,8 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param voltage the voltage to apply to intake motors
+	 * @param voltage
+	 *            the voltage to apply to intake motors
 	 * @return Command that applies voltage to intake motors
 	 */
 	public Command setIntake(double voltage) {
@@ -195,7 +197,8 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param s the State to switch to
+	 * @param s
+	 *            the State to switch to
 	 * @return a command to set state
 	 */
 	public Command setStateCommand(State s) {
@@ -204,7 +207,9 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * sets state based on parameter
-	 * @param s the state to be set to
+	 * 
+	 * @param s
+	 *            the state to be set to
 	 */
 	public void setState(State s) {
 		state = s;
@@ -212,8 +217,9 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param desired State that corresponds with desired command schedules command based on state
-	 *            passed in
+	 * @param desired
+	 *            State that corresponds with desired command schedules command
+	 *            based on state passed in
 	 */
 	public void enterState(State desired) {
 		scheduler.cancelAll();
@@ -223,7 +229,8 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param desired The desired State
+	 * @param desired
+	 *            The desired State
 	 * @return a command corresponding with passed in State
 	 */
 	public Command getEnterStateCommand(State desired) {
@@ -251,6 +258,7 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * intakes until a gear is detected
+	 * 
 	 * @author Quunii
 	 *
 	 */
@@ -287,6 +295,7 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * sets an angle for arm to reach
+	 * 
 	 * @author Quunii
 	 *
 	 */
@@ -296,8 +305,11 @@ public class GearIntakeSystem extends Subsystem {
 
 		/**
 		 * 
-		 * @param position desired angle
-		 * @param waitForFinish whether to wait for this command to end before running another
+		 * @param position
+		 *            desired angle
+		 * @param waitForFinish
+		 *            whether to wait for this command to end before running
+		 *            another
 		 */
 		public SetAngle(double position, boolean waitForFinish) {
 			this.position = position;
@@ -306,8 +318,11 @@ public class GearIntakeSystem extends Subsystem {
 
 		/**
 		 * 
-		 * @param pos desired angle
-		 * @param waitForFinish whether to wait for this command to end before running another
+		 * @param pos
+		 *            desired angle
+		 * @param waitForFinish
+		 *            whether to wait for this command to end before running
+		 *            another
 		 */
 		public SetAngle(Angle pos, boolean waitForFinish) {
 			this(pos.angle, waitForFinish);
@@ -315,7 +330,9 @@ public class GearIntakeSystem extends Subsystem {
 
 		/**
 		 * assumes that command should be executed before running another
-		 * @param position desired angle
+		 * 
+		 * @param position
+		 *            desired angle
 		 */
 		public SetAngle(double position) {
 			this(position, true);
@@ -323,7 +340,9 @@ public class GearIntakeSystem extends Subsystem {
 
 		/**
 		 * assumes that command should be executed before running another
-		 * @param pos desired angle
+		 * 
+		 * @param pos
+		 *            desired angle
 		 */
 		public SetAngle(Angle pos) {
 			this(pos, true);
@@ -339,8 +358,8 @@ public class GearIntakeSystem extends Subsystem {
 		}
 
 		/**
-		 * command is complete if waitForFinish is not true, or the arm is within a degree of the
-		 * desired angle
+		 * command is complete if waitForFinish is not true, or the arm is
+		 * within a degree of the desired angle
 		 */
 		@Override
 		protected boolean execute() {
@@ -350,6 +369,7 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * slower version of SetAngle
+	 * 
 	 * @author Quunii
 	 *
 	 */
@@ -368,8 +388,10 @@ public class GearIntakeSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param angle goal angle
-	 * @param nearTolerance Margin of Error
+	 * @param angle
+	 *            goal angle
+	 * @param nearTolerance
+	 *            Margin of Error
 	 * @return whether the arm is close enough to the desired angle
 	 */
 	public boolean isNear(double angle, double nearTolerance) {
@@ -381,8 +403,8 @@ public class GearIntakeSystem extends Subsystem {
 	}
 	/*
 	 * @Override public void schedule(Command command) {
-	 * super.schedule(CommandUtil.combineSequential(CommandUtil.createCommand(scheduler::isFinished)
-	 * , command)); }
+	 * super.schedule(CommandUtil.combineSequential(CommandUtil.createCommand(
+	 * scheduler::isFinished) , command)); }
 	 */
 
 }

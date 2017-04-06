@@ -40,8 +40,9 @@ public class RobotSoftware extends RobotHardware {
 	}
 
 	public RobotSoftware() {
-		voltageDrive = new FourDriveOut<>(frontLeft.getCompensatedVoltageOut(), frontRight.getCompensatedVoltageOut(),
-				rearLeft.getCompensatedVoltageOut(), rearRight.getCompensatedVoltageOut());
+		compensatedDrive = new FourDriveOut<>(frontLeft.getCompensatedVoltageOut(),
+				frontRight.getCompensatedVoltageOut(), rearLeft.getCompensatedVoltageOut(),
+				rearRight.getCompensatedVoltageOut());
 		// gyroInput = new AngleIn<>(Position.class, () -> 0.0);
 		gyroInput = gyro.getAngleInput();
 
@@ -72,7 +73,8 @@ public class RobotSoftware extends RobotHardware {
 		 * pdp.getCurrentIn(pdp_REAR_LEFT_CURRENT); brCurrent =
 		 * pdp.getCurrentIn(pdp_REAR_RIGHT_CURRENT);
 		 */
-		climberVoltage = climberA.getVoltageOutput().addFollowers(climberB.getVoltageOutput());
+		climberVoltage = climberA.getVoltageOutput().addFollowers(climberB.getVoltageOutput())
+				.addFollowers(climberC.getVoltageOutput());
 		threadManager = new OhmThreadService(20);
 	}
 

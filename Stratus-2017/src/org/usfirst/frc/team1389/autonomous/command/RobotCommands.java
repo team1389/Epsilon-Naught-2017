@@ -38,7 +38,7 @@ public class RobotCommands {
 		public DriveStraightOpenLoop(double time, double voltage) {
 			this.time = time;
 			timer = new Timer();
-			tankDrive = robot.compensatedDrive.getAsTank();
+			tankDrive = robot.voltageDrive.getAsTank();
 
 			/*
 			 * tankDrive = new
@@ -73,30 +73,17 @@ public class RobotCommands {
 	public class TurnAngle extends TurnAngleCommand<Percent> {
 
 		public TurnAngle(double angle, boolean absolute) {
-			super(angle, absolute, 2, robot.gyro.getAngleInput(),
+			super(angle, absolute, 2, robot.gyro.getAngleInput().invert(),
 					TurnAngleCommand.createTurnController(robot.voltageDrive.getAsTank()),
-					new PIDConstants(0.05, .001, .5));
+					new PIDConstants(0.02, 0, 0));
 		}
 
 	}
 
-	public class TurnAngleOpenLoop extends Command {
-		double time, lVoltage, rVoltage;
-		DriveOut<Percent> drive;
-		Timer timer;
+	public class MecanumMove extends MecanumMoveCommand {
 
-		public TurnAngleOpenLoop(double time, double lVoltage, double rVoltage) {
-			this.time = time;
-			this.lVoltage = lVoltage;
-			this.rVoltage = rVoltage;
-			drive = robot.voltageDrive.getAsTank();
-			timer = new Timer();
-		}
-
-		@Override
-		protected boolean execute() {
-			drive.set(lVoltage, rVoltage);
-			return timer.get() >= time;
+		public MecanumMove(double xPwr, double yPwr, double turnPwr, double time) {
+			super(robot.voltageDrive, xPwr, yPwr, turnPwr, time);
 		}
 
 	}

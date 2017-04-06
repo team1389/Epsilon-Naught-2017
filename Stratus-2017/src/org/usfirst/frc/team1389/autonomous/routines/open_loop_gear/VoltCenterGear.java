@@ -20,6 +20,8 @@ public class VoltCenterGear extends AutoModeBase {
 	public VoltCenterGear(RobotSoftware robot) {
 		this.robot = robot;
 		commands = new RobotCommands(robot);
+		gearIntake = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
+				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak);
 	}
 
 	@Override
@@ -29,6 +31,7 @@ public class VoltCenterGear extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
+		System.out.println("starting center gear");
 		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
 				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
 		Command auto = CommandUtil.combineSequential(driveAndLower, gearIntake.placeGear(),
