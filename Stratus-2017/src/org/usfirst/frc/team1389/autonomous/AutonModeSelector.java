@@ -18,11 +18,9 @@ public class AutonModeSelector {
 	 * @return the corresponding auton to that which is selected
 	 */
 	public static AutoModeBase createAutoMode(AutonOption autonOption) {
-		//return autonOption.setupAutoModeBase(RobotSoftware.getInstance());
-		if(autonOption == null){
-			return AutonOption.PLACE_GEAR_OPEN_LOOP.setupAutoModeBase(RobotSoftware.getInstance());
-		}
-		else{
+		if (autonOption == null) {
+			return AutonOption.CROSS_BASELINE.setupAutoModeBase(RobotSoftware.getInstance());
+		} else {
 			return autonOption.setupAutoModeBase(RobotSoftware.getInstance());
 		}
 	}

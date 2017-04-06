@@ -8,9 +8,9 @@ import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.util.bezier.BezierCurve;
 
 /**
- * A basic framework for the robot controls. Like the RobotHardware, one
- * instance of the ControlBoard object is created upon startup, then other
- * methods request the singleton ControlBoard instance.
+ * A basic framework for the robot controls. Like the RobotHardware, one instance of the
+ * ControlBoard object is created upon startup, then other methods request the singleton
+ * ControlBoard instance.
  * 
  * @author amind
  * @see ControlMap
@@ -76,7 +76,7 @@ public class ControlBoard {
 
 	public PercentIn armAngleAxis() {
 		BezierCurve curve = new BezierCurve(.58, .13, .42, .89);
-		return manipController.leftStick.yAxis().applyBezier(curve).scale(.5);
+		return manipController.leftStick.yAxis().applyBezier(curve).scale(.5).invert();
 	}
 
 	public DigitalIn ballIntakeBtn() {
@@ -91,12 +91,20 @@ public class ControlBoard {
 		return manipController.downArrow();
 	}
 
+	public DigitalIn zeroAutomaticBtn() {
+		return manipController.backButton().latched();
+	}
+
 	public DigitalIn dumpHopperBtn() {
 		return manipController.upArrow();
 	}
 
 	public PercentIn outtakeAxis() {
 		return manipController.rightTrigger();
+	}
+
+	public DigitalIn armManualTrigger() {
+		return manipController.startButton().latched();
 	}
 
 }

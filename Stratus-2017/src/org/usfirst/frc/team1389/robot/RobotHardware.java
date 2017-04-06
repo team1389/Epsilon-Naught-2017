@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.inputs.hardware.PDPHardware;
-import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SpartanGyro;
+import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
@@ -28,13 +28,18 @@ public class RobotHardware extends RobotLayout {
 		registry = new Registry();
 		pdp = new PDPHardware(new CAN(0), registry);
 		lights = new CANLightHardware(can_LIGHT_CONTROLLER, registry);
-		ballIntake = new VictorHardware(inv_BALL_INTAKE_MOTOR, pwm_BALL_INTAKE_MOTOR, registry);
-		climber = new VictorHardware(inv_CLIMBER_MOTOR, pwm_CLIMBER_MOTOR, registry);
 		gyro = new SpartanGyro(spi_GyroPort, registry);
 		initDriveTrain();
 		initDriveTrainPneumatics();
 		initGearIntake();
 		initHopper();
+		initClimber();
+	}
+
+	private void initClimber() {
+		climberA = new VictorHardware(inv_CLIMBER_MOTOR_A, pwm_CLIMBER_MOTOR_A, registry);
+		climberB = new VictorHardware(inv_CLIMBER_MOTOR_B, pwm_CLIMBER_MOTOR_B, registry);
+		climberC = new VictorHardware(inv_CLIMBER_MOTOR_C, pwm_CLIMBER_MOTOR_C, registry);
 	}
 
 	private void initHopper() {
@@ -43,11 +48,10 @@ public class RobotHardware extends RobotLayout {
 	}
 
 	private void initGearIntake() {
-		armPot = new PotentiometerHardware(RobotConstants.armPotTurns, RobotConstants.armPotSoftStop,
-				anlg_ARM_POTENTIOMETER, registry);
 		armElevator = new CANTalonHardware(inv_ARM_ELEVATOR_MOTOR, sinv_ARM_ELEVATOR_MOTOR, can_ARM_ELEVATOR_MOTOR,
 				registry);
 		gearIntake = new VictorHardware(inv_GEAR_INTAKE_MOTOR, pwm_GEAR_INTAKE_MOTOR, registry);
+		beamBreakSensor = new SwitchHardware(dio_GEAR_BEAM_BREAK, registry);
 	}
 
 	public Registry getRegistry() {

@@ -1,4 +1,7 @@
 package org.usfirst.frc.team1389.robot;
+
+import edu.wpi.first.wpilibj.Preferences;
+
 /**
  * constants of robot dimensions, as well those used for calculations
  * @author Quunii
@@ -6,14 +9,11 @@ package org.usfirst.frc.team1389.robot;
  */
 public class RobotConstants {
 	public static final double INCHES_TO_METERS = .0254;
-	//was 8
+	// was 8
 	public static final double WheelDiameter = 4; // in
 
-	public static final int armAbsoluteMin = 1950;
-	public static final int armAbsoluteMax = 4390;
-	public static final double armPotSoftStop = 2.16;
-	public static final double armPotTurns = 1;
-	public static final double armSprocketRatio = 28 / 12;
+	public static final double armOffset = Preferences.getInstance().getDouble("offset", 0.0);
+	public static final double armSprocketRatio = 12.0 / 22.0;
 
 	/**
 	 * constants for odometry calculations

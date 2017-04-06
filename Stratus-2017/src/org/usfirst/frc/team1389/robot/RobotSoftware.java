@@ -8,11 +8,14 @@ import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PositionEncoderIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
+import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Percent;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.drive.FourDriveOut;
+
+import edu.wpi.first.wpilibj.Preferences;
 
 public class RobotSoftware extends RobotHardware {
 	private static RobotSoftware INSTANCE = new RobotSoftware();
@@ -20,7 +23,7 @@ public class RobotSoftware extends RobotHardware {
 	public DigitalOut pistons;
 	public FourDriveOut<Percent> voltageDrive;
 	public AngleIn<Position> armAngle;
-	public AngleIn<Position> armAngleAbsolute;
+	public AngleIn<Position> armAngleNoOffset;
 	public AngleIn<Speed> armVel;
 	public RangeIn<Value> gearIntakeCurrent;
 	public RangeIn<Position> flPos, frPos;
@@ -28,6 +31,8 @@ public class RobotSoftware extends RobotHardware {
 	public DigitalIn timeRunning;
 	public RangeIn<Value> flCurrent, frCurrent, blCurrent, brCurrent;
 	public RangeIn<Value> armCurrent;
+	public DigitalIn gearBeamBreak;
+	public PercentOut climberVoltage;
 
 	public static RobotSoftware getInstance() {
 		return INSTANCE;
@@ -43,14 +48,16 @@ public class RobotSoftware extends RobotHardware {
 
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageOutput(), frontRight.getVoltageOutput(),
 				rearLeft.getVoltageOutput(), rearRight.getVoltageOutput());
-
-		armAngleAbsolute = armElevator.getAbsoluteIn().invert().map(d -> (d * 12 / 22)).mapToAngle(Position.class);
-		armAngle = armElevator.getPositionInput().map(d -> (d * 12 / 22)).mapToAngle(Position.class).invert();
+		armAngleNoOffset = armElevator
+				.getAbsoluteIn()
+					.mapToAngle(Position.class)
+					.invert()
+					.scale(RobotConstants.armSprocketRatio);
+		armAngle = armAngleNoOffset.copy().offset(-RobotConstants.armOffset);
 		armVel = armElevator.getSpeedInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Speed.class);
-		zeroArmAngle();
 
 		gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
-
+		gearBeamBreak = beamBreakSensor.getSwitchInput();
 		flCurrent = frontLeft.getCurrentIn();
 		frCurrent = frontRight.getCurrentIn();
 		blCurrent = rearLeft.getCurrentIn();
@@ -66,13 +73,15 @@ public class RobotSoftware extends RobotHardware {
 		 * pdp.getCurrentIn(pdp_REAR_LEFT_CURRENT); brCurrent =
 		 * pdp.getCurrentIn(pdp_REAR_RIGHT_CURRENT);
 		 */
-
+		climberVoltage = climberA.getVoltageOutput().addFollowers(climberB.getVoltageOutput());
 		threadManager = new OhmThreadService(20);
 	}
 
-	public void zeroArmAngle() {
-		double val = armAngleAbsolute.get() + armAngle.get();
-		armAngle.offset(val);
+	public void zeroAngle() {
+		double offset = armAngleNoOffset.get();
+		System.out.println("Angle offset: " + offset);
+		Preferences.getInstance().putDouble("offset", offset);
+		armAngle.clone(armAngleNoOffset.copy().offset(-offset));
 	}
 
 }

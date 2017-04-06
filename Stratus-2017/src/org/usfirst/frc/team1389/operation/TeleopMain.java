@@ -4,11 +4,11 @@ import java.util.function.Supplier;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.robot.controls.ControlBoard;
-import org.usfirst.frc.team1389.systems.BallIntakeSystem;
 import org.usfirst.frc.team1389.systems.ClimberSystem;
 import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
+import org.usfirst.frc.team1389.systems.OctoMecanumSystem.DriveMode;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
 import org.usfirst.frc.team1389.systems.TeleopHopperSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
@@ -31,8 +31,7 @@ public class TeleopMain {
 
 	/**
 	 * 
-	 * @param robot
-	 *            container of all ohm streams
+	 * @param robot container of all ohm streams
 	 */
 	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
@@ -43,22 +42,21 @@ public class TeleopMain {
 	 */
 	public void init() {
 		controls = ControlBoard.getInstance();
-		GearIntakeSystem gearIntake = setupGearIntake();
-		Subsystem drive = setupDrive();
-		Subsystem ballIntake = setUpBallIntake(() -> GearIntakeSystem.State.STOWED);
+		OctoMecanumSystem drive = setupDrive();
+		GearIntakeSystem gearIntake = setupGearIntake(drive.getDriveModeTracker());
 		Subsystem climbing = setUpClimbing();
-		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), () -> GearIntakeSystem.State.STOWED);
-		manager = new SystemManager(drive, ballIntake, climbing, lights, gearIntake, setupHopper());
+		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
+				gearIntake::getState);
+		DebugDash.getInstance().watch(lights, gearIntake);
+		manager = new SystemManager(drive, climbing, lights, gearIntake, setupHopper());
 		manager.init();
-		DebugDash.getInstance().watch(robot.armAngleAbsolute.getWatchable("absolute pos"),
-				robot.gearIntakeCurrent.getWatchable("intake current"));
 	}
 
 	/**
 	 * 
 	 * @return a new OctoMecanumSystem
 	 */
-	private Subsystem setupDrive() {
+	private OctoMecanumSystem setupDrive() {
 		return new OctoMecanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.driveXAxis(),
 				controls.driveYAxis(), controls.driveYaw(), controls.driveTrim(), controls.driveModeBtn(),
 				controls.driveModifierBtn());
@@ -68,22 +66,13 @@ public class TeleopMain {
 	 * 
 	 * @return a new GearIntakeSystem
 	 */
-	private GearIntakeSystem setupGearIntake() {
-		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngleAbsolute, robot.armVel,
-				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearIntakeCurrent,
-				controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(), controls.stowArmBtn(),
-				controls.armAngleAxis(), controls.gearRumble(), controls.outtakeAxis());
+	private GearIntakeSystem setupGearIntake(Supplier<DriveMode> driveMode) {
+		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
+				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak,
+				driveMode, controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(),
+				controls.stowArmBtn(), controls.armAngleAxis(), controls.outtakeAxis(), controls.gearRumble(),
+				controls.armManualTrigger());
 		return Supplier;
-	}
-
-	/**
-	 * 
-	 * @param state
-	 *            supplier of state of GearIntake
-	 * @return a new BallIntakeSystem
-	 */
-	private Subsystem setUpBallIntake(Supplier<GearIntakeSystem.State> state) {
-		return new BallIntakeSystem(controls.ballIntakeBtn(), state, robot.ballIntake.getVoltageOutput());
 	}
 
 	/**
@@ -91,7 +80,7 @@ public class TeleopMain {
 	 * @return a new ClimberSystem
 	 */
 	private ClimberSystem setUpClimbing() {
-		return new ClimberSystem(controls.climberThrottle(), robot.climber.getVoltageOutput());
+		return new ClimberSystem(controls.climberThrottle(), robot.climberVoltage);
 	}
 
 	private TeleopHopperSystem setupHopper() {
@@ -104,6 +93,9 @@ public class TeleopMain {
 	 */
 	public void periodic() {
 		manager.update();
+		if (controls.zeroAutomaticBtn().get()) {
+			robot.zeroAngle();
+		}
 	}
 
 }

@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1389.robot;
 
 import com.team1389.hardware.inputs.hardware.PDPHardware;
-import com.team1389.hardware.inputs.hardware.PotentiometerHardware;
 import com.team1389.hardware.inputs.hardware.SpartanGyro;
+import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
@@ -23,11 +23,11 @@ public class RobotLayout extends RobotMap {
 	public CANTalonHardware rearLeft;
 	public CANTalonHardware rearRight;
 	public CANTalonHardware armElevator;
-	public VictorHardware gearIntake, ballIntake, climber;
+	public VictorHardware gearIntake, climberA, climberB, climberC;
 	public PDPHardware pdp;
 	public DoubleSolenoidHardware flPiston, frPiston, rlPiston, rrPiston;
 	public DoubleSolenoidHardware gatePiston, dumperPiston;
 	public SpartanGyro gyro;
 	public CANLightHardware lights;
-	public PotentiometerHardware armPot;
+	public SwitchHardware beamBreakSensor;
 }

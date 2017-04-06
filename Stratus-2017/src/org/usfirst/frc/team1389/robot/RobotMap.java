@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1389.robot;
 
-import com.team1389.hardware.registry.port_types.Analog;
 import com.team1389.hardware.registry.port_types.CAN;
+import com.team1389.hardware.registry.port_types.DIO;
 import com.team1389.hardware.registry.port_types.PCM;
 import com.team1389.hardware.registry.port_types.PWM;
 import com.team1389.hardware.registry.port_types.SPIPort;
@@ -43,16 +43,17 @@ public class RobotMap {
 	protected final boolean inv_RIGHT_REAR_MOTOR = false;
 
 	protected final CAN can_ARM_ELEVATOR_MOTOR = new CAN(7);
-	protected final boolean inv_ARM_ELEVATOR_MOTOR = false;
+	protected final boolean inv_ARM_ELEVATOR_MOTOR = true;
 	protected final PWM pwm_GEAR_INTAKE_MOTOR = new PWM(1);
 	protected final boolean inv_GEAR_INTAKE_MOTOR = true;
-	protected final PWM pwm_BALL_INTAKE_MOTOR = new PWM(5);
-	protected final boolean inv_BALL_INTAKE_MOTOR = false;
-	protected final PWM pwm_CLIMBER_MOTOR = new PWM(2);
-	protected final boolean inv_CLIMBER_MOTOR = true;
+	protected final PWM pwm_CLIMBER_MOTOR_A = new PWM(0);
+	protected final boolean inv_CLIMBER_MOTOR_A = false;
+	protected final PWM pwm_CLIMBER_MOTOR_B = new PWM(5);
+	protected final boolean inv_CLIMBER_MOTOR_B = true;
+	protected final PWM pwm_CLIMBER_MOTOR_C = new PWM(4);
+	protected final boolean inv_CLIMBER_MOTOR_C = true;
 
 	protected final SPIPort spi_GyroPort = new SPIPort(SPI.Port.kOnboardCS0);
-	protected final Analog anlg_ARM_POTENTIOMETER = new Analog(0);
 
 	// DriveTrain Pneumatics
 	protected final PCM pcm_FRONT_LEFT_PISTON_A = new PCM(7);
@@ -69,6 +70,8 @@ public class RobotMap {
 	protected final PCM pcm_GATE_PISTON_B = new PCM(7);
 	protected final PCM pcm_DUMPER_PISTON_A = new PCM(3);
 	protected final PCM pcm_DUMPER_PISTON_B = new PCM(4);
+
+	protected final DIO dio_GEAR_BEAM_BREAK = new DIO(0);
 
 	protected final CAN can_LIGHT_CONTROLLER = new CAN(8);
 	protected final int mod_DRIVE_TRAIN_PCM = 1;
