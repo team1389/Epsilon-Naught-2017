@@ -1,9 +1,12 @@
 package org.usfirst.frc.team1389.robot;
 
+import com.team1389.configuration.PIDConstants;
+
 import edu.wpi.first.wpilibj.Preferences;
 
 /**
  * constants of robot dimensions, as well those used for calculations
+ * 
  * @author Quunii
  *
  */
@@ -29,4 +32,6 @@ public class RobotConstants {
 	public static final double MaxAcceleration = 100; // ft/s^2
 	public static final double MaxDeceleration = 100; // ft/s^2
 
+	public static PIDConstants driveConstants = new PIDConstants(Preferences.getInstance().getDouble("drive P", 0),
+			Preferences.getInstance().getDouble("drive I", 0), Preferences.getInstance().getDouble("drive D", 0));
 }

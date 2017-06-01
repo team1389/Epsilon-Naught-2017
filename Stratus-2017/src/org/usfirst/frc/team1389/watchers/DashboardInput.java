@@ -33,6 +33,9 @@ public class DashboardInput {
 	private static final String SELECTED_AUTO_MODE = "auto";
 	private static final AutonOption DEFAULT_MODE = AutonOption.CROSS_BASELINE;
 
+	public double getDriveTuningP(){
+		return SmartDashboard.getNumber("DriveTuningP", 0);
+	}
 	public AutoModeBase getSelectedAutonMode() {
 		String autoModeString = SmartDashboard.getString(SELECTED_AUTO_MODE, DEFAULT_MODE.name());
 		AutonOption selectedOption = DEFAULT_MODE;
