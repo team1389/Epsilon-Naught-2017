@@ -3,6 +3,7 @@ package org.usfirst.frc.team1389.autonomous.command;
 import org.usfirst.frc.team1389.autonomous.AutoConstants;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 
+import com.team1389.auto.command.DrivePIDTuneCommand;
 import com.team1389.auto.command.DriveStraightCommand;
 import com.team1389.auto.command.TurnAngleCommand;
 import com.team1389.command_framework.command_base.Command;
@@ -24,27 +25,21 @@ public class RobotCommands {
 			this(distance, 5);
 		}
 
-		// ((tuning)? new PIDConstants(AutoConstants.DriveTuningP,0,0): new
-		// PIDConstants(1, .03, .02))
+	
+		//prior pid constants:  PIDConstants(1, .03, .02))
 		public DriveStraight(double distance, double speed) {
-			super(new PIDConstants(1, .03, .02), new PIDConstants(0, 0, .0), robot.voltageDrive.getAsTank(),
+			super(AutoConstants.driveConstants, new PIDConstants(0, 0, .0), robot.voltageDrive.getAsTank(),
 					robot.flPos, robot.frPos, robot.gyroInput.copy().invert(), distance, 2, 2, speed, .05);
 		}
 	}
 
-	/**
-	 * TODO initialize PID Controller, Simple P loop, measure oscillation time
-	 * with timing of current flip in motor, do ziegler nichols and other method
-	 * calc in get method for respective, apply to preferences, apply values to static pid controller
-	 * 
-	 * @author Quunii
-	 *
-	 */
-	public class StraightPidTune {
+	
+	public class StraightPIDTune extends DrivePIDTuneCommand {
 		double distance;
-
-		public StraightPidTune(double distance) {
-
+		
+		 
+		public StraightPIDTune (double tunedP, double distance, boolean PIOnly) {
+			super(tunedP, distance, PIOnly, robot.flPos, robot.frPos, robot.voltageDrive.getAsTank());
 		}
 	}
 

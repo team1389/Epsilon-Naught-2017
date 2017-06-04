@@ -22,6 +22,7 @@ public class DashboardInput {
 	private SendableChooser<AutonOption> autonSelector;
 
 	public void init() {
+		SmartDashboard.putNumber("DriveTuningP", 0.0);
 		autonSelector = new SendableChooser<AutonOption>();
 		for (AutonOption autonOption : AutonOption.values()) {
 			autonSelector.addObject(autonOption.name(), autonOption);
