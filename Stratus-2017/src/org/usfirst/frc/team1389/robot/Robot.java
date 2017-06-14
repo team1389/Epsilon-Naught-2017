@@ -10,6 +10,7 @@ import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeExecuter;
 import com.team1389.hardware.inputs.hardware.SpartanGyro;
 import com.team1389.util.Color;
+import com.team1389.watch.info.NumberInfo;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -45,12 +46,12 @@ public class Robot extends IterativeRobot {
 		CameraServer.getInstance().startAutomaticCapture(1);
 		DebugDash.getInstance().watch(robot.armAngle.getWatchable("adjusted angle"),
 				robot.armAngleNoOffset.getWatchable("zeroing angle"),
-				robot.frontLeft.getPositionInput().getWatchable("Left encoder"),
+				new NumberInfo("front left", robot.flPos.getStream()),
+				new NumberInfo("front right", robot.frPos.getStream()),
 				robot.frontRight.getPositionInput().getWatchable("Right encoder"),
 				robot.gyroInput.getWatchable("Gyro angle"), robot.flCurrent.getWatchable("front left current"),
 				robot.frCurrent.getWatchable("front right current"), robot.brCurrent.getWatchable("rear right current"),
 				robot.blCurrent.getWatchable("rear left current"), robot.armCurrent.getWatchable("arm current"));
-
 	}
 
 	@Override
