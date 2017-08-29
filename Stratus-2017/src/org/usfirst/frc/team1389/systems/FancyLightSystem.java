@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
  * @author Quunii
  *
  */
-public class FancyLightSystem extends Subsystem {
+public class FancyLightSystem extends Subsystem
+{
 	private Consumer<Color> lightController;
 	private Supplier<GearIntakeSystem.State> intakeState;
 	private Alliance alliance;
@@ -27,12 +28,16 @@ public class FancyLightSystem extends Subsystem {
 
 	/**
 	 * 
-	 * @param lightController consumer that applies Color to Lights
-	 * @param intakeState supplies state of GearIntake
-	 * @param driveState supplies if the robot is autoaligning
+	 * @param lightController
+	 *            consumer that applies Color to Lights
+	 * @param intakeState
+	 *            supplies state of GearIntake
+	 * @param driveState
+	 *            supplies if the robot is autoaligning
 	 */
 	public FancyLightSystem(Consumer<Color> lightController, Supplier<Boolean> hasGear,
-			Supplier<GearIntakeSystem.State> intakeState) {
+			Supplier<GearIntakeSystem.State> intakeState)
+	{
 		this.lightController = lightController;
 		this.intakeState = intakeState;
 		this.hasGear = hasGear;
@@ -40,12 +45,14 @@ public class FancyLightSystem extends Subsystem {
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem.put(new StringInfo("Color", () -> lastSetColor.toString()));
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Lights";
 	}
 
@@ -53,20 +60,23 @@ public class FancyLightSystem extends Subsystem {
 	 * set lights to alliance color
 	 */
 	@Override
-	public void init() {
+	public void init()
+	{
 		alliance = Alliance.Blue;
 		lastSetColor = getAllianceColor(alliance);
 		lightController.accept(lastSetColor);
 	}
 
 	/**
-	 * set lights to colors corresponding with gear intake states Carrying and Intaking, defaults to
-	 * alliance color
+	 * set lights to colors corresponding with gear intake states Carrying and
+	 * Intaking, defaults to alliance color
 	 */
 	@Override
-	public void update() {
+	public void update()
+	{
 		lastSetColor = getAllianceColor(alliance);
-		switch (intakeState.get()) {
+		switch (intakeState.get())
+		{
 		case ALIGNING:
 			lastSetColor = Color.orange;
 		case CARRYING:
@@ -78,19 +88,23 @@ public class FancyLightSystem extends Subsystem {
 		default:
 			break;
 		}
-		if (Preferences.getInstance().getBoolean("lights", true)) {
+		if (Preferences.getInstance().getBoolean("lights", true))
+		{
 			lightController.accept(lastSetColor);
-		} else {
+		} else
+		{
 			lightController.accept(Color.black);
 		}
 	}
 
 	/**
 	 * 
-	 * @param alliance the alliance the robot is on
+	 * @param alliance
+	 *            the alliance the robot is on
 	 * @return the alliance color
 	 */
-	public static Color getAllianceColor(Alliance alliance) {
+	public static Color getAllianceColor(Alliance alliance)
+	{
 		return alliance == Alliance.Blue ? Color.blue : Color.red;
 	}
 

@@ -13,7 +13,8 @@ import com.team1389.watch.Watchable;
  * @author Quunii
  *
  */
-public class ClimberSystem extends Subsystem {
+public class ClimberSystem extends Subsystem
+{
 
 	protected PercentOut climberVoltageOut;
 	protected RangeIn<Percent> rightTrigger;
@@ -27,23 +28,27 @@ public class ClimberSystem extends Subsystem {
 	 * @param climberVoltageOut
 	 *            applies voltage to climber motors
 	 */
-	public ClimberSystem(RangeIn<Percent> trigger, PercentOut climberVoltageOut) {
+	public ClimberSystem(RangeIn<Percent> trigger, PercentOut climberVoltageOut)
+	{
 		this.rightTrigger = trigger;
 		this.climberVoltageOut = climberVoltageOut;
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem.put(climberVoltageOut.getWatchable("climber voltage"));
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "climber";
 	}
 
 	@Override
-	public void init() {
+	public void init()
+	{
 
 	}
 
@@ -51,7 +56,8 @@ public class ClimberSystem extends Subsystem {
 	 * apply RangeIn Values to motorsS
 	 */
 	@Override
-	public void update() {
+	public void update()
+	{
 		climberVoltageOut.set(rightTrigger.get());
 		/*
 		 * if(climberButton.get()){ climberVoltageOut.set(1); } else{

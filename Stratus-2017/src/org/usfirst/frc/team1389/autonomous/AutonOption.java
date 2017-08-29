@@ -17,23 +17,29 @@ import com.team1389.auto.AutoModeBase;
  * @author Quunii
  *
  */
-public enum AutonOption {
+public enum AutonOption
+{
 	CROSS_BASELINE(CrossBaselineOpenLoop::new), CENTER_GEAR(VoltCenterGear::new), SIDE_GEAR(
 			VoltSideGear::new), BAll_BASELINE(BallBaseline::new);
 	public final Optional<Function<RobotSoftware, AutoModeBase>> autoConstructor;
 
-	AutonOption(Function<RobotSoftware, AutoModeBase> autoConstructor) {
+	AutonOption(Function<RobotSoftware, AutoModeBase> autoConstructor)
+	{
 		this.autoConstructor = Optional.of(autoConstructor);
 	}
 
-	AutonOption() {
+	AutonOption()
+	{
 		this.autoConstructor = Optional.empty();
 	}
 
-	public AutoModeBase setupAutoModeBase(RobotSoftware robot) {
-		if (autoConstructor.isPresent()) {
+	public AutoModeBase setupAutoModeBase(RobotSoftware robot)
+	{
+		if (autoConstructor.isPresent())
+		{
 			return autoConstructor.get().apply(robot);
-		} else {
+		} else
+		{
 			throw new RuntimeException("cannot auto insantiate a complex style auto option!");
 		}
 	}

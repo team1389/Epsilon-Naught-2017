@@ -12,12 +12,14 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class VoltCenterGear extends AutoModeBase {
+public class VoltCenterGear extends AutoModeBase
+{
 	RobotCommands commands;
 	RobotSoftware robot;
 	GearIntakeSystem gearIntake;
 
-	public VoltCenterGear(RobotSoftware robot) {
+	public VoltCenterGear(RobotSoftware robot)
+	{
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 		gearIntake = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
@@ -25,12 +27,14 @@ public class VoltCenterGear extends AutoModeBase {
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem;
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		System.out.println("starting center gear");
 		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
 				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
@@ -40,7 +44,8 @@ public class VoltCenterGear extends AutoModeBase {
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "OpenLoopPlaceGear";
 	}
 

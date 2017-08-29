@@ -12,24 +12,28 @@ import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class BallBaseline extends AutoModeBase {
+public class BallBaseline extends AutoModeBase
+{
 	RobotSoftware robot;
 	DigitalOut hopper;
 	RobotCommands commands;
 
-	public BallBaseline(RobotSoftware robot) {
+	public BallBaseline(RobotSoftware robot)
+	{
 		this.robot = robot;
 		this.hopper = robot.dumperPiston.getDigitalOut();
 		commands = new RobotCommands(robot);
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem;
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		robot.pistons.set(OctoMecanumSystem.DriveMode.MECANUM.solenoidVal);
 		runCommand(commands.new MecanumMove(1.0, .2, 0, .45));
 		hopper.set(HopperSystem.DumperPosition.DUMP.pos);
@@ -40,7 +44,8 @@ public class BallBaseline extends AutoModeBase {
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "BallBaseline";
 	}
 

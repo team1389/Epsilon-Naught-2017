@@ -17,7 +17,8 @@ import com.team1389.system.drive.FourDriveOut;
 
 import edu.wpi.first.wpilibj.Preferences;
 
-public class RobotSoftware extends RobotHardware {
+public class RobotSoftware extends RobotHardware
+{
 	private static RobotSoftware INSTANCE = new RobotSoftware();
 	public AngleIn<Position> gyroInput;
 	public DigitalOut pistons;
@@ -35,11 +36,13 @@ public class RobotSoftware extends RobotHardware {
 	public DigitalIn gearBeamBreak;
 	public PercentOut climberVoltage;
 
-	public static RobotSoftware getInstance() {
+	public static RobotSoftware getInstance()
+	{
 		return INSTANCE;
 	}
 
-	public RobotSoftware() {
+	public RobotSoftware()
+	{
 		compensatedDrive = new FourDriveOut<>(frontLeft.getCompensatedVoltageOut(),
 				frontRight.getCompensatedVoltageOut(), rearLeft.getCompensatedVoltageOut(),
 				rearRight.getCompensatedVoltageOut());
@@ -78,7 +81,8 @@ public class RobotSoftware extends RobotHardware {
 		threadManager = new OhmThreadService(20);
 	}
 
-	public void zeroAngle() {
+	public void zeroAngle()
+	{
 		double offset = armAngleNoOffset.get();
 		System.out.println("Angle offset: " + offset);
 		Preferences.getInstance().putDouble("offset", offset);
