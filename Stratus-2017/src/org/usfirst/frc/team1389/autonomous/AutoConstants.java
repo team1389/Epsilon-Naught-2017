@@ -8,6 +8,7 @@ import org.usfirst.frc.team1389.robot.RobotConstants;
  * @author Quunii
  *
  */
+//for commit
 public class AutoConstants {
 	public static final double SIDE_GEAR_STRAIGHT = 74.0625, SIDE_GEAR_TURN = 60, SIDE_GEAR_APPROACH = 83.6875;
 	public static final double ACTIVE_STOP_SHORT = 6;
