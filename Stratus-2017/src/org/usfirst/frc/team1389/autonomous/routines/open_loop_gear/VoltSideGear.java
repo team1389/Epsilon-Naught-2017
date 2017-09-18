@@ -12,23 +12,27 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class VoltSideGear extends AutoModeBase {
+public class VoltSideGear extends AutoModeBase
+{
 	RobotCommands commands;
 	RobotSoftware robot;
 	GearIntakeSystem gearIntake;
 
-	public VoltSideGear(RobotSoftware robot) {
+	public VoltSideGear(RobotSoftware robot)
+	{
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem;
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
 				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
 		Command turnAndDrive = CommandUtil.combineSequential(commands.new TurnAngle(60, true),
@@ -39,7 +43,8 @@ public class VoltSideGear extends AutoModeBase {
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "OpenLoopSideGear";
 	}
 

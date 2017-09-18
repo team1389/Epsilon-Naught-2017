@@ -15,7 +15,8 @@ import com.team1389.trajectory.Translation2d;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class VisionSystem extends Subsystem {
+public class VisionSystem extends Subsystem
+{
 	private DigitalOut visionLight;
 	private PiVisionManager pi;
 	private Supplier<GearIntakeSystem.State> intakeState;
@@ -23,7 +24,8 @@ public class VisionSystem extends Subsystem {
 	private DigitalIn visionEnableButton;
 
 	public VisionSystem(DigitalOut visionLight, PiVisionManager pi, Supplier<GearIntakeSystem.State> intakeState,
-			RangeIn<Position> distanceSensor, DigitalIn visionEnable) {
+			RangeIn<Position> distanceSensor, DigitalIn visionEnable)
+	{
 		this.visionLight = visionLight;
 		this.pi = pi;
 		this.distanceSensor = distanceSensor;
@@ -32,54 +34,67 @@ public class VisionSystem extends Subsystem {
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return pi.getSubWatchables();
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Vision";
 	}
 
 	@Override
-	public void init() {
+	public void init()
+	{
 
 	}
 
 	@Override
-	public void update() {
+	public void update()
+	{
 		State state = intakeState.get();
 		boolean visEnabled = true;
-		if (visionEnableButton.get()) {
+		if (visionEnableButton.get())
+		{
 			visEnabled = true;
-		} else if (state == State.CARRYING) {
+		} else if (state == State.CARRYING)
+		{
 			visEnabled = true;
-		} else if (state == State.STOWED || state == State.INTAKING) {
+		} else if (state == State.STOWED || state == State.INTAKING)
+		{
 			visEnabled = false;
 		}
 		setVisionTracking(visEnabled);
 	}
 
-	public Translation2d getTargetPose() {
+	public Translation2d getTargetPose()
+	{
 		Optional<Double> angle = pi.getRawAngle();
 		double dist = distanceSensor.get();
-		if (angle.isPresent()) {
+		if (angle.isPresent())
+		{
 			return VisionAnalyst.getDesiredMotion(angle.get(), dist);
-		} else {
+		} else
+		{
 			return new Translation2d();
 		}
 	}
 
-	public void setVisionTracking(boolean val) {
+	public void setVisionTracking(boolean val)
+	{
 		pi.setProcessing(val);
 		visionLight.set(val);
 	}
 
-	public void enableVisionTracking() {
+	public void enableVisionTracking()
+	{
 		setVisionTracking(true);
 	}
 
-	public void disableVisionTracking() {
+	public void disableVisionTracking()
+	{
 		setVisionTracking(false);
 	}
 

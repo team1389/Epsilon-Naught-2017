@@ -5,22 +5,26 @@ import com.team1389.auto.AutoModeEndedException;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class BallGear extends AutoModeBase{
+public class BallGear extends AutoModeBase
+{
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}

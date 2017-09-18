@@ -8,25 +8,30 @@ import com.team1389.auto.AutoModeEndedException;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
-public class TurnTest extends AutoModeBase {
+public class TurnTest extends AutoModeBase
+{
 	RobotCommands commands;
 
-	public TurnTest(RobotSoftware robot) {
+	public TurnTest(RobotSoftware robot)
+	{
 		this.commands = new RobotCommands(robot);
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem;
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		runCommand(commands.new TurnAngle(90, false));
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "Turn Test";
 	}
 

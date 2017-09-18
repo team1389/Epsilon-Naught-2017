@@ -20,15 +20,18 @@ import edu.wpi.first.wpilibj.Timer;
  * @author Quunii
  *
  */
-public class CrossBaselineOpenLoop extends AutoModeBase {
+public class CrossBaselineOpenLoop extends AutoModeBase
+{
 	RobotSoftware robot;
 	RobotCommands commands;
 
 	/**
 	 * 
-	 * @param robot container of all ohm streams
+	 * @param robot
+	 *            container of all ohm streams
 	 */
-	public CrossBaselineOpenLoop(RobotSoftware robot) {
+	public CrossBaselineOpenLoop(RobotSoftware robot)
+	{
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 	}
@@ -37,7 +40,8 @@ public class CrossBaselineOpenLoop extends AutoModeBase {
 	 * watches voltage being applied to every drive train motor
 	 */
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem.put(robot.voltageDrive);
 	}
 
@@ -45,7 +49,8 @@ public class CrossBaselineOpenLoop extends AutoModeBase {
 	 * drives forwards over the baseline
 	 */
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		System.out.println("crossing baseline");
 		double voltage = 0.5;
 		double waitTime = AutoConstants.getTimeToTravel(AutoConstants.BASELINE_DIST, voltage) + 0.5;
@@ -60,7 +65,8 @@ public class CrossBaselineOpenLoop extends AutoModeBase {
 	 * id of this auton
 	 */
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "Cross Baseline";
 	}
 

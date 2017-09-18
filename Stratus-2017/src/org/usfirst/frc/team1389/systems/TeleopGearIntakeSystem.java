@@ -20,7 +20,8 @@ import com.team1389.watch.Watchable;
 
 import edu.wpi.first.wpilibj.Preferences;
 
-public class TeleopGearIntakeSystem extends GearIntakeSystem {
+public class TeleopGearIntakeSystem extends GearIntakeSystem
+{
 	public static final boolean USE_MANUAL = false;
 	public static final double RUMBLE_TIME = 1.5;
 
@@ -40,7 +41,8 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn useManualButton, DigitalIn sensorFailure) {
+			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn useManualButton, DigitalIn sensorFailure)
+	{
 		super(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, driveMode);
 		this.intakeGearButton = intakeGearButton;
 		this.prepareGearButton = prepareGearButton;
@@ -61,7 +63,8 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn manualTrigger) {
+			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn manualTrigger)
+	{
 		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, driveMode, intakeGearButton, prepareGearButton,
 				placeGearButton, stowGearButton, armManualAxis, outtakeManualAxis, rumble, manualTrigger,
 				new DigitalIn(() -> false));
@@ -70,34 +73,42 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 
 	@SuppressWarnings("unused")
 	@Override
-	public void update() {
+	public void update()
+	{
 		System.out.println("updating thing");
 		userManualTrigger = userManualTrigger ^ useManualButton.get();
 
-		if (sensorFailure.get()) {
+		if (sensorFailure.get())
+		{
 			failure = true;
 		}
 		currentlyInManual = Preferences.getInstance().getBoolean("manual", false) || USE_MANUAL || userManualTrigger
 				|| failure;
-		if (currentlyInManual) {
+		if (currentlyInManual)
+		{
 			updateManualMode();
 
-		} else {
+		} else
+		{
 			updateAdvancedMode();
 		}
 
 	}
 
-	public DigitalIn getIsManualMode() {
+	public DigitalIn getIsManualMode()
+	{
 		return new DigitalIn(() -> currentlyInManual);
 	}
 
-	private void updateManualMode() {
+	private void updateManualMode()
+	{
 		armVoltage.set(armManualAxis.get());
 		intakeRunning = intakeGearButton.get() ^ intakeRunning;
-		if (intakeRunning) {
+		if (intakeRunning)
+		{
 			setState(State.INTAKING);
-		} else {
+		} else
+		{
 			setState(State.CARRYING);
 		}
 		rumble.set(intakeRunning && hasGear());
@@ -106,33 +117,41 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem {
 
 	}
 
-	private void updateAdvancedMode() {
-		if (intakeGearButton.get()) {
+	private void updateAdvancedMode()
+	{
+		if (intakeGearButton.get())
+		{
 			enterState(State.INTAKING);
 		}
-		if (prepareGearButton.get()) {
+		if (prepareGearButton.get())
+		{
 			enterState(State.ALIGNING);
 		}
-		if (placeGearButton.get()) {
+		if (placeGearButton.get())
+		{
 			enterState(State.PLACING);
 		}
-		if (stowGearButton.get()) {
+		if (stowGearButton.get())
+		{
 			enterState(State.STOWED);
 		}
 		super.update();
 	}
 
-	private Command rumbleCommand(double duration) {
+	private Command rumbleCommand(double duration)
+	{
 		Function<Boolean, Command> rumbler = val -> CommandUtil.createCommand(() -> rumble.set(val));
 		return CommandUtil.combineSequential(rumbler.apply(true), new WaitTimeCommand(duration), rumbler.apply(false));
 	}
 
-	public void addSensorFailurePoint(DigitalIn... sensorFailFlags) {
+	public void addSensorFailurePoint(DigitalIn... sensorFailFlags)
+	{
 		sensorFailure = sensorFailure.combineOR(sensorFailFlags);
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return super.getSubWatchables(stem).put(sensorFailure.copy().invert().getWatchable("sensor state"),
 				getIsManualMode().getWatchable("manual mode"));
 	}
