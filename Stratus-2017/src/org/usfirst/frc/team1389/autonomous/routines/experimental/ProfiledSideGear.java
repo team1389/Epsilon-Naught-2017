@@ -18,17 +18,19 @@ import jaci.pathfinder.Trajectory.Config;
 import jaci.pathfinder.Trajectory.FitMethod;
 import jaci.pathfinder.Waypoint;
 
-public class ProfiledSideGear extends AutoModeBase {
+public class ProfiledSideGear extends AutoModeBase
+{
 	CommandScheduler scheduler;
 	PathFollowingSystem cont;
 	Trajectory traj;
 	RobotSoftware robot;
 
-	public ProfiledSideGear(RobotSoftware robot) {
+	public ProfiledSideGear(RobotSoftware robot)
+	{
 		System.out.println("constructed autonomous");
 		this.robot = robot;
-		PathFollowingSystem.Constants constants = new PathFollowingSystem.Constants(500,
-				/* 240,144 */ 100, 100, .1, .004, 0, 0.25, 28);
+		PathFollowingSystem.Constants constants = new PathFollowingSystem.Constants(500, /* 240,144 */ 100, 100, .1,
+				.004, 0, 0.25, 28);
 		cont = new PathFollowingSystem(robot.voltageDrive.getAsTank(),
 				robot.rearLeft.getPositionInput().adjustRange(0, 1024, 0, 1).scale(4 * Math.PI),
 				robot.rearRight.getPositionInput().adjustRange(0, 1024, 0, 1).scale(4 * Math.PI),
@@ -37,26 +39,32 @@ public class ProfiledSideGear extends AutoModeBase {
 	}
 
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		runCommand(CommandUtil.combineSequential(cont.new PathFollowCommand(
 				new Waypoint[] { new Waypoint(0, 0, 0), new Waypoint(-115.9375, 72.5, Pathfinder.d2r(300)) }, false,
 				180)));
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem;
 	}
 
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "curvedGear";
 	}
 
-	public static void main(String[] args) {
-		// new Waypoint(0, 0, 0), new Waypoint(-115.9375, 72.5, Pathfinder.d2r(300)) the one to rule
+	public static void main(String[] args)
+	{
+		// new Waypoint(0, 0, 0), new Waypoint(-115.9375, 72.5, Pathfinder.d2r(300)) the
+		// one to rule
 		// them all
-		// new Waypoint(0, 0, 0), new Waypoint(-136.4375, 277.125, Pathfinder.d2r(331.3)) boiler peg
+		// new Waypoint(0, 0, 0), new Waypoint(-136.4375, 277.125,
+		// Pathfinder.d2r(331.3)) boiler peg
 		// to enemy launchpad
 		Pathfinder.writeToCSV(new File("path.csv"),
 

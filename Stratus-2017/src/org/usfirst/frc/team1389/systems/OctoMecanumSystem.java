@@ -24,7 +24,8 @@ import com.team1389.watch.Watchable;
 import com.team1389.watch.info.BooleanInfo;
 import com.team1389.watch.info.StringInfo;
 
-public class OctoMecanumSystem extends DriveSystem {
+public class OctoMecanumSystem extends DriveSystem
+{
 	protected DriveMode currentMode;
 	protected CurvatureDriveSystem tank;
 	protected MecanumDriveSystem mecanum;
@@ -33,8 +34,8 @@ public class OctoMecanumSystem extends DriveSystem {
 	protected FourDriveOut<Percent> voltageDrive;
 
 	public OctoMecanumSystem(FourDriveOut<Percent> voltageDrive, DigitalOut octoShifter, AngleIn<Position> gyro,
-			PercentIn xAxis, PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes,
-			DigitalIn trigger) {
+			PercentIn xAxis, PercentIn yAxis, PercentIn twist, PercentIn trim, DigitalIn switchModes, DigitalIn trigger)
+	{
 		this.voltageDrive = voltageDrive;
 		this.octoShifter = octoShifter;
 		this.switchModes = switchModes;
@@ -43,7 +44,8 @@ public class OctoMecanumSystem extends DriveSystem {
 	}
 
 	private void setupTankDriveSystem(DriveOut<Percent> drive, PercentIn xAxis, PercentIn yAxis, PercentIn trim,
-			DigitalIn quickTurn) {
+			DigitalIn quickTurn)
+	{
 		BezierCurve xCurve = new BezierCurve(0, .5, .79, -0.06);
 		BezierCurve yCurve = new BezierCurve(.0, 0.54, 0.45, -0.07);
 		xAxis.map(d -> xCurve.getPoint(d).getY());
@@ -52,63 +54,77 @@ public class OctoMecanumSystem extends DriveSystem {
 				ControlBoard.spinSensitivity);
 	}
 
-	public Supplier<DriveMode> getDriveModeTracker() {
+	public Supplier<DriveMode> getDriveModeTracker()
+	{
 		return () -> currentMode;
 	}
 
 	private void setupMecanumDriveSystem(FourDriveOut<Percent> wheels, PercentIn xAxis, PercentIn yAxis,
-			PercentIn twistAxis, DigitalIn toggleFOD, AngleIn<Position> gyro) {
+			PercentIn twistAxis, DigitalIn toggleFOD, AngleIn<Position> gyro)
+	{
 		mecanum = new MecanumDriveSystem(xAxis, yAxis, twistAxis, wheels, gyro, toggleFOD);
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem.put(voltageDrive, new StringInfo("drive mode", () -> currentMode.name()),
 				new BooleanInfo("drive-mode-val", () -> currentMode.solenoidVal));
 	}
 
-	public enum DriveMode {
+	public enum DriveMode
+	{
 		TANK(false), MECANUM(true);
 		public final boolean solenoidVal;
 
-		DriveMode(boolean solenoidVal) {
+		DriveMode(boolean solenoidVal)
+		{
 			this.solenoidVal = solenoidVal;
 		}
 
-		public DriveMode getFromBoolean(boolean value) {
+		public DriveMode getFromBoolean(boolean value)
+		{
 			return Arrays.stream(DriveMode.values()).filter(m -> m.solenoidVal).findFirst().orElse(TANK);
 		}
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Drive";
 	}
 
 	@Override
-	public void init() {
+	public void init()
+	{
 		setMode(DriveMode.TANK);
 	}
 
-	private void switchModes() {
+	private void switchModes()
+	{
 		setMode(currentMode == DriveMode.TANK ? DriveMode.MECANUM : DriveMode.TANK);
 	}
 
-	protected void setMode(DriveMode mode) {
+	protected void setMode(DriveMode mode)
+	{
 		octoShifter.set(mode.solenoidVal);
 		currentMode = mode;
 	}
 
-	protected Command setModeCommand(DriveMode mode) {
+	protected Command setModeCommand(DriveMode mode)
+	{
 		return CommandUtil.createCommand(() -> setMode(mode));
 	}
 
 	@Override
-	public void update() {
-		if (switchModes.get()) {
+	public void update()
+	{
+		if (switchModes.get())
+		{
 			switchModes();
 		}
-		switch (currentMode) {
+		switch (currentMode)
+		{
 		case MECANUM:
 			mecanum.update();
 			break;

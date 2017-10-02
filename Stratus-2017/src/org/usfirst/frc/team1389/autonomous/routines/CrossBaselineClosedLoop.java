@@ -15,15 +15,18 @@ import com.team1389.watch.Watchable;
  * @author Quunii
  *
  */
-public class CrossBaselineClosedLoop extends AutoModeBase {
+public class CrossBaselineClosedLoop extends AutoModeBase
+{
 	RobotSoftware robot;
 	RobotCommands commands;
 
 	/**
 	 * 
-	 * @param robot container of all ohm streams
+	 * @param robot
+	 *            container of all ohm streams
 	 */
-	public CrossBaselineClosedLoop(RobotSoftware robot) {
+	public CrossBaselineClosedLoop(RobotSoftware robot)
+	{
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 	}
@@ -32,15 +35,18 @@ public class CrossBaselineClosedLoop extends AutoModeBase {
 	 * watches voltage being applied to every drive train motor
 	 */
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(robot.voltageDrive, robot.flPos.getWatchable("left encoder"), robot.frPos.getWatchable("right encoder"));
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
+		return stem.put(robot.voltageDrive, robot.flPos.getWatchable("left encoder"),
+				robot.frPos.getWatchable("right encoder"));
 	}
 
 	/**
 	 * drives forwards over the baseline
 	 */
 	@Override
-	protected void routine() throws AutoModeEndedException {
+	protected void routine() throws AutoModeEndedException
+	{
 		runCommand(commands.new DriveStraight(AutoConstants.getRotations(AutoConstants.BASELINE_DIST)));
 	}
 
@@ -48,7 +54,8 @@ public class CrossBaselineClosedLoop extends AutoModeBase {
 	 * id of this auton
 	 */
 	@Override
-	public String getIdentifier() {
+	public String getIdentifier()
+	{
 		return "Cross Baseline";
 	}
 

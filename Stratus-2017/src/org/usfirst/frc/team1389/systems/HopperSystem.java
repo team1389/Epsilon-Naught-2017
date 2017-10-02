@@ -11,49 +11,59 @@ import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.StringInfo;
 
-public class HopperSystem extends Subsystem {
+public class HopperSystem extends Subsystem
+{
 	private DigitalOut gate, dumper;
 	private DigitalIn dumperEndstop;
 	private State hopperState;
 
-	public HopperSystem(DigitalOut dumper, DigitalOut gate, DigitalIn dumperEndstop) {
+	public HopperSystem(DigitalOut dumper, DigitalOut gate, DigitalIn dumperEndstop)
+	{
 		this.dumper = dumper;
 		this.gate = gate;
 		this.dumperEndstop = dumperEndstop;
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
 		return stem.put(dumperEndstop.getWatchable("endstop hit"), new StringInfo("state", () -> hopperState.name()));
 	}
 
-	public Supplier<State> getStateSupplier() {
+	public Supplier<State> getStateSupplier()
+	{
 		return () -> hopperState;
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Hopper";
 	}
 
 	@Override
-	public void init() {
+	public void init()
+	{
 
 	}
 
 	@Override
-	public void update() {
+	public void update()
+	{
 
 	}
 
-	public enum State {
+	public enum State
+	{
 		DUMPING, COLLECTING
 	}
 
-	public void enterState(State state) {
+	public void enterState(State state)
+	{
 		if (state == hopperState)
 			return;
-		switch (state) {
+		switch (state)
+		{
 		case COLLECTING:
 			schedule(resetDumperCommand());
 			break;
@@ -66,48 +76,58 @@ public class HopperSystem extends Subsystem {
 		}
 	}
 
-	private enum DumperPosition {
+	public enum DumperPosition
+	{
 		DUMP(true), STORE(false);
 		public final boolean pos;
 
-		private DumperPosition(boolean pos) {
+		private DumperPosition(boolean pos)
+		{
 			this.pos = pos;
 		}
 	}
 
-	private enum GatePosition {
+	private enum GatePosition
+	{
 		OPEN(true), CLOSED(false);
 		public final boolean pos;
 
-		private GatePosition(boolean pos) {
+		private GatePosition(boolean pos)
+		{
 			this.pos = pos;
 		}
 	}
 
-	private void resetDumper() {
+	private void resetDumper()
+	{
 		gate.set(GatePosition.CLOSED.pos);
 		dumper.set(DumperPosition.STORE.pos);
 		hopperState = State.COLLECTING;
 	}
 
-	public Command resetDumperCommand() {
+	public Command resetDumperCommand()
+	{
 		return CommandUtil.createCommand(this::resetDumper);
 	}
 
-	public class DumpCommand extends Command {
+	public class DumpCommand extends Command
+	{
 		@Override
-		protected void initialize() {
+		protected void initialize()
+		{
 			dumper.set(DumperPosition.DUMP.pos);
 			gate.set(GatePosition.OPEN.pos);
 		}
 
 		@Override
-		protected boolean execute() {
+		protected boolean execute()
+		{
 			return dumperEndstop.get();
 		}
 
 		@Override
-		protected void done() {
+		protected void done()
+		{
 			hopperState = State.DUMPING;
 		}
 	}

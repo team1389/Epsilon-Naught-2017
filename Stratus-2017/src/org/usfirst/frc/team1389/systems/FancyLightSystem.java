@@ -9,7 +9,7 @@ import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 import com.team1389.watch.info.StringInfo;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
@@ -18,11 +18,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
  * @author Quunii
  *
  */
-public class FancyLightSystem extends Subsystem {
+public class FancyLightSystem extends Subsystem
+{
 	private Consumer<Color> lightController;
 	private Supplier<GearIntakeSystem.State> intakeState;
 	private Alliance alliance;
 	private Color lastSetColor;
+	private Supplier<Boolean> hasGear;
 
 	/**
 	 * 
@@ -33,18 +35,24 @@ public class FancyLightSystem extends Subsystem {
 	 * @param driveState
 	 *            supplies if the robot is autoaligning
 	 */
-	public FancyLightSystem(Consumer<Color> lightController, Supplier<GearIntakeSystem.State> intakeState) {
+	public FancyLightSystem(Consumer<Color> lightController, Supplier<Boolean> hasGear,
+			Supplier<GearIntakeSystem.State> intakeState)
+	{
 		this.lightController = lightController;
 		this.intakeState = intakeState;
+		this.hasGear = hasGear;
+		lastSetColor = Color.white;
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
-		return stem.put(new StringInfo("Color", lastSetColor::toString));
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
+	{
+		return stem.put(new StringInfo("Color", () -> lastSetColor.toString()));
 	}
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return "Lights";
 	}
 
@@ -52,8 +60,9 @@ public class FancyLightSystem extends Subsystem {
 	 * set lights to alliance color
 	 */
 	@Override
-	public void init() {
-		alliance = DriverStation.getInstance().getAlliance();
+	public void init()
+	{
+		alliance = Alliance.Blue;
 		lastSetColor = getAllianceColor(alliance);
 		lightController.accept(lastSetColor);
 	}
@@ -63,21 +72,29 @@ public class FancyLightSystem extends Subsystem {
 	 * Intaking, defaults to alliance color
 	 */
 	@Override
-	public void update() {
+	public void update()
+	{
 		lastSetColor = getAllianceColor(alliance);
-		switch (intakeState.get()) {
+		switch (intakeState.get())
+		{
 		case ALIGNING:
 			lastSetColor = Color.orange;
 		case CARRYING:
-			lastSetColor = Color.green;
+			lastSetColor = hasGear.get() ? Color.green : Color.orange;
 			break;
 		case INTAKING:
-			lastSetColor = Color.orange;
+			lastSetColor = Color.magenta;
 			break;
 		default:
 			break;
 		}
-		lightController.accept(lastSetColor);
+		if (Preferences.getInstance().getBoolean("lights", true))
+		{
+			lightController.accept(lastSetColor);
+		} else
+		{
+			lightController.accept(Color.black);
+		}
 	}
 
 	/**
@@ -86,7 +103,8 @@ public class FancyLightSystem extends Subsystem {
 	 *            the alliance the robot is on
 	 * @return the alliance color
 	 */
-	public static Color getAllianceColor(Alliance alliance) {
+	public static Color getAllianceColor(Alliance alliance)
+	{
 		return alliance == Alliance.Blue ? Color.blue : Color.red;
 	}
 

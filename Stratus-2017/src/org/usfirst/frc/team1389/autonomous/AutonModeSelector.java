@@ -10,15 +10,22 @@ import com.team1389.auto.AutoModeBase;
  * @author Quunii
  *
  */
-public class AutonModeSelector {
+public class AutonModeSelector
+{
 	/**
 	 * 
 	 * @param autonOption
 	 *            the selected Auton
 	 * @return the corresponding auton to that which is selected
 	 */
-	public static AutoModeBase createAutoMode(AutonOption autonOption) {
-		return autonOption.setupAutoModeBase(RobotSoftware.getInstance());
-		
+	public static AutoModeBase createAutoMode(AutonOption autonOption)
+	{
+		if (autonOption == null)
+		{
+			return AutonOption.CROSS_BASELINE.setupAutoModeBase(RobotSoftware.getInstance());
+		} else
+		{
+			return autonOption.setupAutoModeBase(RobotSoftware.getInstance());
+		}
 	}
 }
