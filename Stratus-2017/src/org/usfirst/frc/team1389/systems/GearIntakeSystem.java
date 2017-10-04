@@ -48,13 +48,14 @@ public class GearIntakeSystem extends Subsystem
 	 * @param intakeCurrent
 	 *            curret draw on intake
 	 */
+	//Aiming to ignore everything but the update and init methods
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> currentDriveMode)
 	{
 		this.armAngle = armAngle;
 		this.armPositionPID = new SmoothSetController(new PIDConstants(.03, .0001, .001), 800, 800, 500, armAngle,
 				armVel, armVoltage);
-		armPositionPID.setInputRange(-45, 150);
+		// armPositionPID.setInputRange(-45, 150);
 		setState(State.STOWED);
 		this.intakeVoltageOut = intakeVoltage;
 		this.beamBreak = beamBreak;
@@ -88,13 +89,8 @@ public class GearIntakeSystem extends Subsystem
 	@Override
 	public void init()
 	{
-		if (hasGear())
-		{
-			enterState(State.CARRYING);
-		} else
-		{
-			enterState(State.STOWED);
-		}
+		//functionally just stow arm with the least complexity possible
+		scheduler.schedule(CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED)));
 	}
 
 	/**
@@ -103,7 +99,8 @@ public class GearIntakeSystem extends Subsystem
 	@Override
 	public void update()
 	{
-		System.out.println(armPositionPID.getSetpoint() + " " + armPositionPID.getError());
+		// System.out.println(armPositionPID.getSetpoint() + " " +
+		// armPositionPID.getError());
 		armPositionPID.update();
 	}
 
@@ -118,7 +115,7 @@ public class GearIntakeSystem extends Subsystem
 
 	private enum Angle
 	{
-		DOWN(-40), PLACING(40), CARRYING(70), STOWED(100), PLACED(17), OUTTAKE(35), PLACING_MECANUM(33), DOWN_MECANUM(
+		DOWN(-40), PLACING(40), CARRYING(70), STOWED(50), PLACED(17), OUTTAKE(35), PLACING_MECANUM(33), DOWN_MECANUM(
 				-45);
 		public final double angle;
 
@@ -337,7 +334,8 @@ public class GearIntakeSystem extends Subsystem
 		 * @param position
 		 *            desired angle
 		 * @param waitForFinish
-		 *            whether to wait for this command to end before running another
+		 *            whether to wait for this command to end before running
+		 *            another
 		 */
 		public SetAngle(double position, boolean waitForFinish)
 		{
@@ -350,7 +348,8 @@ public class GearIntakeSystem extends Subsystem
 		 * @param pos
 		 *            desired angle
 		 * @param waitForFinish
-		 *            whether to wait for this command to end before running another
+		 *            whether to wait for this command to end before running
+		 *            another
 		 */
 		public SetAngle(Angle pos, boolean waitForFinish)
 		{
@@ -390,8 +389,8 @@ public class GearIntakeSystem extends Subsystem
 		}
 
 		/**
-		 * command is complete if waitForFinish is not true, or the arm is within a
-		 * degree of the desired angle
+		 * command is complete if waitForFinish is not true, or the arm is
+		 * within a degree of the desired angle
 		 */
 		@Override
 		protected boolean execute()

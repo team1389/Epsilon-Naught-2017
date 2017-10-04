@@ -49,10 +49,10 @@ public class TeleopMain
 		OctoMecanumSystem drive = setupDrive();
 		GearIntakeSystem gearIntake = setupGearIntake(drive.getDriveModeTracker());
 		Subsystem climbing = setUpClimbing();
-		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
-				gearIntake::getState);
-		DebugDash.getInstance().watch(lights, gearIntake);
-		manager = new SystemManager(drive, climbing, lights, gearIntake, setupHopper());
+		/*Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
+				gearIntake::getState);*/
+		DebugDash.getInstance().watch(gearIntake);
+		manager = new SystemManager(drive, climbing, gearIntake, setupHopper());
 		manager.init();
 	}
 

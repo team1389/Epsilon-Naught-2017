@@ -54,9 +54,9 @@ public class RobotSoftware extends RobotHardware
 
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageOutput(), frontRight.getVoltageOutput(),
 				rearLeft.getVoltageOutput(), rearRight.getVoltageOutput());
-		armAngleNoOffset = armElevator.getAbsoluteIn().mapToAngle(Position.class).invert()
+		armAngleNoOffset = armElevator.getAbsoluteIn().mapToAngle(Position.class)
 				.scale(RobotConstants.armSprocketRatio);
-		armAngle = armAngleNoOffset.copy().offset(-RobotConstants.armOffset);
+		armAngle = armAngleNoOffset.copy();//.offset(-RobotConstants.armOffset);
 		armVel = armElevator.getSpeedInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Speed.class);
 
 		gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
@@ -66,7 +66,8 @@ public class RobotSoftware extends RobotHardware
 		blCurrent = rearLeft.getCurrentIn();
 		brCurrent = rearRight.getCurrentIn();
 		armCurrent = armElevator.getCurrentIn();
-		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.adjustRange(0, 1024, 0, 1).scale(18.0 / 16.0);
+		//was 1024 max, 4096 is for ctre mag encoder
+		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.adjustRange(0, 4096, 0, 1).scale(18.0 / 16.0);
 
 		flPos = posFunc.apply(frontLeft.getPositionInput());
 		frPos = posFunc.apply(frontRight.getPositionInput());
@@ -83,10 +84,11 @@ public class RobotSoftware extends RobotHardware
 
 	public void zeroAngle()
 	{
-		double offset = armAngleNoOffset.get();
+		/*double offset = armAngleNoOffset.get();
 		System.out.println("Angle offset: " + offset);
 		Preferences.getInstance().putDouble("offset", offset);
 		armAngle.clone(armAngleNoOffset.copy().offset(-offset));
+	*/
 	}
 
 }

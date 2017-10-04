@@ -32,12 +32,11 @@ public class BallIntakeSystem extends Subsystem
 	 * @param intakeVoltage
 	 *            voltage setter for ball intake motors
 	 */
-	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
-			RangeOut<Percent> intakeVoltage)
+	public BallIntakeSystem(DigitalIn intakeButton,RangeOut<Percent> intakeVoltage )
 	{
 		this.intakeButton = intakeButton;
 		this.intakeVoltage = intakeVoltage;
-		this.gearIntakeState = state;
+		this.gearIntakeState = (() -> GearIntakeSystem.State.ALIGNING);
 	}
 
 	@Override

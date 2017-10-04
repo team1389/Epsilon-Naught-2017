@@ -33,13 +33,13 @@ public class VoltSideGear extends AutoModeBase
 	@Override
 	protected void routine() throws AutoModeEndedException
 	{
-		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
+		/*Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
 				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
 		Command turnAndDrive = CommandUtil.combineSequential(commands.new TurnAngle(60, true),
 				commands.new DriveStraightOpenLoop(2, .5));
 		Command auto = CommandUtil.combineSequential(driveAndLower, turnAndDrive, gearIntake.placeGear(),
 				commands.new DriveStraightOpenLoop(-2, .5));
-		runCommand(gearIntake.pairWithBackgroundCommand(auto));
+		runCommand(gearIntake.pairWithBackgroundCommand(auto));*/
 	}
 
 	@Override
