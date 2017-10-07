@@ -49,9 +49,12 @@ public class TeleopMain
 		OctoMecanumSystem drive = setupDrive();
 		GearIntakeSystem gearIntake = setupGearIntake(drive.getDriveModeTracker());
 		Subsystem climbing = setUpClimbing();
-		/*Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
-				gearIntake::getState);*/
-		DebugDash.getInstance().watch(gearIntake);
+		/*
+		 * Subsystem lights = new
+		 * FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
+		 * gearIntake::getState);
+		 */
+		// DebugDash.getInstance().watch(gearIntake);
 		manager = new SystemManager(drive, climbing, gearIntake, setupHopper());
 		manager.init();
 	}
@@ -68,17 +71,26 @@ public class TeleopMain
 	}
 
 	/**
-	 * 
+	 *armElevator voltageOut was inverted
 	 * @return a new GearIntakeSystem
 	 */
 	private GearIntakeSystem setupGearIntake(Supplier<DriveMode> driveMode)
 	{
-		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
-				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak,
-				driveMode, controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(),
-				controls.stowArmBtn(), controls.armAngleAxis(), controls.outtakeAxis(), controls.gearRumble(),
-				controls.armManualTrigger());
-		return Supplier;
+		
+	
+		 TeleopGearIntakeSystem Supplier = new
+		  TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
+		  robot.armElevator.getVoltageOutput().invert(),
+		  robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak, driveMode,
+		  controls.intakeGearBtn(), controls.prepareArmBtn(),
+		  controls.placeGearBtn(), controls.stowArmBtn(),
+		  controls.armAngleAxis(), controls.outtakeAxis(),
+		  controls.gearRumble(), controls.armManualTrigger());
+		 
+		/*return new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput().invert(),
+				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak);*/
+		 return Supplier;
+		
 	}
 
 	/**

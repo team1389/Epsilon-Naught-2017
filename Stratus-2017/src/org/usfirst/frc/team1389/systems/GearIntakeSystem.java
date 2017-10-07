@@ -24,9 +24,12 @@ import com.team1389.watch.info.EnumInfo;
  * 
  * @author Quunii
  *
+ *
  */
+//changed SmoothSetController to simpler PIDController
 public class GearIntakeSystem extends Subsystem
 {
+	//TODO: figure out why armVoltageOut has to be inverted, if it's not it jerks to the bottom
 	private AngleIn<Position> armAngle;
 	protected SmoothSetController armPositionPID;
 	protected PercentOut intakeVoltageOut;
@@ -48,15 +51,15 @@ public class GearIntakeSystem extends Subsystem
 	 * @param intakeCurrent
 	 *            curret draw on intake
 	 */
-	//Aiming to ignore everything but the update and init methods
+	// Aiming to ignore everything but the update and init methods
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> currentDriveMode)
 	{
 		this.armAngle = armAngle;
 		this.armPositionPID = new SmoothSetController(new PIDConstants(.03, .0001, .001), 800, 800, 500, armAngle,
 				armVel, armVoltage);
-		// armPositionPID.setInputRange(-45, 150);
-		setState(State.STOWED);
+		
+		 armPositionPID.setInputRange(-45, 150);
 		this.intakeVoltageOut = intakeVoltage;
 		this.beamBreak = beamBreak;
 		this.driveMode = currentDriveMode;
@@ -71,7 +74,7 @@ public class GearIntakeSystem extends Subsystem
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
 	{
-		return stem.put(new EnumInfo("intake state", () -> state), scheduler, new BooleanInfo("gear", this::hasGear));
+		return stem.put(new EnumInfo("intake state", () -> state), scheduler, new BooleanInfo("testGear", this::hasGear));
 	}
 
 	@Override
@@ -89,8 +92,11 @@ public class GearIntakeSystem extends Subsystem
 	@Override
 	public void init()
 	{
-		//functionally just stow arm with the least complexity possible
-		scheduler.schedule(CommandUtil.combineSequential(enablePID(true), setIntake(0), new SetAngle(Angle.STOWED)));
+		//TODO: find out why it automatically hits climber, withought below command
+		enterState(State.STOWED);
+		//armPositionPID.enable();
+
+		
 	}
 
 	/**
@@ -196,7 +202,8 @@ public class GearIntakeSystem extends Subsystem
 	 */
 	public Command enablePID(boolean val)
 	{
-		return CommandUtil.createCommand(() -> armPositionPID.setEnabled(val));
+		//return CommandUtil.createCommand(() -> armPositionPID.setEnabled(val));
+	return CommandUtil.createCommand(()->armPositionPID.enable());
 	}
 
 	/**
@@ -416,7 +423,7 @@ public class GearIntakeSystem extends Subsystem
 		@Override
 		protected void initialize()
 		{
-			armPositionPID.setSetpoint(position, 150, 150, 70);
+			//armPositionPID.setSetpoint(position, 150, 150, 70);
 		}
 
 	}

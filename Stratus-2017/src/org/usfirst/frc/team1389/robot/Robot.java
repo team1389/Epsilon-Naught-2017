@@ -44,9 +44,9 @@ public class Robot extends IterativeRobot
 
 		teleOperator = new TeleopMain(robot);
 		gyroCalib = robot.gyro.new CalibrateCommand(true);
-
-		CameraServer.getInstance().startAutomaticCapture(0);
-		CameraServer.getInstance().startAutomaticCapture(1);
+		//disabling cameras for bind to port1735 issue @ https://github.com/wpilibsuite/allwpilib/issues/465
+		/*CameraServer.getInstance().startAutomaticCapture(0);
+		CameraServer.getInstance().startAutomaticCapture(1);*/
 		DebugDash.getInstance().watch(robot.armAngle.getWatchable("adjusted angle"),
 				robot.armAngleNoOffset.getWatchable("zeroing angle"),
 				new NumberInfo("front left", robot.flPos.getStream()),
