@@ -18,6 +18,8 @@ import com.team1389.hardware.value_types.Speed;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
+import org.usfirst.frc.team1389.robot.controls.*;
+
 import edu.wpi.first.wpilibj.Preferences;
 
 public class TeleopGearIntakeSystem extends GearIntakeSystem
@@ -37,6 +39,7 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 	private PercentIn outtakeManualAxis;
 
 	private boolean intakeRunning, userManualTrigger, failure, currentlyInManual;
+	
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
 			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
@@ -55,7 +58,7 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 		this.useManualButton = useManualButton;
 		this.outtakeManualAxis = outtakeManualAxis;
 		failure = false;
-		userManualTrigger = false;
+		userManualTrigger = false; 
 		intakeRunning = false;
 		currentlyInManual = false;
 	}

@@ -31,7 +31,7 @@ public class ControlBoard
 	}
 
 	private final LogitechExtreme3D driveController = new LogitechExtreme3D(0);
-	private final XBoxController manipController = new XBoxController(1);
+	private final XBoxController manipController = new XBoxController(1); 
 
 	public PercentIn driveYAxis()
 	{
