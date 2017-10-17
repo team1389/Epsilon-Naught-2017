@@ -20,6 +20,7 @@ import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.drive.DriveOut;
 import com.team1389.system.drive.DriveSignal;
+import com.team1389.system.drive.FourDriveOut;
 import com.team1389.util.Timer;
 
 public class RobotCommands
@@ -58,12 +59,10 @@ public class RobotCommands
 			timer = new Timer();
 			tankDrive = robot.voltageDrive.getAsTank();
 
-			/*
-			 * tankDrive = new FourDriveOut<>(robot.frontLeft.getCompensatedVoltageOut(),
-			 * robot.frontRight.getCompensatedVoltageOut(),
-			 * robot.rearLeft.getCompensatedVoltageOut(),
-			 * robot.rearRight.getCompensatedVoltageOut()).getAsTank();
-			 */
+			/*tankDrive = new FourDriveOut<>(robot.frontLeft.getCompensatedVoltageOut(),
+					robot.frontRight.getCompensatedVoltageOut(), robot.rearLeft.getCompensatedVoltageOut(),
+					robot.rearRight.getCompensatedVoltageOut()).getAsTank();*/
+
 			this.voltage = voltage;
 		}
 
@@ -80,7 +79,7 @@ public class RobotCommands
 			double gyroTerm = robot.gyroInput.get() - angleOffset;
 			double val = .1 * -gyroTerm;
 			tankDrive.set(voltage - val, voltage + val);
-			return timer.get() > time;
+			return timer.get() > time; 
 		}
 
 		@Override

@@ -20,7 +20,7 @@ import jaci.pathfinder.Waypoint;
 
 public class ProfiledSideGear extends AutoModeBase
 {
-	CommandScheduler scheduler;
+	//CommandScheduler scheduler;
 	PathFollowingSystem cont;
 	Trajectory traj;
 	RobotSoftware robot;
