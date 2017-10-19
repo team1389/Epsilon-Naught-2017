@@ -28,7 +28,7 @@ public class RobotLayout extends RobotMap
 	public VictorHardware gearIntake, climberA, climberB, climberC;
 	public PDPHardware pdp;
 	public DoubleSolenoidHardware flPiston, frPiston, rlPiston, rrPiston;
-	public DoubleSolenoidHardware gatePiston, dumperPiston;
+	public DoubleSolenoidHardware gatePiston, dumperPistonRight, dumperPistonLeft;
 	public SpartanGyro gyro;
 	public CANLightHardware lights;
 	public SwitchHardware beamBreakSensor;

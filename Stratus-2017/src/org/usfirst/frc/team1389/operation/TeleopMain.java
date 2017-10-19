@@ -92,7 +92,7 @@ public class TeleopMain
 
 	private TeleopHopperSystem setupHopper()
 	{
-		return new TeleopHopperSystem(robot.dumperPiston.getDigitalOut(), robot.dumperPiston.getDigitalOut(),
+		return new TeleopHopperSystem(robot.dumperPistonRight.getDigitalOut(), robot.dumperPistonRight.getDigitalOut(),
 				new DigitalIn(() -> true), controls.dumpHopperBtn(), controls.resetHopperBtn());
 	}
 

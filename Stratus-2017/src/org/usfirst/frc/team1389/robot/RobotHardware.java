@@ -49,7 +49,10 @@ public class RobotHardware extends RobotLayout
 	private void initHopper()
 	{
 		gatePiston = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_GATE_PISTON_A, pcm_GATE_PISTON_B, registry);
-		dumperPiston = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_DUMPER_PISTON_A, pcm_DUMPER_PISTON_B, registry);
+		dumperPistonRight = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_DUMPER_PISTON_RIGHT_A,
+				pcm_DUMPER_PISTON_RIGHT_B, registry);
+		dumperPistonLeft = new DoubleSolenoidHardware(mod_HOPPER_PCM, pcm_DUMPER_PISTON_LEFT_A,
+				pcm_DUMPER_PISTON_LEFT_B, registry);
 	}
 
 	private void initGearIntake()

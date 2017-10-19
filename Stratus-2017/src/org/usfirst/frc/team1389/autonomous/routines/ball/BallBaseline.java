@@ -21,7 +21,7 @@ public class BallBaseline extends AutoModeBase
 	public BallBaseline(RobotSoftware robot)
 	{
 		this.robot = robot;
-		this.hopper = robot.dumperPiston.getDigitalOut();
+		this.hopper = robot.dumperPistonRight.getDigitalOut();
 		commands = new RobotCommands(robot);
 	}
 

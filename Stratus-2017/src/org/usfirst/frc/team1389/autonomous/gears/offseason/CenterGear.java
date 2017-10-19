@@ -40,11 +40,13 @@ public class CenterGear extends AutoModeBase
 		// Command driveToPeg = commands.new
 		// DriveStraight(AutoConstants.getRotations(AutoConstants.CENTER_GEAR_DIST));
 		Command driveToPeg = commands.new DriveStraightOpenLoop(.45, .5);
+		
 		Command lowerArm = gearIntake.preparePlaceGear();
+		
 		Command placeGear = gearIntake.placeGear();
 
-		runCommand(lowerArm);//CommandUtil.combineSequential(CommandUtil.combineSimultaneous(driveToPeg, lowerArm), placeGear));
-
+		runCommand(placeGear);//CommandUtil.combineSequential(CommandUtil.combineSimultaneous(driveToPeg, lowerArm), placeGear));
+		System.out.println(gearIntake.getState());
 	}
 
 	@Override

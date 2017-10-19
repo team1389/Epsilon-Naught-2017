@@ -36,11 +36,11 @@ public class VoltCenterGear extends AutoModeBase
 	protected void routine() throws AutoModeEndedException
 	{
 		System.out.println("starting center gear");
-		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(5, .5),
-				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
-		Command auto = CommandUtil.combineSequential(driveAndLower, gearIntake.placeGear(),
-				commands.new DriveStraightOpenLoop(-2, .5));
-		runCommand(gearIntake.pairWithBackgroundCommand(auto));
+		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(.55, .5),
+				CommandUtil.combineSequential(new WaitTimeCommand(0), gearIntake.preparePlaceGear()));
+		Command auto = CommandUtil.combineSequential(driveAndLower); // gearIntake.placeGear());
+		// commands.new DriveStraightOpenLoop(-2, .5));
+		runCommand(gearIntake.pairWithBackgroundCommand(driveAndLower));
 	}
 
 	@Override

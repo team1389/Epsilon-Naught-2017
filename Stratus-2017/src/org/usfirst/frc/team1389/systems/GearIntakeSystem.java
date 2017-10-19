@@ -118,7 +118,7 @@ public class GearIntakeSystem extends Subsystem
 
 	private enum Angle
 	{
-		DOWN(-40), PLACING(40), CARRYING(70), STOWED(100), PLACED(17), OUTTAKE(35), PLACING_MECANUM(33), DOWN_MECANUM(
+		DOWN(-40), PLACING(45), CARRYING(70), STOWED(100), PLACED(17), OUTTAKE(35), PLACING_MECANUM(33), DOWN_MECANUM(
 				-45);
 		public final double angle;
 

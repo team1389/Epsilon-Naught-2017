@@ -13,13 +13,14 @@ import com.team1389.watch.info.StringInfo;
 
 public class HopperSystem extends Subsystem
 {
-	private DigitalOut gate, dumper;
+	private DigitalOut gate, dumperLeft, dumperRight;
 	private DigitalIn dumperEndstop;
 	private State hopperState;
 
-	public HopperSystem(DigitalOut dumper, DigitalOut gate, DigitalIn dumperEndstop)
+	public HopperSystem(DigitalOut dumperLeft, DigitalOut dumperRight, DigitalOut gate, DigitalIn dumperEndstop)
 	{
-		this.dumper = dumper;
+		this.dumperLeft = dumperLeft;
+		this.dumperRight = dumperRight;
 		this.gate = gate;
 		this.dumperEndstop = dumperEndstop;
 	}
@@ -101,7 +102,8 @@ public class HopperSystem extends Subsystem
 	private void resetDumper()
 	{
 		gate.set(GatePosition.CLOSED.pos);
-		dumper.set(DumperPosition.STORE.pos);
+		dumperLeft.set(DumperPosition.STORE.pos);
+		dumperRight.set(DumperPosition.STORE.pos);
 		hopperState = State.COLLECTING;
 	}
 
@@ -115,7 +117,8 @@ public class HopperSystem extends Subsystem
 		@Override
 		protected void initialize()
 		{
-			dumper.set(DumperPosition.DUMP.pos);
+			dumperLeft.set(DumperPosition.DUMP.pos);
+			dumperRight.set(DumperPosition.DUMP.pos);
 			gate.set(GatePosition.OPEN.pos);
 		}
 
