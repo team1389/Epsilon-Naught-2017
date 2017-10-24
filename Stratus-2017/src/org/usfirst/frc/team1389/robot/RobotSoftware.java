@@ -59,7 +59,7 @@ public class RobotSoftware extends RobotHardware
 		armAngle = armAngleNoOffset.copy().offset(-RobotConstants.armOffset);
 		armVel = armElevator.getSpeedInput().scale(RobotConstants.armSprocketRatio).mapToAngle(Speed.class);
 
-		gearIntakeCurrent = pdp.getCurrentIn(pdp_GEAR_INTAKE_CURRENT);
+		gearIntakeCurrent = pdp.getCurrentIn(13);
 		gearBeamBreak = beamBreakSensor.getSwitchInput();
 		flCurrent = frontLeft.getCurrentIn();
 		frCurrent = frontRight.getCurrentIn();

@@ -24,7 +24,7 @@ public class CenterGear extends AutoModeBase
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 		gearIntake = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
-				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak);
+				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak, robot.gearIntakeCurrent);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class CenterGear extends AutoModeBase
 
 	@Override
 	public String getIdentifier()
-	{
+	{    
 
 		return "Center Gear";
 	}

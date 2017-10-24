@@ -9,6 +9,8 @@ import com.team1389.auto.AutoModeEndedException;
 import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandUtil;
 import com.team1389.command_framework.command_base.Command;
+import com.team1389.configuration.PIDConstants;
+import com.team1389.control.PIDController;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
@@ -17,13 +19,15 @@ public class VoltCenterGear extends AutoModeBase
 	RobotCommands commands;
 	RobotSoftware robot;
 	GearIntakeSystem gearIntake;
+	PIDController pid;
 
 	public VoltCenterGear(RobotSoftware robot)
 	{
 		this.robot = robot;
 		commands = new RobotCommands(robot);
 		gearIntake = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
-				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak);
+				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak, robot.gearIntakeCurrent);
+		pid = new PIDController(new PIDConstants(.03, .0001, .001), robot.armAngle, robot.armElevator.getVoltageOutput());
 	}
 
 	@Override
@@ -37,10 +41,23 @@ public class VoltCenterGear extends AutoModeBase
 	{
 		System.out.println("starting center gear");
 		Command driveAndLower = CommandUtil.combineSimultaneous(commands.new DriveStraightOpenLoop(.55, .5),
-				CommandUtil.combineSequential(new WaitTimeCommand(0), gearIntake.preparePlaceGear()));
+				CommandUtil.combineSequential(new WaitTimeCommand(1), gearIntake.preparePlaceGear()));
 		Command auto = CommandUtil.combineSequential(driveAndLower); // gearIntake.placeGear());
 		// commands.new DriveStraightOpenLoop(-2, .5));
-		runCommand(gearIntake.pairWithBackgroundCommand(driveAndLower));
+		// runCommand(gearIntake.pairWithBackgroundCommand(driveAndLower)9);
+		Command drive = commands.new DriveStraightOpenLoop(.825, .5);
+		Command wait = new WaitTimeCommand(2);
+		//arm has to start stowed
+		runCommand(drive);
+		pid.enable();
+		pid.setSetpoint(45);
+		pid.setAbsoluteTolerance(4);
+		if(pid.onTarget())pid.disable();
+		// placing angle
+
+		/*
+		 * runCommand(wait); runCommand(drive); runCommand(place);
+		 */
 	}
 
 	@Override

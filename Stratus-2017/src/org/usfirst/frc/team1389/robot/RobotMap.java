@@ -65,6 +65,7 @@ public class RobotMap
 	protected final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
 	protected final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
 	protected final PCM pcm_FRONT_RIGHT_PISTON_B = new PCM(3);
+	//left A was on 6, left B was on 1
 	protected final PCM pcm_REAR_LEFT_PISTON_A = new PCM(6);
 	protected final PCM pcm_REAR_LEFT_PISTON_B = new PCM(1);
 	protected final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
@@ -73,9 +74,13 @@ public class RobotMap
 	// Hopper Pneumatics
 	protected final PCM pcm_GATE_PISTON_A = new PCM(0);
 	protected final PCM pcm_GATE_PISTON_B = new PCM(7);
-	protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3);
+	/*protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3);
 	protected final PCM pcm_DUMPER_PISTON_RIGHT_B = new PCM(4);
 	protected final PCM pcm_DUMPER_PISTON_LEFT_A = new PCM(5);
+	protected final PCM pcm_DUMPER_PISTON_LEFT_B = new PCM(6);*/
+	protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3);
+	protected final PCM pcm_DUMPER_PISTON_RIGHT_B = new PCM(4);
+	protected final PCM pcm_DUMPER_PISTON_LEFT_A = new PCM(1);
 	protected final PCM pcm_DUMPER_PISTON_LEFT_B = new PCM(6);
 
 	protected final DIO dio_GEAR_BEAM_BREAK = new DIO(0);

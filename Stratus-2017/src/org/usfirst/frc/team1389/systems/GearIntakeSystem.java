@@ -10,9 +10,11 @@ import com.team1389.configuration.PIDConstants;
 import com.team1389.control.SmoothSetController;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
+import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.hardware.value_types.Value;
 import com.team1389.system.Subsystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
@@ -33,7 +35,7 @@ public class GearIntakeSystem extends Subsystem
 	protected DigitalIn beamBreak;
 	protected State state;
 	protected Supplier<DriveMode> driveMode;
-
+	protected RangeIn<Value> intakeCurrent;
 	/**
 	 * defaults to Stowed State
 	 * 
@@ -49,7 +51,7 @@ public class GearIntakeSystem extends Subsystem
 	 *            curret draw on intake
 	 */
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> currentDriveMode)
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent,Supplier<DriveMode> currentDriveMode)
 	{
 		this.armAngle = armAngle;
 		this.armPositionPID = new SmoothSetController(new PIDConstants(.03, .0001, .001), 800, 800, 500, armAngle,
@@ -59,12 +61,13 @@ public class GearIntakeSystem extends Subsystem
 		this.intakeVoltageOut = intakeVoltage;
 		this.beamBreak = beamBreak;
 		this.driveMode = currentDriveMode;
+		this.intakeCurrent = intakeCurrent;
 	}
 
 	public GearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak)
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent)
 	{
-		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, () -> DriveMode.TANK);
+		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent,() -> DriveMode.TANK);
 	}
 
 	@Override
@@ -302,7 +305,7 @@ public class GearIntakeSystem extends Subsystem
 		@Override
 		protected boolean execute()
 		{
-			return hasGear();
+			return (intakeCurrent.get()> 20);
 		}
 
 		/**
@@ -356,6 +359,7 @@ public class GearIntakeSystem extends Subsystem
 		{
 			this(pos.angle, waitForFinish);
 		}
+		
 
 		/**
 		 * assumes that command should be executed before running another

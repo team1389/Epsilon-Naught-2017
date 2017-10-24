@@ -11,14 +11,14 @@ import com.team1389.command_framework.command_base.Command;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PercentIn;
+import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
+import com.team1389.hardware.value_types.Value;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
-
-import org.usfirst.frc.team1389.robot.controls.*;
 
 import edu.wpi.first.wpilibj.Preferences;
 
@@ -42,11 +42,11 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 	
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
 			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn useManualButton, DigitalIn sensorFailure)
 	{
-		super(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, driveMode);
+		super(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent,driveMode);
 		this.intakeGearButton = intakeGearButton;
 		this.prepareGearButton = prepareGearButton;
 		this.placeGearButton = placeGearButton;
@@ -64,11 +64,11 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 	}
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
 			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
 			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn manualTrigger)
 	{
-		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, driveMode, intakeGearButton, prepareGearButton,
+		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent, driveMode,intakeGearButton, prepareGearButton,
 				placeGearButton, stowGearButton, armManualAxis, outtakeManualAxis, rumble, manualTrigger,
 				new DigitalIn(() -> false));
 

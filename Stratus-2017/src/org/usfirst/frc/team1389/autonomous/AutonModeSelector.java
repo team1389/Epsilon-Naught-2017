@@ -22,7 +22,7 @@ public class AutonModeSelector
 	{
 		if (autonOption == null)
 		{
-			return AutonOption.GEAR_CENTER.setupAutoModeBase(RobotSoftware.getInstance());
+			return AutonOption.CENTER_GEAR.setupAutoModeBase(RobotSoftware.getInstance());
 		} else
 		{
 			return autonOption.setupAutoModeBase(RobotSoftware.getInstance());

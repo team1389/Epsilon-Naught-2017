@@ -53,7 +53,7 @@ public class CrossBaselineOpenLoop extends AutoModeBase
 	{
 		System.out.println("crossing baseline");
 		double voltage = 0.5;
-		double waitTime = AutoConstants.getTimeToTravel(AutoConstants.BASELINE_DIST, voltage) + 0.5;
+		double waitTime = 1.3;
 		DriveOut<Percent> asTank = robot.voltageDrive.getAsTank();
 
 		asTank.set(voltage, voltage);

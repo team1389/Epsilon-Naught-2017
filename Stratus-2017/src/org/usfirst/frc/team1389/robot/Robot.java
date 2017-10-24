@@ -54,7 +54,8 @@ public class Robot extends IterativeRobot
 				robot.frontRight.getPositionInput().getWatchable("Right encoder"),
 				robot.gyroInput.getWatchable("Gyro angle"), robot.flCurrent.getWatchable("front left current"),
 				robot.frCurrent.getWatchable("front right current"), robot.brCurrent.getWatchable("rear right current"),
-				robot.blCurrent.getWatchable("rear left current"), robot.armCurrent.getWatchable("arm current"));
+				robot.blCurrent.getWatchable("rear left current"), robot.armCurrent.getWatchable("arm current"),
+				robot.gearIntakeCurrent.getWatchable("intake current"));
 	}
 
 	@Override

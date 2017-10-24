@@ -7,10 +7,10 @@ public class TeleopHopperSystem extends HopperSystem
 {
 	private DigitalIn triggerDump, resetHopper;
 
-	public TeleopHopperSystem(DigitalOut dumper, DigitalOut gate, DigitalIn dumperEndstop, DigitalIn triggerDump,
-			DigitalIn resetHopper)
+	public TeleopHopperSystem(DigitalOut dumperLeft, DigitalOut dumperRight, DigitalOut gate, DigitalIn dumperEndstop,
+			DigitalIn triggerDump, DigitalIn resetHopper)
 	{
-		super(dumper, gate, dumperEndstop);
+		super(dumperLeft, dumperRight, gate, dumperEndstop);
 		this.triggerDump = triggerDump;
 		this.resetHopper = resetHopper;
 	}

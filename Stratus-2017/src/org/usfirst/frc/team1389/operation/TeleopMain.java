@@ -75,7 +75,7 @@ public class TeleopMain
 	{
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
 				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak,
-				driveMode, controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(),
+				robot.gearIntakeCurrent, driveMode, controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(),
 				controls.stowArmBtn(), controls.armAngleAxis(), controls.outtakeAxis(), controls.gearRumble(),
 				controls.armManualTrigger());
 		return Supplier;
@@ -92,8 +92,10 @@ public class TeleopMain
 
 	private TeleopHopperSystem setupHopper()
 	{
-		return new TeleopHopperSystem(robot.dumperPistonRight.getDigitalOut(), robot.dumperPistonRight.getDigitalOut(),
-				new DigitalIn(() -> true), controls.dumpHopperBtn(), controls.resetHopperBtn());
+		
+		return new TeleopHopperSystem(robot.dumperPistonRight.getDigitalOut(), robot.dumperPistonLeft.getDigitalOut(),
+				robot.dumperPistonRight.getDigitalOut(), new DigitalIn(() -> true), controls.dumpHopperBtn(),
+				controls.resetHopperBtn());
 	}
 
 	/**
