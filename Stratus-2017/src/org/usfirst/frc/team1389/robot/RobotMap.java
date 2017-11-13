@@ -84,6 +84,7 @@ public class RobotMap
 	protected final PCM pcm_DUMPER_PISTON_LEFT_B = new PCM(6);
 
 	protected final DIO dio_GEAR_BEAM_BREAK = new DIO(0);
+	
 
 	protected final CAN can_LIGHT_CONTROLLER = new CAN(8);
 	protected final int mod_DRIVE_TRAIN_PCM = 1;

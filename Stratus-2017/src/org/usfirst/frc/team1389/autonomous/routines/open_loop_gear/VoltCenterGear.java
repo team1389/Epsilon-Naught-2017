@@ -27,7 +27,8 @@ public class VoltCenterGear extends AutoModeBase
 		commands = new RobotCommands(robot);
 		gearIntake = new GearIntakeSystem(robot.armAngle, robot.armVel, robot.armElevator.getVoltageOutput(),
 				robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak, robot.gearIntakeCurrent);
-		pid = new PIDController(new PIDConstants(.03, .0001, .001), robot.armAngle, robot.armElevator.getVoltageOutput());
+		pid = new PIDController(new PIDConstants(.03, .0001, .001), robot.armAngle,
+				robot.armElevator.getVoltageOutput());
 	}
 
 	@Override
@@ -47,12 +48,18 @@ public class VoltCenterGear extends AutoModeBase
 		// runCommand(gearIntake.pairWithBackgroundCommand(driveAndLower)9);
 		Command drive = commands.new DriveStraightOpenLoop(.825, .5);
 		Command wait = new WaitTimeCommand(2);
-		//arm has to start stowed
+		// arm has to start stowed
 		runCommand(drive);
 		pid.enable();
-		pid.setSetpoint(45);
+		pid.setSetpoint(50);
 		pid.setAbsoluteTolerance(4);
-		if(pid.onTarget())pid.disable();
+		if (pid.onTarget())
+			pid.disable();
+		runCommand(wait);
+		if(wait.isFinished()) 
+		{
+			pid.disable();
+		}
 		// placing angle
 
 		/*

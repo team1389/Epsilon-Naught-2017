@@ -2,7 +2,6 @@ package org.usfirst.frc.team1389.robot;
 
 import java.util.function.Function;
 
-import com.team1389.concurrent.OhmThreadService;
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.hardware.inputs.software.PositionEncoderIn;
@@ -29,7 +28,6 @@ public class RobotSoftware extends RobotHardware
 	public AngleIn<Speed> armVel;
 	public RangeIn<Value> gearIntakeCurrent;
 	public RangeIn<Position> flPos, frPos;
-	public OhmThreadService threadManager;
 	public DigitalIn timeRunning;
 	public RangeIn<Value> flCurrent, frCurrent, blCurrent, brCurrent;
 	public RangeIn<Value> armCurrent;
@@ -78,7 +76,6 @@ public class RobotSoftware extends RobotHardware
 		 */
 		climberVoltage = climberA.getVoltageOutput().addFollowers(climberB.getVoltageOutput())
 				.addFollowers(climberC.getVoltageOutput());
-		threadManager = new OhmThreadService(20);
 	}
 
 	public void zeroAngle()

@@ -37,7 +37,6 @@ public class Robot extends IterativeRobot
 	public void robotInit()
 	{
 		robot = RobotSoftware.getInstance();
-		robot.threadManager.init();
 
 		DashboardInput.getInstance().init();
 		autoModeExecuter = new AutoModeExecuter();
@@ -61,13 +60,11 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousInit()
 	{
-		robot.threadManager.init();
 		autoModeExecuter.stop();
 		AutoModeBase selectedAutonMode = DashboardInput.getInstance().getSelectedAutonMode();
 		autoModeExecuter.setAutoMode(selectedAutonMode);
 		DebugDash.getInstance().watch(selectedAutonMode);
 		gyroCalib.cancel();
-		robot.threadManager.borrowThreadToRun(autoModeExecuter);
 	}
 
 	/**
@@ -82,7 +79,6 @@ public class Robot extends IterativeRobot
 	public void disabledInit()
 	{
 
-		robot.threadManager.init();
 	}
 
 	@Override
@@ -96,7 +92,6 @@ public class Robot extends IterativeRobot
 	public void teleopInit()
 	{
 		gyroCalib.cancel();
-		robot.threadManager.init();
 		DebugDash.getInstance().outputToDashboard();
 		autoModeExecuter.stop();
 		teleOperator.init();
@@ -120,5 +115,6 @@ public class Robot extends IterativeRobot
 	@Override
 	public void testInit()
 	{
+
 	}
 }
