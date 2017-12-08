@@ -90,7 +90,7 @@ public class RobotMap
 	protected final int mod_DRIVE_TRAIN_PCM = 1;
 	protected final int mod_HOPPER_PCM = 2;
 
-	protected final int pdp_GEAR_INTAKE_CURRENT = 1 /* should be 14 */;
+	//protected final int pdp_GEAR_INTAKE_CURRENT = 1 /* should be 14 */;
 	protected final int pdp_FRONT_LEFT_CURRENT = 5; // TODO fix pdp ports NOTE: these are ports on
 													// the PDP, not the talon
 	protected final int pdp_FRONT_RIGHT_CURRENT = 7;

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1389.vision;
 
-import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 
 import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.command_framework.CommandUtil;
@@ -15,6 +14,8 @@ import com.team1389.hardware.value_types.Position;
 import com.team1389.hardware.value_types.Speed;
 import com.team1389.hardware.value_types.Value;
 import com.team1389.system.drive.FourDriveOut;
+import com.team1389.system.drive.OctoMecanumSystem;
+import com.team1389.system.drive.OctoMecanumSystem.DriveMode;
 import com.team1389.trajectory.Translation2d;
 
 public class VisionDriveSystem extends OctoMecanumSystem

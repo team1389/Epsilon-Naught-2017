@@ -1,26 +1,14 @@
 package org.usfirst.frc.team1389.autonomous.command;
 
-import java.util.function.Supplier;
-
-import org.usfirst.frc.team1389.robot.*;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
-import org.usfirst.frc.team1389.systems.*;
-import org.usfirst.frc.team1389.systems.GearIntakeSystem.State;
-import org.usfirst.frc.team1389.systems.OctoMecanumSystem.DriveMode;
 
 import com.team1389.auto.command.DriveStraightCommand;
 import com.team1389.auto.command.TurnAngleCommand;
 import com.team1389.command_framework.command_base.Command;
 import com.team1389.configuration.PIDConstants;
-import com.team1389.hardware.inputs.software.AngleIn;
-import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.outputs.software.PercentOut;
 import com.team1389.hardware.value_types.Percent;
-import com.team1389.hardware.value_types.Position;
-import com.team1389.hardware.value_types.Speed;
 import com.team1389.system.drive.DriveOut;
 import com.team1389.system.drive.DriveSignal;
-import com.team1389.system.drive.FourDriveOut;
 import com.team1389.util.Timer;
 
 public class RobotCommands

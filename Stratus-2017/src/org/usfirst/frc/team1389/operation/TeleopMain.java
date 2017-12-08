@@ -3,19 +3,19 @@ package org.usfirst.frc.team1389.operation;
 import java.util.function.Supplier;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
-import org.usfirst.frc.team1389.robot.controls.ControlBoard;
 import org.usfirst.frc.team1389.systems.ClimberSystem;
 import org.usfirst.frc.team1389.systems.FancyLightSystem;
 import org.usfirst.frc.team1389.systems.GearIntakeSystem;
-import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
-import org.usfirst.frc.team1389.systems.OctoMecanumSystem.DriveMode;
 import org.usfirst.frc.team1389.systems.TeleopGearIntakeSystem;
 import org.usfirst.frc.team1389.systems.TeleopHopperSystem;
 import org.usfirst.frc.team1389.watchers.DebugDash;
 
+import com.team1389.hardware.controls.ControlBoard;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
+import com.team1389.system.drive.OctoMecanumSystem;
+import com.team1389.system.drive.OctoMecanumSystem.DriveMode;
 
 /**
  * system manager

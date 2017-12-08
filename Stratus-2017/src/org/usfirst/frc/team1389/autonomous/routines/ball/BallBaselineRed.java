@@ -1,11 +1,8 @@
 package org.usfirst.frc.team1389.autonomous.routines.ball;
 
 import org.usfirst.frc.team1389.autonomous.command.RobotCommands;
-import org.usfirst.frc.team1389.autonomous.command.RobotCommands.DriveStraightOpenLoop;
-import org.usfirst.frc.team1389.autonomous.command.RobotCommands.MecanumMove;
 import org.usfirst.frc.team1389.robot.RobotSoftware;
 import org.usfirst.frc.team1389.systems.HopperSystem;
-import org.usfirst.frc.team1389.systems.OctoMecanumSystem;
 
 import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeEndedException;
@@ -13,6 +10,7 @@ import com.team1389.auto.command.WaitTimeCommand;
 import com.team1389.configuration.PIDConstants;
 import com.team1389.control.PIDController;
 import com.team1389.hardware.outputs.software.DigitalOut;
+import com.team1389.system.drive.OctoMecanumSystem;
 import com.team1389.util.list.AddList;
 import com.team1389.watch.Watchable;
 
