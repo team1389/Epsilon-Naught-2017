@@ -75,9 +75,9 @@ public class TeleopMain
 	{
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
 				robot.armElevator.getVoltageOutput(), robot.gearIntake.getVoltageOutput(), robot.gearBeamBreak,
-				robot.gearIntakeCurrent, driveMode, controls.intakeGearBtn(), controls.prepareArmBtn(), controls.placeGearBtn(),
-				controls.stowArmBtn(), controls.armAngleAxis(), controls.outtakeAxis(), controls.gearRumble(),
-				controls.armManualTrigger());
+				robot.gearIntakeCurrent, driveMode, controls.aButton(), controls.bButton(), controls.xButton(),
+				controls.yButton(), controls.leftStickYAxis(), controls.rightTrigger(), controls.setRumble(),
+				controls.startButton());
 		return Supplier;
 	}
 
@@ -87,15 +87,15 @@ public class TeleopMain
 	 */
 	private ClimberSystem setUpClimbing()
 	{
-		return new ClimberSystem(controls.climberThrottle(), robot.climberVoltage);
+		return new ClimberSystem(controls.leftTrigger(), robot.climberVoltage);
 	}
 
 	private TeleopHopperSystem setupHopper()
 	{
 		
 		return new TeleopHopperSystem(robot.dumperPistonRight.getDigitalOut(), robot.dumperPistonLeft.getDigitalOut(),
-				robot.dumperPistonRight.getDigitalOut(), new DigitalIn(() -> true), controls.dumpHopperBtn(),
-				controls.resetHopperBtn());
+				robot.dumperPistonRight.getDigitalOut(), new DigitalIn(() -> true), controls.upDPad(),
+				controls.downDPad());
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class TeleopMain
 	public void periodic()
 	{
 		manager.update();
-		if (controls.zeroAutomaticBtn().get())
+		if (controls.backButton().get())
 		{
 			robot.zeroAngle();
 		}
