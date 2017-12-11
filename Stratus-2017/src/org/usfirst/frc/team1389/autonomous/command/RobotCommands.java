@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1389.autonomous.command;
 
 import org.usfirst.frc.team1389.robot.RobotSoftware;
+import org.usfirst.frc.team1389.systems.GearIntakeSystem;
 
 import com.team1389.auto.command.DriveStraightCommand;
 import com.team1389.auto.command.TurnAngleCommand;
@@ -53,7 +54,7 @@ public class RobotCommands
 
 			this.voltage = voltage;
 		}
-
+		
 		@Override
 		protected void initialize()
 		{
@@ -99,5 +100,37 @@ public class RobotCommands
 
 	}
 	
+	public class ArmMovement extends Command
+	{
 
+		GearIntakeSystem gearIntake;
+		RobotSoftware robot;
+		double robotAngle = robot.armAngle.get();
+		
+		public ArmMovement (double angle)
+		{
+			while(robotAngle != angle)
+			{
+				if (robotAngle > angle)
+				{
+					robot.armElevator.getVoltageOutput().set(0.1);
+				}
+				
+				else
+				{
+					robot.armElevator.getVoltageOutput().set(-0.1);
+				}
+			}
+			
+			robot.armElevator.getVoltageOutput().set(0);
+		}
+		
+		@Override
+		protected boolean execute() {
+			
+			
+			return false;
+		}
+		
+	}
 }
