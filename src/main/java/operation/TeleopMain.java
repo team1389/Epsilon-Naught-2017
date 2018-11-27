@@ -14,6 +14,7 @@ import robot.RobotSoftware;
 import systems.ClimberSystem;
 import systems.FancyLightSystem;
 import systems.GearIntakeSystem;
+import systems.PneumaticTwinMecanum;
 import systems.TeleopGearIntakeSystem;
 import systems.TeleopHopperSystem;
 import watchers.DebugDash;
@@ -43,13 +44,8 @@ public class TeleopMain {
 	 */
 	public void init() {
 		controls = ControlBoard.getInstance();
-		OctocanumSystem drive = setupDrive();
-		GearIntakeSystem gearIntake = setupGearIntake(drive.getDriveModeTracker());
-		Subsystem climbing = setUpClimbing();
-		Subsystem lights = new FancyLightSystem(robot.lights.getColorOutput(), gearIntake::hasGear,
-				gearIntake::getState);
-		DebugDash.getInstance().watch(lights, gearIntake);
-		manager = new SystemManager(drive, climbing, lights, gearIntake, setupHopper());
+		Subsystem drive = setUpTwinstickDrive();
+		manager = new SystemManager(drive);
 		manager.init();
 	}
 
@@ -61,6 +57,11 @@ public class TeleopMain {
 		return new OctocanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.driveXAxis(),
 				controls.driveYAxis(), controls.driveYaw(), controls.driveTrim(), controls.driveModeBtn(),
 				controls.driveModifierBtn());
+	}
+
+	private Subsystem setUpTwinstickDrive() {
+		return new PneumaticTwinMecanum(controls.xLeftDriveY(), controls.xRightDriveX(), robot.voltageDrive,
+				controls.upDPad(), robot.pistons);
 	}
 
 	/**
