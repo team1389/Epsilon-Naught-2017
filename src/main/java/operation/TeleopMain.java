@@ -23,8 +23,7 @@ import watchers.DebugDash;
  * @author Quunii
  *
  */
-public class TeleopMain
-{
+public class TeleopMain {
 	SystemManager manager;
 	ControlBoard controls;
 	RobotSoftware robot;
@@ -32,19 +31,16 @@ public class TeleopMain
 
 	/**
 	 * 
-	 * @param robot
-	 *            container of all ohm streams
+	 * @param robot container of all ohm streams
 	 */
-	public TeleopMain(RobotSoftware robot)
-	{
+	public TeleopMain(RobotSoftware robot) {
 		this.robot = robot;
 	}
 
 	/**
 	 * initializes systems, and adds them to a list of systems to update
 	 */
-	public void init()
-	{
+	public void init() {
 		controls = ControlBoard.getInstance();
 		OctocanumSystem drive = setupDrive();
 		GearIntakeSystem gearIntake = setupGearIntake(drive.getDriveModeTracker());
@@ -60,8 +56,7 @@ public class TeleopMain
 	 * 
 	 * @return a new OctocanumSystem
 	 */
-	private OctocanumSystem setupDrive()
-	{
+	private OctocanumSystem setupDrive() {
 		return new OctocanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.driveXAxis(),
 				controls.driveYAxis(), controls.driveYaw(), controls.driveTrim(), controls.driveModeBtn(),
 				controls.driveModifierBtn());
@@ -71,8 +66,7 @@ public class TeleopMain
 	 * 
 	 * @return a new GearIntakeSystem
 	 */
-	private GearIntakeSystem setupGearIntake(Supplier<DriveMode> driveMode)
-	{
+	private GearIntakeSystem setupGearIntake(Supplier<DriveMode> driveMode) {
 		TeleopGearIntakeSystem Supplier = new TeleopGearIntakeSystem(robot.armAngle, robot.armVel,
 				robot.armElevator.getVoltageController(), robot.gearIntake.getVoltageController(), robot.gearBeamBreak,
 				robot.gearIntakeCurrent, driveMode, controls.aButton(), controls.bButton(), controls.xButton(),
@@ -85,14 +79,12 @@ public class TeleopMain
 	 * 
 	 * @return a new ClimberSystem
 	 */
-	private ClimberSystem setUpClimbing()
-	{
+	private ClimberSystem setUpClimbing() {
 		return new ClimberSystem(controls.leftTrigger(), robot.climberVoltage);
 	}
 
-	private TeleopHopperSystem setupHopper()
-	{
-		
+	private TeleopHopperSystem setupHopper() {
+
 		return new TeleopHopperSystem(robot.dumperPistonRight.getDigitalOut(), robot.dumperPistonLeft.getDigitalOut(),
 				robot.dumperPistonRight.getDigitalOut(), new DigitalIn(() -> true), controls.upDPad(),
 				controls.downDPad());
@@ -101,11 +93,9 @@ public class TeleopMain
 	/**
 	 * periodically calls update method in all subsystems
 	 */
-	public void periodic()
-	{
+	public void periodic() {
 		manager.update();
-		if (controls.backButton().get())
-		{
+		if (controls.backButton().get()) {
 			robot.zeroAngle();
 		}
 	}
