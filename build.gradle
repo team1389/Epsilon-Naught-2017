@@ -39,7 +39,7 @@ dependencies {
    	compile files('native')
    	//compile 'com.github.OhmSuite:ohm:0.0.5'
    	//compile files('../../ohm/Ohm/build/libs/ohm-0.1.0.jar')
-	compile files('lib/ohm-0.1.0.jar')
+	compile files('../ohm/Ohm/build/libs/ohm-0.1.0.jar')
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
