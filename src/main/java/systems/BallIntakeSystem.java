@@ -1,4 +1,4 @@
-package systems;;
+package systems;
 
 import java.util.function.Supplier;
 
@@ -16,8 +16,7 @@ import com.team1389.watch.info.BooleanInfo;
  * @author Quunii
  *
  */
-public class BallIntakeSystem extends Subsystem
-{
+public class BallIntakeSystem extends Subsystem {
 	DigitalIn intakeButton;
 	RangeOut<Percent> intakeVoltage;
 	Supplier<GearIntakeSystem.State> gearIntakeState;
@@ -25,36 +24,29 @@ public class BallIntakeSystem extends Subsystem
 
 	/**
 	 * 
-	 * @param intakeButton
-	 *            controls when ball intake is running
-	 * @param state
-	 *            Supplier of GearIntakeSystem state
-	 * @param intakeVoltage
-	 *            voltage setter for ball intake motors
+	 * @param intakeButton  controls when ball intake is running
+	 * @param state         Supplier of GearIntakeSystem state
+	 * @param intakeVoltage voltage setter for ball intake motors
 	 */
 	public BallIntakeSystem(DigitalIn intakeButton, Supplier<GearIntakeSystem.State> state,
-			RangeOut<Percent> intakeVoltage)
-	{
+			RangeOut<Percent> intakeVoltage) {
 		this.intakeButton = intakeButton;
 		this.intakeVoltage = intakeVoltage;
 		this.gearIntakeState = state;
 	}
 
 	@Override
-	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
-	{
+	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem) {
 		return stem.put(intakeVoltage.getWatchable("BallIntakeMotor"), new BooleanInfo("intaking", () -> intaking));
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "BallIntakeSystem";
 	}
 
 	@Override
-	public void init()
-	{
+	public void init() {
 	}
 
 	/**
@@ -62,14 +54,11 @@ public class BallIntakeSystem extends Subsystem
 	 * GearIntake is in State Intake
 	 */
 	@Override
-	public void update()
-	{
-		if (intakeButton.get())
-		{
+	public void update() {
+		if (intakeButton.get()) {
 			intaking = !intaking;
 		}
-		if (gearIntakeState.get() == GearIntakeSystem.State.INTAKING)
-		{
+		if (gearIntakeState.get() == GearIntakeSystem.State.INTAKING) {
 			intaking = false;
 		}
 		intakeVoltage.set(intaking ? 1 : 0);

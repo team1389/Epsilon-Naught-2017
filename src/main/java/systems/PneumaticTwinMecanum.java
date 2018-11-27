@@ -18,9 +18,9 @@ public class PneumaticTwinMecanum extends TwinStickMecanumSystem {
     DigitalIn mecanumBtn;
     DigitalOut shiftToMecanum;
 
-    public PneumaticTwinMecanum(PercentIn leftStickY, PercentIn leftStickX, PercentIn rightStickX,
-            FourDriveOut<Percent> drive, DigitalIn mecanumBtn, DigitalOut shiftToMecanum) {
-        super(leftStickX, leftStickY, rightStickX, drive);
+    public PneumaticTwinMecanum(PercentIn leftStickY, PercentIn rightStickX, FourDriveOut<Percent> drive,
+            DigitalIn mecanumBtn, DigitalOut shiftToMecanum) {
+        super(leftStickY, rightStickX, drive);
         this.mecanumBtn = mecanumBtn;
         this.shiftToMecanum = shiftToMecanum;
     }
