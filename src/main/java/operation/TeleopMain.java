@@ -12,7 +12,6 @@ import com.team1389.system.drive.OctocanumSystem.DriveMode;
 
 import robot.RobotSoftware;
 import systems.ClimberSystem;
-import systems.FancyLightSystem;
 import systems.GearIntakeSystem;
 import systems.PneumaticTwinMecanum;
 import systems.TeleopGearIntakeSystem;
@@ -60,8 +59,8 @@ public class TeleopMain {
 	}
 
 	private Subsystem setUpTwinstickDrive() {
-		return new PneumaticTwinMecanum(controls.xLeftDriveY(), controls.xRightDriveX(), robot.voltageDrive,
-				controls.upDPad(), robot.pistons);
+		return new PneumaticTwinMecanum(controls.xLeftDriveY(), controls.xLeftDriveX(), controls.xRightDriveX(),
+				robot.voltageDrive, controls.xDriveBtn(), controls.xDriveStraightButton(), robot.pistons);
 	}
 
 	/**

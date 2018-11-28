@@ -16,8 +16,7 @@ import com.team1389.system.drive.FourDriveOut;
 
 import edu.wpi.first.wpilibj.Preferences;
 
-public class RobotSoftware extends RobotHardware
-{
+public class RobotSoftware extends RobotHardware {
 	private static RobotSoftware INSTANCE = new RobotSoftware();
 	public AngleIn<Position> gyroInput;
 	public DigitalOut pistons;
@@ -34,23 +33,20 @@ public class RobotSoftware extends RobotHardware
 	public DigitalIn gearBeamBreak;
 	public PercentOut climberVoltage;
 
-	public static RobotSoftware getInstance()
-	{
+	public static RobotSoftware getInstance() {
 		return INSTANCE;
 	}
 
-	public RobotSoftware()
-	{
+	public RobotSoftware() {
 
 		// gyroInput = new AngleIn<>(Position.class, () -> 0.0);
-		gyroInput = gyro.getAngleInput();
 
 		pistons = flPiston.getDigitalOut().addFollowers(frPiston.getDigitalOut(), rlPiston.getDigitalOut(),
 				rrPiston.getDigitalOut());
 
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageController(), frontRight.getVoltageController(),
 				rearLeft.getVoltageController(), rearRight.getVoltageController());
-		//need to fix encoder references
+		// need to fix encoder references
 		armAngleNoOffset = armElevator.getSensorPositionStream().mapToAngle(Position.class).invert()
 				.scale(RobotConstants.armSprocketRatio);
 		armAngle = armAngleNoOffset.copy().offset(-RobotConstants.armOffset);
@@ -58,10 +54,9 @@ public class RobotSoftware extends RobotHardware
 
 		gearIntakeCurrent = pdp.getCurrentIn(13);
 		gearBeamBreak = beamBreakSensor.getSwitchInput();
-		
+
 		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.adjustRange(0, 1024, 0, 1).scale(18.0 / 16.0);
 
-		
 		/*
 		 * flCurrent = pdp.getCurrentIn(pdp_FRONT_LEFT_CURRENT); frCurrent =
 		 * pdp.getCurrentIn(pdp_FRONT_RIGHT_CURRENT); blCurrent =
@@ -72,8 +67,7 @@ public class RobotSoftware extends RobotHardware
 				.addFollowers(climberC.getVoltageController());
 	}
 
-	public void zeroAngle()
-	{
+	public void zeroAngle() {
 		double offset = armAngleNoOffset.get();
 		System.out.println("Angle offset: " + offset);
 		Preferences.getInstance().putDouble("offset", offset);

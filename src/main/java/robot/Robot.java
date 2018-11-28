@@ -23,75 +23,51 @@ import watchers.DebugDash;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot
-{
+public class Robot extends IterativeRobot {
 	RobotSoftware robot;
 	TeleopMain teleOperator;
 	AutoModeExecuter autoModeExecuter;
-	SpartanGyro.CalibrateCommand gyroCalib;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
 	 */
 	@Override
-	public void robotInit()
-	{
+	public void robotInit() {
 		robot = RobotSoftware.getInstance();
 
 		DashboardInput.getInstance().init();
 		autoModeExecuter = new AutoModeExecuter();
 
 		teleOperator = new TeleopMain(robot);
-		gyroCalib = robot.gyro.new CalibrateCommand(true);
 
-		CameraServer.getInstance().startAutomaticCapture(0);
-		CameraServer.getInstance().startAutomaticCapture(1);
-		DebugDash.getInstance().watch(robot.armAngle.getWatchable("adjusted angle"),
-				robot.armAngleNoOffset.getWatchable("zeroing angle"),
-				new NumberInfo("front left", robot.flPos.getStream()),
-				new NumberInfo("front right", robot.frPos.getStream()),
-				robot.frontRight.getSensorPositionStream().getWatchable("Right encoder"),
-				robot.gyroInput.getWatchable("Gyro angle"), robot.flCurrent.getWatchable("front left current"),
-				robot.frCurrent.getWatchable("front right current"), robot.brCurrent.getWatchable("rear right current"),
-				robot.blCurrent.getWatchable("rear left current"), robot.armCurrent.getWatchable("arm current"),
-				robot.gearIntakeCurrent.getWatchable("intake current"));
 	}
 
 	@Override
-	public void autonomousInit()
-	{
+	public void autonomousInit() {
 		autoModeExecuter.stop();
 		AutoModeBase selectedAutonMode = DashboardInput.getInstance().getSelectedAutonMode();
 		autoModeExecuter.setAutoMode(selectedAutonMode);
-		DebugDash.getInstance().watch(selectedAutonMode);
-		gyroCalib.cancel();
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
 	@Override
-	public void autonomousPeriodic()
-	{
+	public void autonomousPeriodic() {
 	}
 
 	@Override
-	public void disabledInit()
-	{
+	public void disabledInit() {
 
 	}
 
 	@Override
-	public void disabledPeriodic()
-	{
-		gyroCalib.exec();
+	public void disabledPeriodic() {
 	}
 
 	@Override
-	public void teleopInit()
-	{
-		gyroCalib.cancel();
+	public void teleopInit() {
 		DebugDash.getInstance().outputToDashboard();
 		autoModeExecuter.stop();
 		teleOperator.init();
@@ -101,8 +77,7 @@ public class Robot extends IterativeRobot
 	 * This function is called periodically during operator control
 	 */
 	@Override
-	public void teleopPeriodic()
-	{
+	public void teleopPeriodic() {
 		teleOperator.periodic();
 
 	}
@@ -111,8 +86,7 @@ public class Robot extends IterativeRobot
 	 * This function is called periodically during test mode
 	 */
 	@Override
-	public void testInit()
-	{
+	public void testInit() {
 
 	}
 }

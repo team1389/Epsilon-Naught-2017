@@ -3,7 +3,6 @@ package robot;
 import com.team1389.hardware.inputs.hardware.PDPHardware;
 import com.team1389.hardware.inputs.hardware.SpartanGyro;
 import com.team1389.hardware.inputs.hardware.SwitchHardware;
-import com.team1389.hardware.outputs.hardware.CANLightHardware;
 import com.team1389.hardware.outputs.hardware.CANTalonHardware;
 import com.team1389.hardware.outputs.hardware.DoubleSolenoidHardware;
 import com.team1389.hardware.outputs.hardware.VictorHardware;
@@ -17,8 +16,7 @@ import com.team1389.hardware.registry.Registry;
  * @author amind
  *
  */
-public class RobotLayout extends RobotMap
-{
+public class RobotLayout extends RobotMap {
 	public Registry registry;
 	public CANTalonHardware frontLeft;
 	public CANTalonHardware frontRight;
@@ -29,7 +27,5 @@ public class RobotLayout extends RobotMap
 	public PDPHardware pdp;
 	public DoubleSolenoidHardware flPiston, frPiston, rlPiston, rrPiston;
 	public DoubleSolenoidHardware gatePiston, dumperPistonRight, dumperPistonLeft;
-	public SpartanGyro gyro;
-	public CANLightHardware lights;
 	public SwitchHardware beamBreakSensor;
 }

@@ -12,15 +12,17 @@ import com.team1389.system.Subsystem;
 
 public class PneumaticTwinMecanum extends Subsystem {
 
-    DigitalIn mecanumBtn;
+    DigitalIn mecanumUp;
+    DigitalIn mecanumDown;
     DigitalOut shiftToMecanum;
 
     TwinStickMecanumSystem twinstick;
 
-    public PneumaticTwinMecanum(PercentIn leftStickY, PercentIn rightStickX, FourDriveOut<Percent> drive,
-            DigitalIn mecanumBtn, DigitalOut shiftToMecanum) {
-        twinstick = new TwinStickMecanumSystem(leftStickY, rightStickX, drive);
-        this.mecanumBtn = mecanumBtn;
+    public PneumaticTwinMecanum(PercentIn leftStickY, PercentIn leftStickX, PercentIn rightStickX,
+            FourDriveOut<Percent> drive, DigitalIn mecanumUp, DigitalIn mecanumDown, DigitalOut shiftToMecanum) {
+        twinstick = new TwinStickMecanumSystem(leftStickY, leftStickX, rightStickX, drive);
+        this.mecanumUp = mecanumUp;
+        this.mecanumDown = mecanumDown;
         this.shiftToMecanum = shiftToMecanum;
     }
 
@@ -32,8 +34,10 @@ public class PneumaticTwinMecanum extends Subsystem {
     @Override
     public void update() {
         twinstick.update();
-        if (mecanumBtn.get())
+        if (mecanumUp.get())
             shiftToMecanum.set(true);
+        if (mecanumDown.get())
+            shiftToMecanum.set(false);
     }
 
     @Override
