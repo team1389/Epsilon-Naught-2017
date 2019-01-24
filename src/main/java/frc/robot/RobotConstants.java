@@ -1,51 +1,34 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Preferences;
+
 /**
- * Constants for the Robot.
- * All units are standard metric units
- * @author Raffi
+ * constants of robot dimensions, as well those used for calculations
+ * 
+ * @author Quunii
  *
  */
-public class RobotConstants {
-	public static final int MaxConcurrentThreads = 3;
+public class RobotConstants
+{
+	public static final double INCHES_TO_METERS = .0254;
+	// was 8
+	public static final double WheelDiameter = 4; // in
+
+	public static final double armOffset = Preferences.getInstance().getDouble("offset", 0.0);
+	public static final double armSprocketRatio = 12.0 / 22.0;
 
 	/**
 	 * constants for odometry calculations
 	 */
-	public static final double WheelDiameter = .127;
-	public static final double WheelBase = 0.67945; // 
+	public static final double TrackWidth = 22; // in
 	public static final double TrackLength = 23;
 	public static final double TrackScrub = 1;
 
 	/**
 	 * constants for motion profiling
 	 */
-	public static final double MaxVelocity = 3; // m/s
-	public static final double MaxAcceleration = .5; // m/s^2
-	public static final double MaxDeceleration = 4.5; // m/s^2
-	public static final double MaxJerk = 30; // m/s^3
-	
-	/**
-	 * constants for elevator motion profiling
-	 * 
-	 */
-	public static final double ElevMaxVelocity = 0; 
-	public static final double ElevMaxAcceleration = 0;
-	public static final double ElevMaxDeceleration = 0; 
-	public static final double ElevMaxJerk = 0; 
-	
-	/**
-	 * GyroCorrection for Driving straight
-	 */
-	public static final double GyroCorrection = 0.05;
-
-	public static double feetToMeters(double ft)
-	{
-		return ft * 0.3048;
-	}
-	public static double rotationsToMeters(double rotations)
-	{
-		return rotations * Math.PI * WheelDiameter;
-	}
+	public static final double MaxVelocity = 203.4; // in/s;
+	public static final double MaxAcceleration = 100; // ft/s^2
+	public static final double MaxDeceleration = 100; // ft/s^2
 
 }

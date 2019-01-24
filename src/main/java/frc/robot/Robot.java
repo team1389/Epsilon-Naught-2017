@@ -2,7 +2,10 @@ package frc.robot;
 
 import com.team1389.auto.AutoModeBase;
 import com.team1389.auto.AutoModeExecuter;
+import com.team1389.hardware.inputs.hardware.SwitchHardware;
 import com.team1389.hardware.registry.Registry;
+import com.team1389.hardware.registry.port_types.DIO;
+import frc.robot.RobotSoftware;
 import frc.operation.TeleopMain;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	RobotSoftware robot;
 	TeleopMain teleOperator;
-
 	Registry registry;
 
 	/**
@@ -30,6 +32,7 @@ public class Robot extends IterativeRobot {
 		registry = new Registry();
 		robot = RobotSoftware.getInstance();
 		teleOperator = new TeleopMain(robot);
+
 
 	}
 
@@ -45,7 +48,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-
+		teleOperator.init();
 	}
 
 	/**
