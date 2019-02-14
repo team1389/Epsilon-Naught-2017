@@ -8,7 +8,6 @@ import com.team1389.hardware.registry.port_types.SPIPort;
 
 import edu.wpi.first.wpilibj.SPI;
 
-
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -66,7 +65,7 @@ public class RobotMap
 	protected final PCM pcm_FRONT_LEFT_PISTON_B = new PCM(0);
 	protected final PCM pcm_FRONT_RIGHT_PISTON_A = new PCM(4);
 	protected final PCM pcm_FRONT_RIGHT_PISTON_B = new PCM(3);
-	//left A was on 6, left B was on 1
+	// left A was on 6, left B was on 1
 	protected final PCM pcm_REAR_LEFT_PISTON_A = new PCM(6);
 	protected final PCM pcm_REAR_LEFT_PISTON_B = new PCM(1);
 	protected final PCM pcm_REAR_RIGHT_PISTON_A = new PCM(5);
@@ -75,27 +74,30 @@ public class RobotMap
 	// Hopper Pneumatics
 	protected final PCM pcm_GATE_PISTON_A = new PCM(0);
 	protected final PCM pcm_GATE_PISTON_B = new PCM(7);
-	/*protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3);
-	protected final PCM pcm_DUMPER_PISTON_RIGHT_B = new PCM(4);
-	protected final PCM pcm_DUMPER_PISTON_LEFT_A = new PCM(5);
-	protected final PCM pcm_DUMPER_PISTON_LEFT_B = new PCM(6);*/
+	/*
+	 * protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3); protected
+	 * final PCM pcm_DUMPER_PISTON_RIGHT_B = new PCM(4); protected final PCM
+	 * pcm_DUMPER_PISTON_LEFT_A = new PCM(5); protected final PCM
+	 * pcm_DUMPER_PISTON_LEFT_B = new PCM(6);
+	 */
 	protected final PCM pcm_DUMPER_PISTON_RIGHT_A = new PCM(3);
 	protected final PCM pcm_DUMPER_PISTON_RIGHT_B = new PCM(4);
 	protected final PCM pcm_DUMPER_PISTON_LEFT_A = new PCM(1);
 	protected final PCM pcm_DUMPER_PISTON_LEFT_B = new PCM(6);
 
-	//PWM 3
+	// PWM 3
 	protected final DIO dio_GEAR_BEAM_BREAK = new DIO(0);
-	
 
 	protected final CAN can_LIGHT_CONTROLLER = new CAN(8);
 	protected final int mod_DRIVE_TRAIN_PCM = 1;
-	protected final int mod_HOPPER_PCM = 2;
+	protected final CAN mod_HOPPER_PCM = new CAN(2);
 
-	//protected final int pdp_GEAR_INTAKE_CURRENT = 1 /* should be 14 */;
-	protected final int pdp_FRONT_LEFT_CURRENT = 5; // TODO fix pdp ports NOTE: these are ports on
+	// protected final int pdp_GEAR_INTAKE_CURRENT = 1 /* should be 14 */;
+	protected final int pdp_FRONT_LEFT_CURRENT = 5; // TODO fix pdp ports NOTE:
+													// these are ports on
 													// the PDP, not the talon
 	protected final int pdp_FRONT_RIGHT_CURRENT = 7;
 	protected final int pdp_REAR_LEFT_CURRENT = 8;
 	protected final int pdp_REAR_RIGHT_CURRENT = 9;
+
 }
