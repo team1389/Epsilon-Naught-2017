@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.team1389.hardware.inputs.software.AngleIn;
 import com.team1389.hardware.inputs.software.DigitalIn;
-import com.team1389.hardware.inputs.software.PositionEncoderIn;
 import com.team1389.hardware.inputs.software.RangeIn;
 import com.team1389.hardware.outputs.software.DigitalOut;
 import com.team1389.hardware.outputs.software.PercentOut;
@@ -16,7 +15,8 @@ import com.team1389.system.drive.FourDriveOut;
 
 import edu.wpi.first.wpilibj.Preferences;
 
-public class RobotSoftware extends RobotHardware {
+public class RobotSoftware extends RobotHardware
+{
 	private static RobotSoftware INSTANCE = new RobotSoftware();
 	public AngleIn<Position> gyroInput;
 	public DigitalOut pistons;
@@ -33,28 +33,28 @@ public class RobotSoftware extends RobotHardware {
 	public DigitalIn gearBeamBreak;
 	public PercentOut climberVoltage;
 
-	public static RobotSoftware getInstance() {
+	public static RobotSoftware getInstance()
+	{
 		return INSTANCE;
 	}
 
-	public RobotSoftware() {
+	public RobotSoftware()
+	{
 
 		// gyroInput = new AngleIn<>(Position.class, () -> 0.0);
 
-		pistons = flPiston.getDigitalOut().addFollowers(frPiston.getDigitalOut(), rlPiston.getDigitalOut(),
+		pistons = flPiston.getDigitalOut().getWithAddedFollowers(frPiston.getDigitalOut(), rlPiston.getDigitalOut(),
 				rrPiston.getDigitalOut());
 
 		voltageDrive = new FourDriveOut<>(frontLeft.getVoltageController(), frontRight.getVoltageController(),
 				rearLeft.getVoltageController(), rearRight.getVoltageController());
 		// need to fix encoder references
-		armAngleNoOffset= null;
-		armAngle = null; 
-		armVel = null; 
+		armAngleNoOffset = null;
+		armAngle = null;
+		armVel = null;
 
 		gearIntakeCurrent = pdp.getCurrentIn(13);
 		gearBeamBreak = beamBreakSensor.getSwitchInput();
-
-		Function<PositionEncoderIn, RangeIn<Position>> posFunc = e -> e.adjustRange(0, 1024, 0, 1).scale(18.0 / 16.0);
 
 		/*
 		 * flCurrent = pdp.getCurrentIn(pdp_FRONT_LEFT_CURRENT); frCurrent =
@@ -62,15 +62,16 @@ public class RobotSoftware extends RobotHardware {
 		 * pdp.getCurrentIn(pdp_REAR_LEFT_CURRENT); brCurrent =
 		 * pdp.getCurrentIn(pdp_REAR_RIGHT_CURRENT);
 		 */
-		climberVoltage = climberA.getVoltageController().addFollowers(climberB.getVoltageController())
-				.addFollowers(climberC.getVoltageController());
+		climberVoltage = climberA.getVoltageController().getWithAddedFollowers(climberB.getVoltageController())
+				.getWithAddedFollowers(climberC.getVoltageController());
 	}
 
-	public void zeroAngle() {
+	public void zeroAngle()
+	{
 		double offset = armAngleNoOffset.get();
 		System.out.println("Angle offset: " + offset);
 		Preferences.getInstance().putDouble("offset", offset);
-		armAngle.clone(armAngleNoOffset.copy().offset(-offset));
+		armAngle.clone(armAngleNoOffset.copy().getOffset(-offset));
 	}
 
 }

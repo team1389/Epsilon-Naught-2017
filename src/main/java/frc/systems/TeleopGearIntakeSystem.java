@@ -38,14 +38,14 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 	private PercentIn outtakeManualAxis;
 
 	private boolean intakeRunning, userManualTrigger, failure, currentlyInManual;
-	
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
-			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn useManualButton, DigitalIn sensorFailure)
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode,
+			DigitalIn intakeGearButton, DigitalIn prepareGearButton, DigitalIn placeGearButton,
+			DigitalIn stowGearButton, PercentIn armManualAxis, PercentIn outtakeManualAxis, DigitalOut rumble,
+			DigitalIn useManualButton, DigitalIn sensorFailure)
 	{
-		super(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent,driveMode);
+		super(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent, driveMode);
 		this.intakeGearButton = intakeGearButton;
 		this.prepareGearButton = prepareGearButton;
 		this.placeGearButton = placeGearButton;
@@ -57,19 +57,20 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 		this.useManualButton = useManualButton;
 		this.outtakeManualAxis = outtakeManualAxis;
 		failure = false;
-		userManualTrigger = false; 
+		userManualTrigger = false;
 		intakeRunning = false;
 		currentlyInManual = false;
 	}
 
 	public TeleopGearIntakeSystem(AngleIn<Position> armAngle, AngleIn<Speed> armVel, PercentOut armVoltage,
-			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode, DigitalIn intakeGearButton,
-			DigitalIn prepareGearButton, DigitalIn placeGearButton, DigitalIn stowGearButton, PercentIn armManualAxis,
-			PercentIn outtakeManualAxis, DigitalOut rumble, DigitalIn manualTrigger)
+			PercentOut intakeVoltage, DigitalIn beamBreak, RangeIn<Value> intakeCurrent, Supplier<DriveMode> driveMode,
+			DigitalIn intakeGearButton, DigitalIn prepareGearButton, DigitalIn placeGearButton,
+			DigitalIn stowGearButton, PercentIn armManualAxis, PercentIn outtakeManualAxis, DigitalOut rumble,
+			DigitalIn manualTrigger)
 	{
-		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent, driveMode,intakeGearButton, prepareGearButton,
-				placeGearButton, stowGearButton, armManualAxis, outtakeManualAxis, rumble, manualTrigger,
-				new DigitalIn(() -> false));
+		this(armAngle, armVel, armVoltage, intakeVoltage, beamBreak, intakeCurrent, driveMode, intakeGearButton,
+				prepareGearButton, placeGearButton, stowGearButton, armManualAxis, outtakeManualAxis, rumble,
+				manualTrigger, new DigitalIn(() -> false));
 
 	}
 
@@ -90,7 +91,8 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 		{
 			updateManualMode();
 
-		} else
+		}
+		else
 		{
 			updateAdvancedMode();
 		}
@@ -109,7 +111,8 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 		if (intakeRunning)
 		{
 			setState(State.INTAKING);
-		} else
+		}
+		else
 		{
 			setState(State.CARRYING);
 		}
@@ -148,13 +151,13 @@ public class TeleopGearIntakeSystem extends GearIntakeSystem
 
 	public void addSensorFailurePoint(DigitalIn... sensorFailFlags)
 	{
-		sensorFailure = sensorFailure.combineOR(sensorFailFlags);
+		sensorFailure = sensorFailure.getCombineOR(sensorFailFlags);
 	}
 
 	@Override
 	public AddList<Watchable> getSubWatchables(AddList<Watchable> stem)
 	{
-		return super.getSubWatchables(stem).put(sensorFailure.copy().invert().getWatchable("sensor state"),
+		return super.getSubWatchables(stem).put(sensorFailure.copy().getInverted().getWatchable("sensor state"),
 				getIsManualMode().getWatchable("manual mode"));
 	}
 }
