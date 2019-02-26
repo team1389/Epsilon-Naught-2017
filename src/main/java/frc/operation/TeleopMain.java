@@ -6,6 +6,7 @@ import com.team1389.hardware.controls.ControlBoard;
 import com.team1389.hardware.inputs.software.DigitalIn;
 import com.team1389.system.Subsystem;
 import com.team1389.system.SystemManager;
+import com.team1389.system.drive.CurvatureDriveSystem;
 import com.team1389.system.drive.OctocanumSystem;
 import com.team1389.system.drive.TwinStickMecanumSystem;
 import com.team1389.system.drive.OctocanumSystem.DriveMode;
@@ -50,7 +51,7 @@ public class TeleopMain
 	public void init()
 	{
 		controls = ControlBoard.getInstance();
-		Subsystem drive = setUpTwinstickDrive();
+		Subsystem drive = setupDrive();
 		Subsystem gearManip = setupSimpleIntakeSystem();
 		manager = new SystemManager(drive, gearManip);
 		manager.init();
@@ -60,17 +61,10 @@ public class TeleopMain
 	 * 
 	 * @return a new OctocanumSystem
 	 */
-	private OctocanumSystem setupDrive()
+	private CurvatureDriveSystem setupDrive()
 	{
-		return new OctocanumSystem(robot.voltageDrive, robot.pistons, robot.gyroInput, controls.driveXAxis(),
-				controls.driveYAxis(), controls.driveYaw(), controls.driveTrim(), controls.xLeftBumper(),
-				controls.xRightBumper());
-	}
-
-	private Subsystem setUpTwinstickDrive()
-	{
-		return new PneumaticTwinMecanum(controls.xLeftDriveY(), controls.xLeftDriveX(), controls.xRightDriveX(),
-				robot.voltageDrive, controls.xLeftBumper(), controls.xRightBumper(), robot.pistons);
+		return new CurvatureDriveSystem(robot.voltageDrive.getAsTank(), controls.driveLeftY(), controls.driveRightX(),
+				controls.driveLeftBumper());
 	}
 
 	private Subsystem setupSimpleIntakeSystem()
